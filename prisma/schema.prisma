@@ -26,6 +26,80 @@ model Role {
   users User[]
 }
 
+model Platform {
+  id String @id @default(uuid())
+  name String @db.VarChar(100)
+  projects PlatformsOnProjects[]
+}
+
+model Project {
+  id String @id @default(uuid())
+  projectName String @db.VarChar(250)
+  description String 
+  startedDate DateTime @default(now())
+  endDate DateTime
+  price Int
+  client Client @relation(fields: [clientId], references: [id])
+  clientId String 
+  taskId Int
+  task Task @relation(fields: [taskId], references: [id])
+  image String
+  platform PlatformsOnProjects[]
+}
+
+model Member {
+  id String @id @default(uuid())
+  name String @db.VarChar(100)
+  position String
+  phoneNumber String
+  profilePicture String
+  gender String
+  birthDate DateTime
+  role RoleType
+  task Task?
+  payroll Payroll?
+}
+
+model Client {
+  id String @id @default(uuid())
+  name String @db.VarChar(100)
+  phoneNumber String
+  email String
+  address String 
+  project Project[]
+  role RoleType @default(CLIENT)
+} 
+
+model Task {
+  id Int @id @default(autoincrement())
+  name String 
+  startedDate DateTime @default(now())
+  endDate DateTime
+  project Project[]
+  assignMember Member @relation(fields: [memberId], references: [id])
+  memberId String @unique
+}
+
+model Payroll {
+  id Int @id @default(autoincrement())
+  percent Int
+  payment String
+  totalPayment Int
+  date DateTime @default(now())
+  memberId String @unique
+  member Member @relation(fields: [memberId], references: [id])
+}
+
+
+model PlatformsOnProjects {
+  platform Platform @relation(fields: [platformId], references: [id])
+  platformId String
+  project Project @relation(fields: [projectId], references: [id])
+  projectId String
+
+  @@id([platformId,projectId])
+}
+
 enum RoleType {
   ADMIN
   CLIENT 
