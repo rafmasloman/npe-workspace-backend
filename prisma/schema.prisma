@@ -45,6 +45,7 @@ model Project {
   task Task @relation(fields: [taskId], references: [id])
   image String
   platform PlatformsOnProjects[]
+  members Member[]
 }
 
 model Member {
@@ -58,6 +59,7 @@ model Member {
   role RoleType
   task Task?
   payroll Payroll?
+  projects Project[]
 }
 
 model Client {
