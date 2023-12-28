@@ -6,15 +6,19 @@ import NotFoundError from '../error/not-found.error';
 import { IUserDetailResponse } from '../interfaces/user.interface';
 
 const adminController = {
-  getAllRoles: async (req: Request, res: Response) => {
-    const roles = await AdminService.getAllRoles();
+  getAllRoles: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const roles = await AdminService.getAllRoles();
 
-    console.log(roles);
-    return res.json({
-      message: 'Berhasil mendapatkan semua role',
-      statusCode: responseCodes.SUCCESS_FIND_ALL,
-      data: roles,
-    });
+      console.log(roles);
+      return res.json({
+        message: 'Berhasil mendapatkan semua role',
+        statusCode: HttpStatusCode.OK,
+        data: roles,
+      });
+    } catch (error) {
+      next(error);
+    }
   },
 
   getAllUsers: async (req: Request, res: Response, next: NextFunction) => {
@@ -35,8 +39,6 @@ const adminController = {
     try {
       const user: IUserDetailResponse = await AdminService.getUserDetail(id);
 
-      console.log(user);
-
       return res.json({
         message: 'Berhasil mendapatkan detail user',
         statusCode: HttpStatusCode.OK,
@@ -47,26 +49,49 @@ const adminController = {
     }
   },
 
-  createUser: async (req: Request, res: Response) => {
-    const { email, username, password, fullname, role } = req.body;
-    const user = await AdminService.createUser(role, {
-      email,
-      username,
-      password,
-      fullname,
-      roleId: role,
-    });
+  createUser: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { email, username, password, fullname, role } = req.body;
+      const user = await AdminService.createUser(role, {
+        email,
+        username,
+        password,
+        fullname,
+        roleId: role,
+      });
 
-    console.log(user);
-    return res.json({
-      message: 'Berhasil menambah user',
-      statusCode: responseCodes.SUCCESS_CREATE,
-      data: user,
-    });
+      console.log(user);
+      return res.json({
+        message: 'Berhasil menambah user',
+        statusCode: HttpStatusCode.CREATED,
+        data: user,
+      });
+    } catch (error) {
+      next(error);
+    }
   },
 
-  deleteUser: async (req: Request, res: Response) => {
-    const { id } = req.params;
+  updateUser: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = req.params.id;
+      const payload = req.body;
+
+      const user = await AdminService.updateUser(userId, payload);
+
+      return res.json({
+        message: 'Berhasil mengupdate user',
+        statusCode: HttpStatusCode.CREATED,
+        data: {
+          user,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  deleteUser: async (req: Request, res: Response, next: NextFunction) => {
+    const id = req.params.id;
 
     try {
       const user = await prisma.user.delete({
@@ -87,10 +112,7 @@ const adminController = {
         statusCode: 400,
       });
     } catch (error) {
-      return res.json({
-        message: error,
-        statusCode: 500,
-      });
+      next(error);
     }
   },
 };

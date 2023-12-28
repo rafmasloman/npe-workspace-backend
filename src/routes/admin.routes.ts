@@ -7,9 +7,11 @@ const adminRouter = () => {
   const router = Router();
 
   router.get('/', authToken, checkRole, adminController.getAllUsers);
-  router.post('/', adminController.createUser);
-  router.get('/roles', adminController.getAllRoles);
-  router.get('/:id', adminController.getDetailUser);
+  router.post('/', authToken, checkRole, adminController.createUser);
+  router.put('/:id', authToken, checkRole, adminController.updateUser);
+  router.get('/roles', authToken, checkRole, adminController.getAllRoles);
+  router.get('/:id', authToken, checkRole, adminController.getDetailUser);
+  router.delete('/:id', authToken, checkRole, adminController.deleteUser);
 
   return router;
 };

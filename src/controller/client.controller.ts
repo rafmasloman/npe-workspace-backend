@@ -8,6 +8,8 @@ const clientController = {
       const payload = req.body;
       const client = await ClientService.createClient(payload);
 
+      console.log('Client data : ', payload);
+
       return res.json({
         message: 'Berhasil menambah data client',
         statusCode: HttpStatusCode.CREATED,
@@ -55,7 +57,7 @@ const clientController = {
       const clients = await ClientService.getAllClient();
 
       return res.json({
-        message: 'Berhasil mendapatkan semua data project',
+        message: 'Berhasil mendapatkan semua data client',
         statusCode: HttpStatusCode.OK,
         data: clients,
       });

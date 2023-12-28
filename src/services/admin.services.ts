@@ -14,12 +14,6 @@ class AdminService {
     payload: IAdminCreateUserRequestParams,
   ) {
     try {
-      const userRole = await prisma.role.findUnique({
-        where: {
-          id: roleID,
-        },
-      });
-
       const hashPassword = await bcrypt.hash(
         payload.password,
         HashPassword.SALT_ROUND,
@@ -29,9 +23,9 @@ class AdminService {
         data: {
           ...payload,
           password: hashPassword,
-          roleId: userRole?.id,
         } as IAdminCreateUserRequestParams,
       });
+
       return user;
     } catch (error) {
       console.error(error);
@@ -62,7 +56,12 @@ class AdminService {
         where: {
           id,
         },
-        data: payload,
+        data: {
+          email: payload.email,
+          password: payload.password,
+          username: payload.username,
+          fullname: payload.fullname,
+        },
       });
 
       return user;
@@ -75,7 +74,10 @@ class AdminService {
   static async getAllUser() {
     try {
       const user = await prisma.user.findMany({
-        include: {
+        select: {
+          id: true,
+          fullname: true,
+          email: true,
           role: true,
         },
       });
@@ -88,11 +90,19 @@ class AdminService {
 
   static async getUserDetail(id: string) {
     try {
-      const user: IUserDetailResponse | null = await prisma.user.findUnique({
+      const user: IUserDetailResponse | any = await prisma.user.findFirst({
         where: {
           id,
         },
+        select: {
+          id: true,
+          fullname: true,
+          email: true,
+          role: true,
+        },
       });
+
+      console.log(user);
 
       if (!user) {
         throw new NotFoundError('Not Found');
@@ -106,7 +116,11 @@ class AdminService {
 
   static async getAllRoles() {
     try {
-      const roles = await prisma.role.findMany();
+      const roles = await prisma.user.findMany({
+        select: {
+          role: true,
+        },
+      });
 
       return roles;
     } catch (error) {

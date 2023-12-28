@@ -3,27 +3,19 @@ import ProjectService from '../services/project.services';
 import { HttpStatusCode } from '../constants/responses.constant';
 
 const projectController = {
-  createProject: async (req: Request, res: Response, next: NextFunction) => {
+  createProject: async (req: any, res: Response, next: NextFunction) => {
     try {
-      const {
-        projectName,
-        description,
-        startedDate,
-        endDate,
-        price,
-        image,
-        clientId,
-        taskId,
-      } = req.body;
+      const payload = req.body;
+      const image =
+        (req.files?.image && req.files?.image[0]?.filename) || undefined;
+      const projectIcon =
+        (req.files?.projectIcon && req.files?.projectIcon[0]?.filename) ||
+        undefined;
+
       const project = await ProjectService.createProject({
-        projectName,
-        description,
-        startedDate,
-        endDate,
-        price,
+        ...payload,
         image,
-        clientId,
-        taskId,
+        projectIcon,
       });
 
       return res.json({
@@ -32,6 +24,8 @@ const projectController = {
         data: project,
       });
     } catch (error) {
+      console.log('error : ', error);
+
       next(error);
     }
   },
@@ -46,6 +40,8 @@ const projectController = {
         data: projects,
       });
     } catch (error) {
+      console.log('error : ', error);
+
       next(error);
     }
   },
@@ -68,26 +64,15 @@ const projectController = {
   updateProject: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = req.params.id;
-      const {
-        projectName,
-        description,
-        startedDate,
-        endDate,
-        price,
-        image,
-        clientId,
-        taskId,
-      } = req.body;
+      const payload = req.body;
+
+      const image = req.file?.filename;
+      const projectIcon = req.file?.filename;
 
       const project = await ProjectService.updateProject(id, {
-        projectName,
-        description,
-        startedDate,
-        endDate,
-        price,
+        ...payload,
         image,
-        clientId,
-        taskId,
+        projectIcon,
       });
 
       return res.json({

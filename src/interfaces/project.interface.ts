@@ -5,6 +5,9 @@ export interface ICreateProjectRequestParams {
   endDate: Date;
   price: number;
   image: string;
-  clientId: string;
-  taskId: number;
+  projectIcon: string;
+  clientId?: string;
+  taskId?: number;
+  memberId?: string;
+  payrollId?: number;
 }

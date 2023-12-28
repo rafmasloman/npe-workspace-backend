@@ -23,11 +23,6 @@ class AuthServices {
         data: {
           ...payload,
           password: hashPassword,
-          role: {
-            connect: {
-              name: roleName as RoleType,
-            },
-          },
         },
       });
 
@@ -39,37 +34,36 @@ class AuthServices {
 
   static async login(payload: IUserLoginRequestParams) {
     try {
-      const user = await prisma.user.findUnique({
+      const user = await prisma.user.findFirst({
         where: {
           email: payload.email,
         },
-      });
-
-      const role = await prisma.role.findUnique({
-        where: {
-          id: user?.roleId,
+        select: {
+          id: true,
+          role: true,
+          password: true,
         },
       });
 
-      if (user) {
-        const comparePassword = await bcrypt.compare(
-          payload.password,
-          user.password,
-        );
-
-        if (comparePassword) {
-          const token = jwt.sign(
-            { userId: user.id, role: role?.name },
-            process.env.JWT_KEY as string,
-          );
-
-          return token;
-        }
-
+      if (!user) {
         throw new UnauthorizedError('Email atau Password salah');
       }
 
-      throw new UnauthorizedError('Email atau Password salah');
+      const comparePassword = await bcrypt.compare(
+        payload.password,
+        user.password as any,
+      );
+
+      if (!comparePassword) {
+        throw new UnauthorizedError('Email atau Password salah');
+      }
+
+      const token = jwt.sign(
+        { userId: user.id, role: user.role },
+        process.env.JWT_KEY as string,
+      );
+
+      return token;
     } catch (error) {
       throw error;
     }

@@ -4,6 +4,7 @@ import UnauthorizedError from '../error/unauthrized.error';
 const checkRole = (req: Request, res: Response, next: NextFunction) => {
   try {
     const { role } = req.body.user;
+    console.log('role : ', req.body.user);
 
     if (role.toLowerCase() !== 'admin'.toLowerCase()) {
       throw new UnauthorizedError(
@@ -13,6 +14,8 @@ const checkRole = (req: Request, res: Response, next: NextFunction) => {
 
     next();
   } catch (error) {
+    console.log('error : ', error);
+
     next(error);
   }
 };

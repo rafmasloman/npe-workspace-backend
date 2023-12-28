@@ -6,6 +6,7 @@ import { IUserRequest } from '../interfaces/auth.interfaces';
 const authToken = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const token = req.headers.authorization?.split(' ')[1];
+    console.log('token : ', token);
 
     if (!token) {
       throw new UnauthorizedError('Token tidak ada');
@@ -18,9 +19,12 @@ const authToken = async (req: Request, res: Response, next: NextFunction) => {
     }
 
     req.body.user = userToken;
+    console.log('user : ', req.body.user);
 
     next();
   } catch (error) {
+    console.log(error);
+
     next(error);
   }
 };

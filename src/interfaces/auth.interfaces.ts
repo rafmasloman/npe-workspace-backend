@@ -15,6 +15,8 @@ export interface IUserLoginRequestParams {
   password: string;
 }
 
+
+
 export interface IUserRequest extends Request {
   user: string | JwtPayload;
 }

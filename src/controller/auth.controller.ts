@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import AuthServices from '../services/auth.services';
 import { HttpStatusCode } from '../constants/responses.constant';
+import AdminService from '../services/admin.services';
 
 const authController = {
   login: async (req: Request, res: Response, next: NextFunction) => {
@@ -11,9 +12,30 @@ const authController = {
       return res.json({
         statusCode: HttpStatusCode.OK,
         message: 'Berhasil Login',
-        token: user,
+        data: {
+          token: user,
+        },
+      });
+      
+    } catch (error) {
+      console.log('error : ', error);
+
+      next(error);
+    }
+  },
+
+  credential: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userCredential = req.body.user;
+      const user = await AdminService.getUserDetail(userCredential.userId);
+
+      return res.json({
+        statusCode: HttpStatusCode.OK,
+        message: 'Berhasil menampilkan user credential',
+        user,
       });
     } catch (error) {
+      console.log(error);
       next(error);
     }
   },

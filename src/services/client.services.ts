@@ -13,6 +13,8 @@ class ClientService {
 
       return client;
     } catch (error) {
+      console.log('Client Create : ', error);
+
       throw error;
     }
   }
@@ -36,7 +38,7 @@ class ClientService {
 
   static async getAllClient() {
     try {
-      const clients = await prisma.client.findMany();
+      const clients = await prisma.user.findMany();
 
       return clients;
     } catch (error) {

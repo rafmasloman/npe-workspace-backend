@@ -8,11 +8,16 @@ class ProjectService {
       const project = await prisma.project.create({
         data: {
           ...payload,
+          price: Number(payload.price),
+          memberId: payload.memberId!,
+          clientId: payload.clientId,
         },
       });
 
       return project;
     } catch (error) {
+      console.log('error : ', error);
+
       throw error;
     }
   }
@@ -21,7 +26,6 @@ class ProjectService {
     try {
       const projects = await prisma.project.findMany({
         include: {
-          client: true,
           platform: true,
           task: true,
         },
@@ -29,6 +33,8 @@ class ProjectService {
 
       return projects;
     } catch (error) {
+      console.log('error : ', error);
+
       throw error;
     }
   }
@@ -73,6 +79,33 @@ class ProjectService {
       const project = await prisma.project.delete({
         where: {
           id,
+        },
+      });
+
+      return project;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async inviteMember(projectId: string, memberId: string, payload: any) {
+    try {
+      const member = await prisma.member.findUnique({
+        where: {
+          id: memberId,
+        },
+      });
+
+      if (!member) {
+        throw new NotFoundError('Member not found');
+      }
+
+      const project = await prisma.project.update({
+        where: {
+          id: projectId,
+        },
+        data: {
+          memberId,
         },
       });
 
