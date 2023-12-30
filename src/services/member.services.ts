@@ -5,15 +5,13 @@ import { ICreateMemberRequestParams } from '../interfaces/member.interface';
 class MemberService {
   static async createMember(payload: ICreateMemberRequestParams) {
     try {
-      // const user = await prisma.user.create({
-      //   data: {
-
-      //   }
-      // })
-
       const member = await prisma.member.create({
         data: {
           ...payload,
+          userId: payload.userId,
+        },
+        include: {
+          user: true,
         },
       });
 
@@ -33,6 +31,7 @@ class MemberService {
             },
           },
           task: true,
+          user: true,
         },
       });
 

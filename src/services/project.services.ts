@@ -27,7 +27,7 @@ class ProjectService {
       const projects = await prisma.project.findMany({
         include: {
           platform: true,
-          task: true,
+          // task: true,
         },
       });
 

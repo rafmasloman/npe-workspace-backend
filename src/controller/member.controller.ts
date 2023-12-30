@@ -1,12 +1,24 @@
 import { NextFunction, Request, Response } from 'express';
 import MemberService from '../services/member.services';
 import { HttpStatusCode } from '../constants/responses.constant';
+import { ICreateMemberRequestParams } from '../interfaces/member.interface';
 
 const memberController = {
   createMember: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const payload = req.body;
-      const member = await MemberService.createMember(payload);
+      const { position, phoneNumber, gender, birthDate } = req.body;
+      const profilePicture = req.file?.filename;
+
+      console.log('member : ', { position, phoneNumber, gender, birthDate });
+      const initialBirthDate = new Date(birthDate);
+
+      const member = await MemberService.createMember({
+        position,
+        phoneNumber,
+        gender,
+        birthDate: initialBirthDate,
+        profilePicture,
+      } as ICreateMemberRequestParams);
 
       return res.json({
         message: 'Berhasil menambah data member',
@@ -14,6 +26,8 @@ const memberController = {
         data: member,
       });
     } catch (error) {
+      console.log('error controller : ', error);
+
       next(error);
     }
   },

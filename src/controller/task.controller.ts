@@ -6,10 +6,17 @@ const TaskController = {
   createTask: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const payload = req.body;
+      const { name, projectId } = req.body;
       const task = await TaskService.createTask(payload);
 
-      return task;
+      return res.json({
+        message: 'Berhasil membuat task',
+        statusCode: HttpStatusCode.CREATED,
+        data: task,
+      });
     } catch (error) {
+      console.log('error controller : ', error);
+
       next(error);
     }
   },

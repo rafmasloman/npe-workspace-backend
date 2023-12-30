@@ -9,10 +9,7 @@ import { IUserDetailResponse } from '../interfaces/user.interface';
 import bcrypt from 'bcrypt';
 
 class AdminService {
-  static async createUser(
-    roleID: number,
-    payload: IAdminCreateUserRequestParams,
-  ) {
+  static async createUser(payload: IAdminCreateUserRequestParams) {
     try {
       const hashPassword = await bcrypt.hash(
         payload.password,

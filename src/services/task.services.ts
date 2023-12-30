@@ -8,10 +8,13 @@ class TaskService {
       const task = await prisma.task.create({
         data: {
           ...payload,
-          project: {
-            connect: {
-              id: payload.projectId,
-            },
+          member: {
+            connect: [
+              {
+                id: payload.memberId,
+              },
+              
+            ],
           },
         },
       });
@@ -27,7 +30,6 @@ class TaskService {
       const tasks = await prisma.task.findMany({
         include: {
           project: true,
-          assignMember: true,
         },
       });
 

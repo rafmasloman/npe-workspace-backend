@@ -5,7 +5,7 @@ export interface IAdminCreateUserRequestParams {
   username: string;
   password: string;
   fullname: string;
-  roleId: number;
+  role: 'STAFF' | 'ADMIN' | 'PROJECT_MANAGER';
   //   role: Prisma.RoleCreateNestedOneWithoutUsersInput;
 }
 

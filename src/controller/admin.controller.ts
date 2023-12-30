@@ -52,12 +52,12 @@ const adminController = {
   createUser: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { email, username, password, fullname, role } = req.body;
-      const user = await AdminService.createUser(role, {
+      const user = await AdminService.createUser({
         email,
         username,
         password,
         fullname,
-        roleId: role,
+        role,
       });
 
       console.log(user);
