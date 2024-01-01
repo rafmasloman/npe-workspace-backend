@@ -2,8 +2,8 @@ export interface ICreateTaskRequestParams {
   name: string;
   startedDate: Date;
   endDate: Date;
-  memberId: string;
-  projectId: string
+  member: string[];
+  projectId: string;
 }
 
 export interface IReadTasksResponseParams {

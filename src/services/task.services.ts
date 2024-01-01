@@ -4,17 +4,25 @@ import { ICreateTaskRequestParams } from '../interfaces/task.interface';
 
 class TaskService {
   static async createTask(payload: ICreateTaskRequestParams) {
+    console.log('task : ', payload);
+
     try {
       const task = await prisma.task.create({
         data: {
           ...payload,
           member: {
-            connect: [
-              {
-                id: payload.memberId,
-              },
-              
-            ],
+            connect: payload.member.map((memberId: string) => ({
+              id: memberId,
+            })),
+          },
+          projectId: payload.projectId,
+        },
+        include: {
+          project: true,
+          member: {
+            include: {
+              user: true,
+            },
           },
         },
       });
@@ -30,6 +38,11 @@ class TaskService {
       const tasks = await prisma.task.findMany({
         include: {
           project: true,
+          member: {
+            include: {
+              user: true,
+            },
+          },
         },
       });
 
@@ -105,6 +118,12 @@ class TaskService {
         },
         data: {
           ...payload,
+          member: {
+            connect: payload.member.map((memberId: string) => ({
+              id: memberId,
+            })),
+          },
+          projectId: payload.projectId,
         },
       });
 

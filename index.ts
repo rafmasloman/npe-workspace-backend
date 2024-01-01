@@ -9,6 +9,8 @@ import memberRouter from './src/routes/member.routes';
 import taskRouter from './src/routes/task.routes';
 import cors from 'cors';
 import fileRouter from './src/routes/file.routes';
+import commentRouter from './src/routes/comment.routes';
+import milestoneRouter from './src/routes/milestone.routes';
 
 //For env File
 dotenv.config();
@@ -28,6 +30,8 @@ app.use(`/${API_URL}/${API_VERSION}/client`, clientRouter());
 app.use(`/${API_URL}/${API_VERSION}/member`, memberRouter());
 app.use(`/${API_URL}/${API_VERSION}/task`, taskRouter());
 app.use(`/${API_URL}/${API_VERSION}/files`, fileRouter());
+app.use(`/${API_URL}/${API_VERSION}/comment`, commentRouter());
+app.use(`/${API_URL}/${API_VERSION}/milestone`, milestoneRouter());
 
 app.use(ErrorHandler);
 

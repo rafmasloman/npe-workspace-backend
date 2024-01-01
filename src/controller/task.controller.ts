@@ -1,13 +1,18 @@
 import { NextFunction, Request, Response } from 'express';
 import TaskService from '../services/task.services';
 import { HttpStatusCode } from '../constants/responses.constant';
+import { ICreateTaskRequestParams } from '../interfaces/task.interface';
 
 const TaskController = {
   createTask: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const payload = req.body;
-      const { name, projectId } = req.body;
-      const task = await TaskService.createTask(payload);
+      const { name, projectId, member } = req.body;
+      const task = await TaskService.createTask({
+        name,
+        projectId,
+        member,
+      } as ICreateTaskRequestParams);
 
       return res.json({
         message: 'Berhasil membuat task',
@@ -55,7 +60,11 @@ const TaskController = {
 
       const task = await TaskService.updateTask(Number(id), payload);
 
-      return task;
+      return res.json({
+        message: 'Berhasil mengupdate task',
+        statusCode: HttpStatusCode.CREATED,
+        data: task,
+      });
     } catch (error) {
       next(error);
     }
@@ -66,7 +75,10 @@ const TaskController = {
       const id = req.params.id;
       const task = await TaskService.deleteTask(Number(id));
 
-      return task;
+      return res.json({
+        message: 'Berhasil menghapus task',
+        statusCode: HttpStatusCode.OK,
+      });
     } catch (error) {
       next(error);
     }
