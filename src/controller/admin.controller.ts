@@ -4,6 +4,8 @@ import AdminService from '../services/admin.services';
 import { HttpStatusCode, responseCodes } from '../constants/responses.constant';
 import NotFoundError from '../error/not-found.error';
 import { IUserDetailResponse } from '../interfaces/user.interface';
+import { userValidationSchema } from '../utils/schema.utils';
+import ValidationError from '../error/validation.error';
 
 const adminController = {
   getAllRoles: async (req: Request, res: Response, next: NextFunction) => {
@@ -52,7 +54,7 @@ const adminController = {
   createUser: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { email, username, password, fullname, role } = req.body;
-      const user = await AdminService.createUser({
+      const { error, value } = userValidationSchema.validate({
         email,
         username,
         password,
@@ -60,7 +62,12 @@ const adminController = {
         role,
       });
 
-      console.log(user);
+      if (error) {
+        throw new ValidationError(error.message);
+      }
+
+      const user = await AdminService.createUser(value);
+
       return res.json({
         message: 'Berhasil menambah user',
         statusCode: HttpStatusCode.CREATED,

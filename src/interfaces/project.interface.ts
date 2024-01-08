@@ -8,6 +8,6 @@ export interface ICreateProjectRequestParams {
   projectIcon: string;
   clientId?: string;
   taskId?: number;
-  memberId?: string;
+  memberId?: string[];
   payrollId?: number;
 }

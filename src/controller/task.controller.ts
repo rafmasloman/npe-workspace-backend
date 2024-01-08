@@ -6,12 +6,12 @@ import { ICreateTaskRequestParams } from '../interfaces/task.interface';
 const TaskController = {
   createTask: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const payload = req.body;
-      const { name, projectId, member } = req.body;
+      const { name, projectId, member, milestoneId, status } = req.body;
       const task = await TaskService.createTask({
         name,
         projectId,
         member,
+        status,
       } as ICreateTaskRequestParams);
 
       return res.json({
@@ -56,9 +56,15 @@ const TaskController = {
   updateTask: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = req.params.id;
-      const payload = req.body;
+      const { name, projectId, member, milestoneId, status } = req.body;
 
-      const task = await TaskService.updateTask(Number(id), payload);
+      const task = await TaskService.updateTask(Number(id), {
+        name,
+        projectId,
+        member,
+        milestoneId,
+        status,
+      } as ICreateTaskRequestParams);
 
       return res.json({
         message: 'Berhasil mengupdate task',
@@ -66,6 +72,8 @@ const TaskController = {
         data: task,
       });
     } catch (error) {
+      console.log(error);
+
       next(error);
     }
   },

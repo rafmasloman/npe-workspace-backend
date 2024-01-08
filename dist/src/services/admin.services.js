@@ -15,19 +15,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const prisma_client_config_1 = __importDefault(require("../config/prisma-client.config"));
 const auth_constant_1 = require("../constants/auth.constant");
 const not_found_error_1 = __importDefault(require("../error/not-found.error"));
+const validation_error_1 = __importDefault(require("../error/validation.error"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 class AdminService {
-    static createUser(roleID, payload) {
+    static createUser(payload) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const userRole = yield prisma_client_config_1.default.role.findUnique({
-                    where: {
-                        id: roleID,
-                    },
-                });
                 const hashPassword = yield bcrypt_1.default.hash(payload.password, auth_constant_1.HashPassword.SALT_ROUND);
+                const existingUser = yield prisma_client_config_1.default.user.findUnique({
+                    where: { email: payload.email },
+                });
+                if (existingUser) {
+                    throw new validation_error_1.default('Email Sudah ada');
+                }
                 const user = yield prisma_client_config_1.default.user.create({
-                    data: Object.assign(Object.assign({}, payload), { password: hashPassword, roleId: userRole === null || userRole === void 0 ? void 0 : userRole.id }),
+                    data: Object.assign(Object.assign({}, payload), { password: hashPassword }),
                 });
                 return user;
             }
@@ -60,7 +62,12 @@ class AdminService {
                     where: {
                         id,
                     },
-                    data: payload,
+                    data: {
+                        email: payload.email,
+                        password: payload.password,
+                        username: payload.username,
+                        fullname: payload.fullname,
+                    },
                 });
                 return user;
             }
@@ -74,7 +81,10 @@ class AdminService {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const user = yield prisma_client_config_1.default.user.findMany({
-                    include: {
+                    select: {
+                        id: true,
+                        fullname: true,
+                        email: true,
                         role: true,
                     },
                 });
@@ -89,17 +99,25 @@ class AdminService {
     static getUserDetail(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const user = yield prisma_client_config_1.default.user.findUnique({
+                const user = yield prisma_client_config_1.default.user.findFirst({
                     where: {
                         id,
                     },
+                    select: {
+                        id: true,
+                        fullname: true,
+                        email: true,
+                        role: true,
+                    },
                 });
+                console.log('user : ', user);
                 if (!user) {
                     throw new not_found_error_1.default('Not Found');
                 }
                 return user;
             }
             catch (error) {
+                console.log('user credential error : ', error);
                 throw error;
             }
         });
@@ -107,7 +125,11 @@ class AdminService {
     static getAllRoles() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const roles = yield prisma_client_config_1.default.role.findMany();
+                const roles = yield prisma_client_config_1.default.user.findMany({
+                    select: {
+                        role: true,
+                    },
+                });
                 return roles;
             }
             catch (error) {

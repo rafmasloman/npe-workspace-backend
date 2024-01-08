@@ -37,6 +37,8 @@ class MemberService {
 
       return members;
     } catch (error) {
+      console.log('member get all error : ', error);
+
       throw error;
     }
   }

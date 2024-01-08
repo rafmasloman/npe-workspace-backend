@@ -8,13 +8,13 @@ const fileRouter = () => {
 
   router.get(
     '/download/:imageFolder/:imageName',
-    authToken,
+
     fileController.downloadImage,
   );
 
   router.get(
     '/download/:imageFolder/:iconName',
-    authToken,
+
     fileController.downloadIcon,
   );
 

@@ -61,16 +61,22 @@ const projectController = {
     }
   },
 
-  updateProject: async (req: Request, res: Response, next: NextFunction) => {
+  updateProject: async (req: any, res: Response, next: NextFunction) => {
     try {
       const id = req.params.id;
       const payload = req.body;
 
-      const image = req.file?.filename;
-      const projectIcon = req.file?.filename;
+      const image =
+        (req.files?.image && req.files?.image[0]?.filename) || undefined;
+      const projectIcon =
+        (req.files?.projectIcon && req.files?.projectIcon[0]?.filename) ||
+        undefined;
+
+      console.log('image name : ', image);
 
       const project = await ProjectService.updateProject(id, {
         ...payload,
+        price: Number(payload.price),
         image,
         projectIcon,
       });
@@ -81,6 +87,8 @@ const projectController = {
         data: project,
       });
     } catch (error) {
+      console.log(error);
+
       next(error);
     }
   },

@@ -4,6 +4,8 @@ export interface ICreateTaskRequestParams {
   endDate: Date;
   member: string[];
   projectId: string;
+  milestoneId?: number;
+  status: 'To Do' | 'On Progress' | 'Complete';
 }
 
 export interface IReadTasksResponseParams {
@@ -12,4 +14,5 @@ export interface IReadTasksResponseParams {
   startedDate: Date;
   endDate: Date;
   memberId: string;
+  status: string;
 }

@@ -24,6 +24,7 @@ class ClientService {
                 return client;
             }
             catch (error) {
+                console.log('Client Create : ', error);
                 throw error;
             }
         });
@@ -47,7 +48,7 @@ class ClientService {
     static getAllClient() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const clients = yield prisma_client_config_1.default.client.findMany();
+                const clients = yield prisma_client_config_1.default.user.findMany();
                 return clients;
             }
             catch (error) {

@@ -29,7 +29,16 @@ const projectRouter = () => {
     '/:id',
     authToken,
     checkRole,
-    multerConfig('projects').single('image'),
+    multerConfig('projects').fields([
+      {
+        name: 'image',
+        maxCount: 4,
+      },
+      {
+        name: 'projectIcon',
+        maxCount: 1,
+      },
+    ]),
 
     projectController.updateProject,
   );

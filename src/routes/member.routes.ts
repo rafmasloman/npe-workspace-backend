@@ -11,11 +11,17 @@ const memberRouter = () => {
   router.get('/:id', authToken, checkRole, memberController.getMemberDetail);
   router.post(
     '/',
-    authToken, 
+    authToken,
     multerConfig('members').single('profilePicture'),
     memberController.createMember,
   );
-  router.put('/:id', authToken, checkRole, memberController.updateMember);
+  router.put(
+    '/:id',
+    authToken,
+    checkRole,
+    multerConfig('members').single('profilePicture'),
+    memberController.updateMember,
+  );
   router.delete('/:id', authToken, checkRole, memberController.deleteMember);
 
   return router;

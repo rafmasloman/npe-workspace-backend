@@ -13,12 +13,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const prisma_client_config_1 = __importDefault(require("../src/config/prisma-client.config"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
+const auth_constant_1 = require("../src/constants/auth.constant");
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
+        const initialPassword = 'adminnpe';
+        const hashPassword = yield bcrypt_1.default.hash(initialPassword, auth_constant_1.HashPassword.SALT_ROUND);
         const user = yield prisma_client_config_1.default.user.create({
             data: {
                 email: 'adminnpe01@gmail.com',
-                password: 'adminnpe',
+                password: hashPassword,
                 fullname: 'Admin 01',
                 username: 'admin01',
                 roleId: 1,

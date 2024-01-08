@@ -34,10 +34,19 @@ const memberController = {
 
   updateMember: async (req: Request, res: Response, next: NextFunction) => {
     try {
+      const { position, phoneNumber, gender, birthDate } = req.body;
       const id = req.params.id;
-      const payload = req.body;
+      const profilePicture = req.file?.filename;
 
-      const member = await MemberService.updateMember(id, payload);
+      console.log(profilePicture);
+
+      const member = await MemberService.updateMember(id, {
+        position,
+        phoneNumber,
+        gender,
+        birthDate,
+        profilePicture,
+      } as ICreateMemberRequestParams);
       return res.json({
         message: 'Berhasil mengubah data member',
         statusCode: HttpStatusCode.CREATED,

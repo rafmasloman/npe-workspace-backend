@@ -19,11 +19,12 @@ class ProjectService {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const project = yield prisma_client_config_1.default.project.create({
-                    data: Object.assign({}, payload),
+                    data: Object.assign(Object.assign({}, payload), { price: Number(payload.price), memberId: payload.memberId, clientId: payload.clientId }),
                 });
                 return project;
             }
             catch (error) {
+                console.log('error : ', error);
                 throw error;
             }
         });
@@ -31,16 +32,11 @@ class ProjectService {
     static getAllProject() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const projects = yield prisma_client_config_1.default.project.findMany({
-                    include: {
-                        client: true,
-                        platform: true,
-                        task: true,
-                    },
-                });
+                const projects = yield prisma_client_config_1.default.project.findMany();
                 return projects;
             }
             catch (error) {
+                console.log('error : ', error);
                 throw error;
             }
         });
@@ -75,6 +71,7 @@ class ProjectService {
                 return project;
             }
             catch (error) {
+                console.log(error);
                 throw error;
             }
         });
@@ -85,6 +82,32 @@ class ProjectService {
                 const project = yield prisma_client_config_1.default.project.delete({
                     where: {
                         id,
+                    },
+                });
+                return project;
+            }
+            catch (error) {
+                throw error;
+            }
+        });
+    }
+    static inviteMember(projectId, memberId, payload) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const member = yield prisma_client_config_1.default.member.findUnique({
+                    where: {
+                        id: memberId,
+                    },
+                });
+                if (!member) {
+                    throw new not_found_error_1.default('Member not found');
+                }
+                const project = yield prisma_client_config_1.default.project.update({
+                    where: {
+                        id: projectId,
+                    },
+                    data: {
+                        memberId,
                     },
                 });
                 return project;

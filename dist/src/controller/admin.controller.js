@@ -15,15 +15,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const prisma_client_config_1 = __importDefault(require("../config/prisma-client.config"));
 const admin_services_1 = __importDefault(require("../services/admin.services"));
 const responses_constant_1 = require("../constants/responses.constant");
+const schema_utils_1 = require("../utils/schema.utils");
+const validation_error_1 = __importDefault(require("../error/validation.error"));
 const adminController = {
-    getAllRoles: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const roles = yield admin_services_1.default.getAllRoles();
-        console.log(roles);
-        return res.json({
-            message: 'Berhasil mendapatkan semua role',
-            statusCode: responses_constant_1.responseCodes.SUCCESS_FIND_ALL,
-            data: roles,
-        });
+    getAllRoles: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const roles = yield admin_services_1.default.getAllRoles();
+            console.log(roles);
+            return res.json({
+                message: 'Berhasil mendapatkan semua role',
+                statusCode: responses_constant_1.HttpStatusCode.OK,
+                data: roles,
+            });
+        }
+        catch (error) {
+            next(error);
+        }
     }),
     getAllUsers: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         try {
@@ -42,7 +49,6 @@ const adminController = {
         const id = req.params.id;
         try {
             const user = yield admin_services_1.default.getUserDetail(id);
-            console.log(user);
             return res.json({
                 message: 'Berhasil mendapatkan detail user',
                 statusCode: responses_constant_1.HttpStatusCode.OK,
@@ -53,24 +59,49 @@ const adminController = {
             next(error);
         }
     }),
-    createUser: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const { email, username, password, fullname, role } = req.body;
-        const user = yield admin_services_1.default.createUser(role, {
-            email,
-            username,
-            password,
-            fullname,
-            roleId: role,
-        });
-        console.log(user);
-        return res.json({
-            message: 'Berhasil menambah user',
-            statusCode: responses_constant_1.responseCodes.SUCCESS_CREATE,
-            data: user,
-        });
+    createUser: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const { email, username, password, fullname, role } = req.body;
+            const { error, value } = schema_utils_1.userValidationSchema.validate({
+                email,
+                username,
+                password,
+                fullname,
+                role,
+            });
+            if (error) {
+                throw new validation_error_1.default(error.message);
+            }
+            const user = yield admin_services_1.default.createUser(value);
+            return res.json({
+                message: 'Berhasil menambah user',
+                statusCode: responses_constant_1.HttpStatusCode.CREATED,
+                data: user,
+            });
+        }
+        catch (error) {
+            next(error);
+        }
     }),
-    deleteUser: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const { id } = req.params;
+    updateUser: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const userId = req.params.id;
+            const payload = req.body;
+            const user = yield admin_services_1.default.updateUser(userId, payload);
+            return res.json({
+                message: 'Berhasil mengupdate user',
+                statusCode: responses_constant_1.HttpStatusCode.CREATED,
+                data: {
+                    user,
+                },
+            });
+        }
+        catch (error) {
+            next(error);
+        }
+    }),
+    deleteUser: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        const id = req.params.id;
         try {
             const user = yield prisma_client_config_1.default.user.delete({
                 where: {
@@ -89,10 +120,7 @@ const adminController = {
             });
         }
         catch (error) {
-            return res.json({
-                message: error,
-                statusCode: 500,
-            });
+            next(error);
         }
     }),
 };

@@ -18,8 +18,8 @@ const authToken = async (req: Request, res: Response, next: NextFunction) => {
       throw new UnauthorizedError('Token tidak terverifikasi');
     }
 
-    req.body.userDetail = userToken;
-    console.log('user : ', req.body.userDetail);
+    req.body.user = userToken;
+    console.log('user : ', req.body.user);
 
     next();
   } catch (error) {

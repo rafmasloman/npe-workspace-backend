@@ -1,20 +1,26 @@
 import prisma from '../config/prisma-client.config';
 import { ICreatePayrollRequestParams } from '../interfaces/payroll.interfaces';
+import ProjectService from './project.services';
 
 class PayrollService {
   static async createPayroll(payload: ICreatePayrollRequestParams) {
     try {
+      const project = await ProjectService.getProjetDetail(payload.projectId);
+
+      console.log('project on payroll : ', project.price);
+
       const payroll = await prisma.payroll.create({
         data: {
           ...payload,
           memberId: payload.memberId,
           projectId: payload.projectId,
-          
         },
       });
 
       return payroll;
     } catch (error) {
+      console.log('payroll creata : ', error);
+
       throw error;
     }
   }

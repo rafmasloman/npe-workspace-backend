@@ -19,6 +19,7 @@ const clientController = {
         try {
             const payload = req.body;
             const client = yield client_services_1.default.createClient(payload);
+            console.log('Client data : ', payload);
             return res.json({
                 message: 'Berhasil menambah data client',
                 statusCode: responses_constant_1.HttpStatusCode.CREATED,
@@ -62,7 +63,7 @@ const clientController = {
         try {
             const clients = yield client_services_1.default.getAllClient();
             return res.json({
-                message: 'Berhasil mendapatkan semua data project',
+                message: 'Berhasil mendapatkan semua data client',
                 statusCode: responses_constant_1.HttpStatusCode.OK,
                 data: clients,
             });

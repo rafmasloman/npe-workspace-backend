@@ -25,11 +25,7 @@ class AuthServices {
             try {
                 const hashPassword = yield bcrypt_1.default.hash(payload.password, auth_constant_1.HashPassword.SALT_ROUND);
                 const user = prisma_client_config_1.default.user.create({
-                    data: Object.assign(Object.assign({}, payload), { password: hashPassword, role: {
-                            connect: {
-                                name: roleName,
-                            },
-                        } }),
+                    data: Object.assign(Object.assign({}, payload), { password: hashPassword }),
                 });
                 return user;
             }
@@ -41,25 +37,25 @@ class AuthServices {
     static login(payload) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const user = yield prisma_client_config_1.default.user.findUnique({
+                const user = yield prisma_client_config_1.default.user.findFirst({
                     where: {
                         email: payload.email,
                     },
-                });
-                const role = yield prisma_client_config_1.default.role.findUnique({
-                    where: {
-                        id: user === null || user === void 0 ? void 0 : user.roleId,
+                    select: {
+                        id: true,
+                        role: true,
+                        password: true,
                     },
                 });
-                if (user) {
-                    const comparePassword = yield bcrypt_1.default.compare(payload.password, user.password);
-                    if (comparePassword) {
-                        const token = jsonwebtoken_1.default.sign({ userId: user.id, role: role === null || role === void 0 ? void 0 : role.name }, process.env.JWT_KEY);
-                        return token;
-                    }
+                if (!user) {
                     throw new unauthrized_error_1.default('Email atau Password salah');
                 }
-                throw new unauthrized_error_1.default('Email atau Password salah');
+                const comparePassword = yield bcrypt_1.default.compare(payload.password, user.password);
+                if (!comparePassword) {
+                    throw new unauthrized_error_1.default('Email atau Password salah');
+                }
+                const token = jsonwebtoken_1.default.sign({ id: user.id, role: user.role }, process.env.JWT_KEY);
+                return token;
             }
             catch (error) {
                 throw error;

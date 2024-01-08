@@ -18,6 +18,7 @@ const authToken = (req, res, next) => __awaiter(void 0, void 0, void 0, function
     var _a;
     try {
         const token = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(' ')[1];
+        console.log('token : ', token);
         if (!token) {
             throw new unauthrized_error_1.default('Token tidak ada');
         }
@@ -26,9 +27,11 @@ const authToken = (req, res, next) => __awaiter(void 0, void 0, void 0, function
             throw new unauthrized_error_1.default('Token tidak terverifikasi');
         }
         req.body.user = userToken;
+        console.log('user : ', req.body.user);
         next();
     }
     catch (error) {
+        console.log(error);
         next(error);
     }
 });

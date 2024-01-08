@@ -16,7 +16,7 @@ async function main() {
       password: hashPassword,
       fullname: 'Admin 01',
       username: 'admin01',
-      roleId: 1,
+      role: 'ADMIN',
     },
   });
 

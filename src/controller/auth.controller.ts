@@ -16,7 +16,6 @@ const authController = {
           token: user,
         },
       });
-      
     } catch (error) {
       console.log('error : ', error);
 
@@ -27,6 +26,9 @@ const authController = {
   credential: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userCredential = req.body.user;
+
+      console.log('user : ', req.body.user);
+
       const user = await AdminService.getUserDetail(userCredential.userId);
 
       return res.json({

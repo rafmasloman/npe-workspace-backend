@@ -36,7 +36,6 @@ model User {
 model Platform {
   id       String                @id @default(uuid())
   name     String                @db.VarChar(100)
-  projects PlatformsOnProjects[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
@@ -50,13 +49,12 @@ model Project {
   endDate     DateTime?
   price       Int
   task        Task[]
-  memberId    String?
-  member      Member?                @relation(fields: [memberId], references: [id])
+  member Member[]
   clientId  String?
   client    Client?   @relation(fields: [clientId], references: [id])
   image       String?
   projectIcon String?
-  platform    PlatformsOnProjects[]
+  platform    String?
   payroll     Payroll[]
   milestone Milestone[]
 
@@ -67,7 +65,6 @@ model Project {
 
 model Member {
   id             String    @id @default(uuid())
-  // name String @db.VarChar(100)
   position       String
   phoneNumber    String
   profilePicture String?
@@ -113,6 +110,7 @@ model Task {
   project   Project @relation(fields: [projectId], references: [id])
   member    Member[]
   comment Comment[]
+  status String
   milestoneId Int?
   milestone Milestone? @relation(fields: [milestoneId], references: [id])
   createdAt DateTime  @default(now())
@@ -136,8 +134,7 @@ model Milestone {
 model Payroll {
   id           Int       @id @default(autoincrement())
   percent      Int
-  payment      String
-  totalPayment Int
+  paymentMethod  String
   date         DateTime  @default(now())
   memberId     String    @unique
   member       Member    @relation(fields: [memberId], references: [id])
@@ -147,17 +144,6 @@ model Payroll {
   updatedAt    DateTime? @updatedAt
 }
 
-model PlatformsOnProjects {
-  platform   Platform @relation(fields: [platformId], references: [id])
-  platformId String
-  project    Project  @relation(fields: [projectId], references: [id])
-  projectId  String
-
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
-
-  @@id([platformId, projectId])
-}
 
 enum RoleType {
   ADMIN

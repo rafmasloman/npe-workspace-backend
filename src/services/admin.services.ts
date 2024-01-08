@@ -1,6 +1,7 @@
 import prisma from '../config/prisma-client.config';
 import { HashPassword } from '../constants/auth.constant';
 import NotFoundError from '../error/not-found.error';
+import ValidationError from '../error/validation.error';
 import {
   IAdminCreateUserRequestParams,
   IAdminUpdateUserRequestParams,
@@ -15,6 +16,14 @@ class AdminService {
         payload.password,
         HashPassword.SALT_ROUND,
       );
+
+      const existingUser = await prisma.user.findUnique({
+        where: { email: payload.email },
+      });
+
+      if (existingUser) {
+        throw new ValidationError('Email Sudah ada');
+      }
 
       const user = await prisma.user.create({
         data: {
@@ -99,7 +108,7 @@ class AdminService {
         },
       });
 
-      console.log(user);
+      console.log('user : ', user);
 
       if (!user) {
         throw new NotFoundError('Not Found');
@@ -107,6 +116,8 @@ class AdminService {
 
       return user;
     } catch (error) {
+      console.log('user credential error : ', error);
+
       throw error;
     }
   }

@@ -11,6 +11,7 @@ import cors from 'cors';
 import fileRouter from './src/routes/file.routes';
 import commentRouter from './src/routes/comment.routes';
 import milestoneRouter from './src/routes/milestone.routes';
+import PayrollRoute from './src/routes/payroll.routes';
 
 //For env File
 dotenv.config();
@@ -18,7 +19,11 @@ dotenv.config();
 const app: Application = express();
 const port = process.env.PORT || 8000;
 app.use(express.json());
-app.use(cors({ origin: '*' }));
+app.use(
+  cors({
+    origin: '*',
+  }),
+);
 
 const API_VERSION = 'v1';
 const API_URL = 'api';
@@ -32,6 +37,7 @@ app.use(`/${API_URL}/${API_VERSION}/task`, taskRouter());
 app.use(`/${API_URL}/${API_VERSION}/files`, fileRouter());
 app.use(`/${API_URL}/${API_VERSION}/comment`, commentRouter());
 app.use(`/${API_URL}/${API_VERSION}/milestone`, milestoneRouter());
+app.use(`/${API_URL}/${API_VERSION}/payroll`, PayrollRoute.routes());
 
 app.use(ErrorHandler);
 

@@ -9,8 +9,12 @@ class ProjectService {
         data: {
           ...payload,
           price: Number(payload.price),
-          memberId: payload.memberId!,
           clientId: payload.clientId,
+          member: {
+            connect: payload.memberId?.map((memberId: string) => ({
+              id: memberId,
+            })),
+          },
         },
       });
 
@@ -26,10 +30,34 @@ class ProjectService {
     try {
       const projects = await prisma.project.findMany({
         include: {
-          platform: true,
-          // task: true,
+          member: {
+            select: {
+              position: true,
+              profilePicture: true,
+              user: {
+                select: {
+                  fullname: true,
+                },
+              },
+            },
+          },
+          task: {
+            select: {
+              status: true,
+            },
+          },
         },
       });
+
+      const taskCompleted = await prisma.task.count({
+        where: {
+          status: {
+            contains: 'Completed',
+          },
+        },
+      });
+
+      console.log('task completed : ', taskCompleted);
 
       return projects;
     } catch (error) {
@@ -70,6 +98,8 @@ class ProjectService {
 
       return project;
     } catch (error) {
+      console.log(error);
+
       throw error;
     }
   }
@@ -88,32 +118,32 @@ class ProjectService {
     }
   }
 
-  static async inviteMember(projectId: string, memberId: string, payload: any) {
-    try {
-      const member = await prisma.member.findUnique({
-        where: {
-          id: memberId,
-        },
-      });
+  // static async inviteMember(projectId: string, memberId: string, payload: any) {
+  //   try {
+  //     const member = await prisma.member.findUnique({
+  //       where: {
+  //         id: memberId,
+  //       },
+  //     });
 
-      if (!member) {
-        throw new NotFoundError('Member not found');
-      }
+  //     if (!member) {
+  //       throw new NotFoundError('Member not found');
+  //     }
 
-      const project = await prisma.project.update({
-        where: {
-          id: projectId,
-        },
-        data: {
-          memberId,
-        },
-      });
+  //     const project = await prisma.project.update({
+  //       where: {
+  //         id: projectId,
+  //       },
+  //       data: {
+  //         memberId,
+  //       },
+  //     });
 
-      return project;
-    } catch (error) {
-      throw error;
-    }
-  }
+  //     return project;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
 }
 
 export default ProjectService;

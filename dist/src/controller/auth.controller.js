@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const auth_services_1 = __importDefault(require("../services/auth.services"));
 const responses_constant_1 = require("../constants/responses.constant");
+const admin_services_1 = __importDefault(require("../services/admin.services"));
 const authController = {
     login: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         try {
@@ -22,10 +23,29 @@ const authController = {
             return res.json({
                 statusCode: responses_constant_1.HttpStatusCode.OK,
                 message: 'Berhasil Login',
-                token: user,
+                data: {
+                    token: user,
+                },
             });
         }
         catch (error) {
+            console.log('error : ', error);
+            next(error);
+        }
+    }),
+    credential: (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const userCredential = req.body.user;
+            console.log('user : ', req.body.user);
+            const user = yield admin_services_1.default.getUserDetail(userCredential.userId);
+            return res.json({
+                statusCode: responses_constant_1.HttpStatusCode.OK,
+                message: 'Berhasil menampilkan user credential',
+                user,
+            });
+        }
+        catch (error) {
+            console.log(error);
             next(error);
         }
     }),

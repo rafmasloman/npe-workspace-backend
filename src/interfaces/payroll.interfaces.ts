@@ -1,7 +1,6 @@
 export interface ICreatePayrollRequestParams {
   percent: number;
-  payment: string;
-  totalPayment: number;
+  paymentMethod: string;
   date: Date;
   memberId: string;
   projectId: string;

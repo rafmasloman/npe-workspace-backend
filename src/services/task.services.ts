@@ -10,12 +10,14 @@ class TaskService {
       const task = await prisma.task.create({
         data: {
           ...payload,
+
           member: {
             connect: payload.member.map((memberId: string) => ({
               id: memberId,
             })),
           },
           projectId: payload.projectId,
+          milestoneId: payload.milestoneId,
         },
         include: {
           project: true,
@@ -36,14 +38,15 @@ class TaskService {
   static async getAllTask() {
     try {
       const tasks = await prisma.task.findMany({
-        include: {
-          project: true,
-          member: {
-            include: {
-              user: true,
-            },
-          },
-        },
+        // include: {
+        //   project: true,
+        //   member: {
+        //     include: {
+        //       user: true,
+        //     },
+        //   },
+        //   milestone: true,
+        // },
       });
 
       return tasks;
@@ -119,16 +122,19 @@ class TaskService {
         data: {
           ...payload,
           member: {
-            connect: payload.member.map((memberId: string) => ({
+            connect: payload.member?.map((memberId: string) => ({
               id: memberId,
             })),
           },
           projectId: payload.projectId,
+          milestoneId: payload.milestoneId,
         },
       });
 
       return task;
     } catch (error) {
+      console.log(error);
+
       throw error;
     }
   }
