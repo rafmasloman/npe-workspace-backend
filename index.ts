@@ -22,12 +22,14 @@ app.use(express.json());
 app.use(
   cors({
     origin: '*',
+    credentials: true,
   }),
 );
 
 const API_VERSION = 'v1';
 const API_URL = 'api';
 
+// app.options(`/${API_URL}/${API_VERSION}/project`, cors())
 app.use(`/${API_URL}/${API_VERSION}/users`, adminRouter());
 app.use(`/${API_URL}/${API_VERSION}/auth`, authRouter());
 app.use(`/${API_URL}/${API_VERSION}/project`, projectRouter());

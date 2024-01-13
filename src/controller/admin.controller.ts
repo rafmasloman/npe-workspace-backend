@@ -12,7 +12,6 @@ const adminController = {
     try {
       const roles = await AdminService.getAllRoles();
 
-      console.log(roles);
       return res.json({
         message: 'Berhasil mendapatkan semua role',
         statusCode: HttpStatusCode.OK,

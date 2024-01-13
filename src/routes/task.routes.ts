@@ -8,7 +8,8 @@ const taskRouter = () => {
 
   router.get('/', authToken, taskController.getAllTask);
   router.get('/:id', authToken, taskController.getTaskDetail);
-  
+  router.get('project/:id', authToken, taskController.getTasksByProject);
+
   router.post('/', authToken, taskController.createTask);
   router.put('/:id', authToken, taskController.updateTask);
   router.delete('/:id', authToken, taskController.deleteTask);

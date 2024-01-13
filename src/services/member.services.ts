@@ -21,7 +21,7 @@ class MemberService {
     }
   }
 
-  static async getAllMember() {
+  static async getAllMember(limit?: number) {
     try {
       const members = await prisma.member.findMany({
         include: {
@@ -33,6 +33,7 @@ class MemberService {
           task: true,
           user: true,
         },
+        take: limit,
       });
 
       return members;

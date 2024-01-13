@@ -42,6 +42,25 @@ const TaskController = {
     }
   },
 
+  getTasksByProject: async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      const projectId = req.params.id;
+      const task = await TaskService.getTasksByProjectStatus(projectId);
+
+      return res.json({
+        message: 'Berhasil mendapatkan task project',
+        statusCode: HttpStatusCode.OK,
+        data: task,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
   getTaskDetail: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = Number(req.params.id);

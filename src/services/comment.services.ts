@@ -11,16 +11,21 @@ class CommentService {
         data: {
           ...payload,
           userId: payload.userId,
-          taskId: payload.taskId,
+          taskId: Number(payload.taskId),
         },
         include: {
-          task: true,
-          user: true,
+          user: {
+            select: {
+              fullname: true,
+            },
+          },
         },
       });
 
       return comment;
     } catch (error) {
+      console.log(error);
+
       throw error;
     }
   }
@@ -47,6 +52,49 @@ class CommentService {
       });
 
       return comments;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getCommentByTask(taskId: string) {
+    try {
+      const comments = prisma.comment.findMany({
+        where: {
+          task: {
+            id: Number(taskId),
+          },
+        },
+        include: {
+          user: {
+            select: {
+              fullname: true,
+              member: {
+                select: {
+                  position: true,
+                  profilePicture: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      return comments;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getCommentById(id: number) {
+    try {
+      const comment = prisma.comment.findUnique({
+        where: {
+          id,
+        },
+      });
+
+      return comment;
     } catch (error) {
       throw error;
     }

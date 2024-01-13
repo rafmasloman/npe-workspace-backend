@@ -1,13 +1,14 @@
 export interface ICreateProjectRequestParams {
   projectName: string;
   description: string;
-  startedDate: Date;
-  endDate: Date;
+  startedDate?: Date;
+  endDate?: Date;
   price: number;
   image: string;
   projectIcon: string;
   clientId?: string;
   taskId?: number;
-  memberId?: string[];
+  member?: any[];
   payrollId?: number;
+  platform: any;
 }

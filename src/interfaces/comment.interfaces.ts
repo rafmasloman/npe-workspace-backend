@@ -1,7 +1,7 @@
 export interface ICreateCommentRequestParams {
   message: string;
   userId: string;
-  taskId: number;
+  taskId: number | string;
 }
 
 export interface IGetAllCommentRequest {

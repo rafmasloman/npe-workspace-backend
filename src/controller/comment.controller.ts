@@ -39,6 +39,38 @@ const commentController = {
       next(error);
     }
   },
+
+  getCommentByTask: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const taskId = req.query.taskId;
+      const taskComment = await CommentService.getCommentByTask(
+        taskId as string,
+      );
+
+      return res.json({
+        message: 'Berhasil mendapatkan semua data komentar',
+        statusCode: HttpStatusCode.OK,
+        data: taskComment,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  getCommentById: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.body;
+      const comment = await CommentService.getCommentById(id);
+
+      return res.json({
+        message: 'Berhasil mendapatkan semua data komentar',
+        statusCode: HttpStatusCode.OK,
+        data: comment,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
 };
 
 export default commentController;

@@ -4,15 +4,20 @@ import { ICreateProjectRequestParams } from '../interfaces/project.interface';
 
 class ProjectService {
   static async createProject(payload: ICreateProjectRequestParams) {
+    let memberId: any = payload.member?.slice(0, payload.member.length);
+    memberId = memberId.split(',');
+    memberId.map((id: string) => console.log(id));
+
+    console.log('member : ', memberId);
+
     try {
       const project = await prisma.project.create({
         data: {
-          ...payload,
+          ...(payload as any),
           price: Number(payload.price),
-          clientId: payload.clientId,
           member: {
-            connect: payload.memberId?.map((memberId: string) => ({
-              id: memberId,
+            connect: memberId?.map((id: string) => ({
+              id,
             })),
           },
         },
@@ -44,6 +49,19 @@ class ProjectService {
           task: {
             select: {
               status: true,
+              name: true,
+              endDate: true,
+              member: {
+                select: {
+                  position: true,
+                  profilePicture: true,
+                  user: {
+                    select: {
+                      fullname: true,
+                    },
+                  },
+                },
+              },
             },
           },
         },
@@ -67,11 +85,18 @@ class ProjectService {
     }
   }
 
-  static async getProjetDetail(id: string) {
+  static async getProjetDetail(id: string, status?: string) {
     try {
       const project = await prisma.project.findUnique({
         where: {
           id,
+        },
+        include: {
+          member: {
+            include: {
+              user: true,
+            },
+          },
         },
       });
 
@@ -87,12 +112,22 @@ class ProjectService {
 
   static async updateProject(id: string, payload: ICreateProjectRequestParams) {
     try {
+      let memberId: any = payload.member?.slice(1, -1);
+      memberId = memberId?.split(',');
+      memberId.map((id: string) => console.log(id));
+
       const project = await prisma.project.update({
         where: {
           id,
         },
         data: {
-          ...payload,
+          ...(payload as any),
+          price: Number(payload.price),
+          member: {
+            connect: memberId?.map((id: string) => ({
+              id,
+            })),
+          },
         },
       });
 

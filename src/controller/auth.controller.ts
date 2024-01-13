@@ -27,9 +27,9 @@ const authController = {
     try {
       const userCredential = req.body.user;
 
-      console.log('user : ', req.body.user);
+      console.log('user credential : ', req.body.user.id);
 
-      const user = await AdminService.getUserDetail(userCredential.userId);
+      const user = await AdminService.getUserDetail(userCredential.id);
 
       return res.json({
         statusCode: HttpStatusCode.OK,

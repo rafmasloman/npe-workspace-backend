@@ -19,14 +19,6 @@ class TaskService {
           projectId: payload.projectId,
           milestoneId: payload.milestoneId,
         },
-        include: {
-          project: true,
-          member: {
-            include: {
-              user: true,
-            },
-          },
-        },
       });
 
       return task;
@@ -68,12 +60,80 @@ class TaskService {
               image: true,
             },
           },
+          comment: {
+            select: {
+              message: true,
+              user: {
+                select: {
+                  fullname: true,
+                },
+                include: {
+                  member: {
+                    select: {
+                      profilePicture: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
       });
 
       if (!task) {
         throw new NotFoundError('Task tidak ditemukan');
       }
+
+      return task;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getTasksByProjectStatus(projectId: string, status?: string) {
+    try {
+      const task = await prisma.task.findMany({
+        where: {
+          project: {
+            id: projectId,
+          },
+          status,
+        },
+        include: {
+          member: {
+            select: {
+              position: true,
+              profilePicture: true,
+              user: {
+                select: {
+                  fullname: true,
+                },
+              },
+            },
+          },
+          // comment: {
+          //   include: {
+          //     user: {
+          //       select: {
+          //         fullname: true,
+          //         member: {
+          //           select: {
+          //             profilePicture: true,
+          //           },
+          //         },
+          //       },
+          //     },
+          //   },
+          // },
+          comment: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      });
+
+      return task;
     } catch (error) {
       throw error;
     }

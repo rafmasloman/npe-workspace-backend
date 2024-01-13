@@ -21,7 +21,7 @@ model User {
   role     RoleType @default(value: ADMIN)
   memberId String?
   member   Member?
-  comments       Comment[]
+  comments Comment[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt

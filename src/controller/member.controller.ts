@@ -6,10 +6,9 @@ import { ICreateMemberRequestParams } from '../interfaces/member.interface';
 const memberController = {
   createMember: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { position, phoneNumber, gender, birthDate } = req.body;
+      const { position, phoneNumber, gender, birthDate, userId } = req.body;
       const profilePicture = req.file?.filename;
 
-      console.log('member : ', { position, phoneNumber, gender, birthDate });
       const initialBirthDate = new Date(birthDate);
 
       const member = await MemberService.createMember({
@@ -18,6 +17,7 @@ const memberController = {
         gender,
         birthDate: initialBirthDate,
         profilePicture,
+        userId,
       } as ICreateMemberRequestParams);
 
       return res.json({
@@ -34,7 +34,7 @@ const memberController = {
 
   updateMember: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { position, phoneNumber, gender, birthDate } = req.body;
+      const { position, phoneNumber, gender, birthDate, userId } = req.body;
       const id = req.params.id;
       const profilePicture = req.file?.filename;
 
@@ -45,6 +45,7 @@ const memberController = {
         phoneNumber,
         gender,
         birthDate,
+        userId,
         profilePicture,
       } as ICreateMemberRequestParams);
       return res.json({
@@ -75,7 +76,10 @@ const memberController = {
 
   getAllMember: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const members = await MemberService.getAllMember();
+      const limit = req.query.limit;
+      const members = await MemberService.getAllMember(
+        Number(limit) || undefined,
+      );
 
       return res.json({
         message: 'Berhasil mendapatkan semua data member',

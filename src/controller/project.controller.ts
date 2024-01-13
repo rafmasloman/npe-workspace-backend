@@ -1,11 +1,15 @@
 import { NextFunction, Request, Response } from 'express';
 import ProjectService from '../services/project.services';
 import { HttpStatusCode } from '../constants/responses.constant';
+import TaskService from '../services/task.services';
 
 const projectController = {
   createProject: async (req: any, res: Response, next: NextFunction) => {
     try {
-      const payload = req.body;
+      const { projectName, description, price, platform, member } = req.body;
+
+      console.log('project : ', req.body);
+
       const image =
         (req.files?.image && req.files?.image[0]?.filename) || undefined;
       const projectIcon =
@@ -13,10 +17,16 @@ const projectController = {
         undefined;
 
       const project = await ProjectService.createProject({
-        ...payload,
+        projectName,
+        description,
+        price,
+        platform,
+        member,
         image,
         projectIcon,
       });
+
+      console.log('tess');
 
       return res.json({
         message: 'Berhasil membuat project',
@@ -42,7 +52,9 @@ const projectController = {
     } catch (error) {
       console.log('error : ', error);
 
-      next(error);
+      return res.json({
+        message: error,
+      });
     }
   },
 
@@ -50,11 +62,27 @@ const projectController = {
     try {
       const id = req.params.id;
       const project = await ProjectService.getProjetDetail(id);
+      const onToDoTask = await TaskService.getTasksByProjectStatus(id, 'To Do');
+      const onProgressTask = await TaskService.getTasksByProjectStatus(
+        id,
+        'On Progress',
+      );
+      const onCompletedTask = await TaskService.getTasksByProjectStatus(
+        id,
+        'Completed',
+      );
 
       return res.json({
         message: 'Berhasil mendapatkan detail project',
         statusCode: HttpStatusCode.OK,
-        data: project,
+        data: {
+          project,
+          todos: {
+            todo: onToDoTask,
+            onprogress: onProgressTask,
+            completed: onCompletedTask,
+          },
+        },
       });
     } catch (error) {
       next(error);
