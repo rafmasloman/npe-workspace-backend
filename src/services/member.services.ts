@@ -21,6 +21,26 @@ class MemberService {
     }
   }
 
+  static async getMemberProject(userId: string) {
+    try {
+      const member = await prisma.member.findFirst({
+        where: {
+          userId,
+        },
+        include: {
+          project: true,
+        },
+      });
+      console.log('member projects : ', member);
+
+      return member;
+    } catch (error) {
+      console.log(error);
+
+      throw error;
+    }
+  }
+
   static async getAllMember(limit?: number) {
     try {
       const members = await prisma.member.findMany({
@@ -46,7 +66,7 @@ class MemberService {
 
   static async getMemberDetail(id: string) {
     try {
-      const member = await prisma.member.findUnique({
+      const member = await prisma.member.findFirst({
         where: {
           id,
         },
@@ -57,12 +77,11 @@ class MemberService {
             },
           },
           task: true,
+          project: true,
         },
       });
 
-      if (!member) {
-        return member;
-      }
+      return member;
     } catch (error) {
       throw error;
     }

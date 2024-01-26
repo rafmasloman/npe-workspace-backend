@@ -12,3 +12,8 @@ export interface ICreateProjectRequestParams {
   payrollId?: number;
   platform: any;
 }
+
+export interface IUploadProjectFilesParams {
+  projectIcon: string;
+  image: string;
+}

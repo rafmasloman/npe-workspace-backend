@@ -5,10 +5,14 @@ import { HttpStatusCode } from '../constants/responses.constant';
 const clientController = {
   createClient: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const payload = req.body;
-      const client = await ClientService.createClient(payload);
-
-      console.log('Client data : ', payload);
+      const { name, phoneNumber, address, project, email } = req.body;
+      const client = await ClientService.createClient({
+        name,
+        phoneNumber,
+        address,
+        project,
+        email,
+      });
 
       return res.json({
         message: 'Berhasil menambah data client',
@@ -23,9 +27,15 @@ const clientController = {
   updateClient: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = req.params.id;
-      const payload = req.body;
+      const { name, phoneNumber, address, project, email } = req.body;
 
-      const client = await ClientService.updateClient(id, payload);
+      const client = await ClientService.updateClient(id, {
+        name,
+        phoneNumber,
+        address,
+        project,
+        email,
+      });
       return res.json({
         message: 'Berhasil mengubah data client',
         statusCode: HttpStatusCode.CREATED,
@@ -40,8 +50,9 @@ const clientController = {
     try {
       const id = req.params.id;
 
+      console.log('client id : ', id);
+
       const client = await ClientService.deleteClient(id);
-      console.log(client);
 
       return res.json({
         message: 'Berhasil menghapus data client',

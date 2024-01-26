@@ -12,6 +12,7 @@ import fileRouter from './src/routes/file.routes';
 import commentRouter from './src/routes/comment.routes';
 import milestoneRouter from './src/routes/milestone.routes';
 import PayrollRoute from './src/routes/payroll.routes';
+import InvoiceRouter from './src/routes/invoice.routes';
 
 //For env File
 dotenv.config();
@@ -40,6 +41,7 @@ app.use(`/${API_URL}/${API_VERSION}/files`, fileRouter());
 app.use(`/${API_URL}/${API_VERSION}/comment`, commentRouter());
 app.use(`/${API_URL}/${API_VERSION}/milestone`, milestoneRouter());
 app.use(`/${API_URL}/${API_VERSION}/payroll`, PayrollRoute.routes());
+app.use(`/${API_URL}/${API_VERSION}/invoice`, InvoiceRouter.routes());
 
 app.use(ErrorHandler);
 

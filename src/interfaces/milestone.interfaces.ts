@@ -3,4 +3,6 @@ export interface ICreateMilestoneRequestParams {
   projectId: string;
   startedDate?: Date;
   endDate?: Date;
+  member: string[];
+  status: 'TODO' | 'ON_PROGRESS' | 'COMPLETED';
 }

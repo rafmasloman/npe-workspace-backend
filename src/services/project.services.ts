@@ -4,11 +4,11 @@ import { ICreateProjectRequestParams } from '../interfaces/project.interface';
 
 class ProjectService {
   static async createProject(payload: ICreateProjectRequestParams) {
-    let memberId: any = payload.member?.slice(0, payload.member.length);
-    memberId = memberId.split(',');
-    memberId.map((id: string) => console.log(id));
+    // let memberId: any = payload.member?.slice(0, payload.member.length);
+    // memberId = memberId.split(',');
+    // memberId.map((id: string) => console.log(id));
 
-    console.log('member : ', memberId);
+    // console.log('member : ', memberId);
 
     try {
       const project = await prisma.project.create({
@@ -16,7 +16,7 @@ class ProjectService {
           ...(payload as any),
           price: Number(payload.price),
           member: {
-            connect: memberId?.map((id: string) => ({
+            connect: payload.member?.map((id: string) => ({
               id,
             })),
           },
@@ -31,7 +31,7 @@ class ProjectService {
     }
   }
 
-  static async getAllProject() {
+  static async getAllProject(limit?: number, searchTerm?: string) {
     try {
       const projects = await prisma.project.findMany({
         include: {
@@ -41,7 +41,8 @@ class ProjectService {
               profilePicture: true,
               user: {
                 select: {
-                  fullname: true,
+                  firstname: true,
+                  lastname: true,
                 },
               },
             },
@@ -57,7 +58,8 @@ class ProjectService {
                   profilePicture: true,
                   user: {
                     select: {
-                      fullname: true,
+                      firstname: true,
+                      lastname: true,
                     },
                   },
                 },
@@ -65,22 +67,89 @@ class ProjectService {
             },
           },
         },
-      });
-
-      const taskCompleted = await prisma.task.count({
         where: {
-          status: {
-            contains: 'Completed',
+          projectName: {
+            contains: searchTerm,
           },
         },
+        take: limit ? limit : undefined,
       });
-
-      console.log('task completed : ', taskCompleted);
 
       return projects;
     } catch (error) {
       console.log('error : ', error);
 
+      throw error;
+    }
+  }
+
+  static async getProjectByMember(userId: string) {
+    try {
+      const userProject = await prisma.user.findFirst({
+        where: {
+          id: userId,
+        },
+        select: {
+          member: {
+            select: {
+              id: true,
+              project: {
+                select: {
+                  id: true,
+                  projectIcon: true,
+                  description: true,
+                  projectName: true,
+                  platform: true,
+                  endDate: true,
+                  member: {
+                    select: {
+                      profilePicture: true,
+                      user: {
+                        select: {
+                          firstname: true,
+                          lastname: true,
+                        },
+                      },
+                    },
+                  },
+                },
+                take: 3,
+              },
+              task: {
+                select: {
+                  name: true,
+                  project: {
+                    select: {
+                      projectName: true,
+                      projectIcon: true,
+                    },
+                  },
+                },
+                take: 2,
+              },
+              milestone: {
+                select: {
+                  member: {
+                    select: {
+                      profilePicture: true,
+                      user: {
+                        select: {
+                          firstname: true,
+                          lastname: true,
+                        },
+                      },
+                    },
+                  },
+                },
+                take: 2,
+              },
+            },
+          },
+        },
+      });
+
+      return userProject;
+    } catch (error) {
       throw error;
     }
   }
@@ -112,7 +181,10 @@ class ProjectService {
 
   static async updateProject(id: string, payload: ICreateProjectRequestParams) {
     try {
-      let memberId: any = payload.member?.slice(1, -1);
+      let memberId: any = payload.member?.slice(0, payload.member.length);
+
+      console.log('member id : ', memberId);
+
       memberId = memberId?.split(',');
       memberId.map((id: string) => console.log(id));
 

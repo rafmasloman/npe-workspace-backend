@@ -63,10 +63,7 @@ class AdminService {
           id,
         },
         data: {
-          email: payload.email,
-          password: payload.password,
-          username: payload.username,
-          fullname: payload.fullname,
+          ...payload,
         },
       });
 
@@ -82,7 +79,8 @@ class AdminService {
       const user = await prisma.user.findMany({
         select: {
           id: true,
-          fullname: true,
+          firstname: true,
+          lastname: true,
           email: true,
           role: true,
         },
@@ -102,7 +100,8 @@ class AdminService {
         },
         select: {
           id: true,
-          fullname: true,
+          firstname: true,
+          lastname: true,
           email: true,
           role: true,
         },

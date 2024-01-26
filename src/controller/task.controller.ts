@@ -1,18 +1,34 @@
 import { NextFunction, Request, Response } from 'express';
 import TaskService from '../services/task.services';
 import { HttpStatusCode } from '../constants/responses.constant';
-import { ICreateTaskRequestParams } from '../interfaces/task.interface';
+import {
+  ICreateTaskRequestParams,
+  StatusProgress,
+} from '../interfaces/task.interface';
 
 const TaskController = {
   createTask: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { name, projectId, member, milestoneId, status } = req.body;
+      const {
+        name,
+        projectId,
+        member,
+        milestoneId,
+        endDate,
+        startedDate,
+        status,
+        priority,
+      } = req.body;
       const task = await TaskService.createTask({
         name,
         projectId,
         member,
+        startedDate,
+        milestoneId,
+        endDate,
         status,
-      } as ICreateTaskRequestParams);
+        priority,
+      });
 
       return res.json({
         message: 'Berhasil membuat task',
@@ -42,7 +58,7 @@ const TaskController = {
     }
   },
 
-  getTasksByProject: async (
+  getTasksByProjectStatus: async (
     req: Request,
     res: Response,
     next: NextFunction,
@@ -75,7 +91,8 @@ const TaskController = {
   updateTask: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = req.params.id;
-      const { name, projectId, member, milestoneId, status } = req.body;
+      const { name, projectId, member, milestoneId, status, priority } =
+        req.body;
 
       const task = await TaskService.updateTask(Number(id), {
         name,
@@ -83,10 +100,33 @@ const TaskController = {
         member,
         milestoneId,
         status,
+        priority,
       } as ICreateTaskRequestParams);
 
       return res.json({
         message: 'Berhasil mengupdate task',
+        statusCode: HttpStatusCode.CREATED,
+        data: task,
+      });
+    } catch (error) {
+      console.log(error);
+
+      next(error);
+    }
+  },
+
+  updateStatusTask: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const id = req.params.id;
+      const { status } = req.body;
+
+      console.log('status : ', status);
+      console.log('id : ', id);
+
+      const task = await TaskService.updateTaskStatus(Number(id), status);
+
+      return res.json({
+        message: 'Berhasil mengupdate status task',
         statusCode: HttpStatusCode.CREATED,
         data: task,
       });

@@ -4,17 +4,19 @@ export interface IAdminCreateUserRequestParams {
   email: string;
   username: string;
   password: string;
-  fullname: string;
+  firstname: string;
+  lastname: string;
   role: 'STAFF' | 'ADMIN' | 'PROJECT_MANAGER';
   //   role: Prisma.RoleCreateNestedOneWithoutUsersInput;
 }
 
 export interface IAdminUpdateUserRequestParams {
-  id: string;
   email: string;
   username: string;
   password: string;
-  fullname: string;
+  firstname: string;
+  lastname: string;
+  role: 'STAFF' | 'ADMIN' | 'PROJECT_MANAGER';
   //   role: Prisma.RoleCreateNestedOneWithoutUsersInput;
 }
 

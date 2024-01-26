@@ -9,18 +9,40 @@ class MilestoneService {
         data: {
           ...payload,
           projectId: payload.projectId,
+          member: {
+            connect: payload.member.map((memberId) => ({
+              id: memberId,
+            })),
+          },
+          // project: {
+          //   connect: {
+          //     id: payload.projectId,
+          //   },
+          // },
         },
       });
 
       return milestone;
     } catch (error) {
+      console.log(error);
+
       throw error;
     }
   }
 
   static async getAllMilestones() {
     try {
-      const milestones = await prisma.milestone.findMany();
+      const milestones = await prisma.milestone.findMany({
+        include: {
+          task: true,
+          project: {
+            select: {
+              projectIcon: true,
+              projectName: true,
+            },
+          },
+        },
+      });
 
       return milestones;
     } catch (error) {
@@ -46,20 +68,62 @@ class MilestoneService {
     }
   }
 
+  static async getMilestonesByProject(projectId: string) {
+    try {
+      const milestones = await prisma.milestone.findMany({
+        where: {
+          projectId,
+        },
+      });
+
+      if (!milestones) {
+        throw NotFoundError;
+      }
+
+      return milestones;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getMilestonesByMember(memberId: string) {
+    try {
+      const milestones = await prisma.milestone.findMany({
+        where: {
+          member: {
+            some: {
+              id: memberId,
+            },
+          },
+        },
+      });
+
+      if (!milestones) {
+        throw NotFoundError;
+      }
+
+      return milestones;
+    } catch (error) {
+      console.log(error);
+
+      throw error;
+    }
+  }
+
   static async updateMilestone(
     milestoneId: number,
     payload: ICreateMilestoneRequestParams,
   ) {
     try {
-      const getMilestone = await prisma.milestone.findFirst({
-        where: {
-          id: milestoneId,
-        },
-      });
+      // const getMilestone = await prisma.milestone.findFirst({
+      //   where: {
+      //     id: milestoneId,
+      //   },
+      // });
 
-      if (!getMilestone) {
-        throw NotFoundError;
-      }
+      // if (!getMilestone) {
+      //   throw NotFoundError;
+      // }
 
       const milestone = await prisma.milestone.update({
         where: {
@@ -68,11 +132,18 @@ class MilestoneService {
         data: {
           ...payload,
           projectId: payload.projectId,
+          member: {
+            connect: payload.member.map((memberId) => ({
+              id: memberId,
+            })),
+          },
         },
       });
 
       return milestone;
     } catch (error) {
+      console.log(error);
+
       throw error;
     }
   }

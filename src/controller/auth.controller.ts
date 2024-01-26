@@ -31,13 +31,36 @@ const authController = {
 
       const user = await AdminService.getUserDetail(userCredential.id);
 
+      console.log(user);
+
       return res.json({
         statusCode: HttpStatusCode.OK,
         message: 'Berhasil menampilkan user credential',
-        user,
+        user: {
+          ...user,
+          fullname: user.firstname + ' ' + user.lastname,
+        },
       });
     } catch (error) {
       console.log(error);
+      next(error);
+    }
+  },
+
+  register: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const payload = req.body;
+
+      const user = await AuthServices.register(payload);
+
+      return res.json({
+        statusCode: HttpStatusCode.OK,
+        message: 'Registrasi Berhasil',
+        data: {
+          user,
+        },
+      });
+    } catch (error) {
       next(error);
     }
   },

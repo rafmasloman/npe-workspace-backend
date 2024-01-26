@@ -8,7 +8,15 @@ const memberRouter = () => {
   const router = Router();
 
   router.get('/', authToken, memberController.getAllMember);
-  router.get('/:id', authToken, checkRole, memberController.getMemberDetail);
+  router.get(
+    '/projects/:id',
+    authToken,
+    // checkRole,
+    memberController.getMembersProject,
+  );
+
+  router.get('/:id', authToken, memberController.getMemberDetail);
+
   router.post(
     '/',
     authToken,

@@ -94,14 +94,37 @@ const memberController = {
   getMemberDetail: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = req.params.id;
+      console.log(id);
+
       const member = await MemberService.getMemberDetail(id);
 
       return res.json({
-        message: 'Berhasil mendapatkan detail member',
+        message: 'Berhasil mendapatkan detail members',
         statusCode: HttpStatusCode.OK,
         data: member,
       });
     } catch (error) {
+      next(error);
+    }
+  },
+
+  getMembersProject: async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      const { id } = req.params;
+      const memberProject = await MemberService.getMemberProject(id);
+
+      return res.json({
+        message: 'Berhasil mendapatkan project member',
+        statusCode: HttpStatusCode.OK,
+        data: memberProject,
+      });
+    } catch (error) {
+      console.log(error);
+
       next(error);
     }
   },

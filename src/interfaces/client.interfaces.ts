@@ -3,4 +3,5 @@ export interface ICreateClientRequestParams {
   phoneNumber: string;
   email: string;
   address: string;
+  project: string;
 }

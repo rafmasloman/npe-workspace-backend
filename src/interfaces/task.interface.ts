@@ -5,7 +5,8 @@ export interface ICreateTaskRequestParams {
   member: string[];
   projectId: string;
   milestoneId?: number;
-  status: 'To Do' | 'On Progress' | 'Complete';
+  priority: 'HIGH' | 'MEDIUM' | 'LOW';
+  status: string;
 }
 
 export interface IReadTasksResponseParams {
@@ -15,4 +16,10 @@ export interface IReadTasksResponseParams {
   endDate: Date;
   memberId: string;
   status: string;
+}
+
+export enum StatusProgress {
+  TODO,
+  ON_PROGRESS,
+  COMPLETED,
 }

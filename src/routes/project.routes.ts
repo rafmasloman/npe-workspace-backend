@@ -7,8 +7,9 @@ import multerConfig from '../libs/multer.libs';
 const projectRouter = () => {
   const router = Router();
 
-  router.get('/', authToken, checkRole, projectController.getAllProject);
-  router.get('/:id', authToken, checkRole, projectController.getProjectDetail);
+  router.get('/', authToken, projectController.getAllProject);
+  router.get('/:id', authToken, projectController.getProjectDetail);
+  router.get('/member/:id', authToken, projectController.getMemberProject);
   router.post(
     '/',
     authToken,

@@ -12,7 +12,7 @@ import { HashPassword } from '../constants/auth.constant';
 
 // configDotenv();
 class AuthServices {
-  static async register(roleName: string, payload: IUserRegisterParams) {
+  static async register(payload: IUserRegisterParams) {
     try {
       const hashPassword = await bcrypt.hash(
         payload.password,

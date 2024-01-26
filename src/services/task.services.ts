@@ -65,7 +65,8 @@ class TaskService {
               message: true,
               user: {
                 select: {
-                  fullname: true,
+                  firstname: true,
+                  lastname: true,
                 },
                 include: {
                   member: {
@@ -90,7 +91,10 @@ class TaskService {
     }
   }
 
-  static async getTasksByProjectStatus(projectId: string, status?: string) {
+  static async getTasksByProjectStatus(
+    projectId: string,
+    status?: 'TODO' | 'ON_PROGRESS' | 'COMPLETED',
+  ) {
     try {
       const task = await prisma.task.findMany({
         where: {
@@ -106,7 +110,8 @@ class TaskService {
               profilePicture: true,
               user: {
                 select: {
-                  fullname: true,
+                  firstname: true,
+                  lastname: true,
                 },
               },
             },
@@ -115,7 +120,8 @@ class TaskService {
           //   include: {
           //     user: {
           //       select: {
-          //         fullname: true,
+          //         firstname: true,
+          // lastname: true,
           //         member: {
           //           select: {
           //             profilePicture: true,
@@ -130,6 +136,24 @@ class TaskService {
               id: true,
             },
           },
+        },
+      });
+
+      return task;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getTaskByProjectId(projectId: string) {
+    try {
+      const task = await prisma.task.findMany({
+        where: {
+          projectId,
+        },
+        include: {
+          member: true,
+          comment: true,
         },
       });
 
@@ -188,6 +212,35 @@ class TaskService {
           },
           projectId: payload.projectId,
           milestoneId: payload.milestoneId,
+        },
+      });
+
+      return task;
+    } catch (error) {
+      console.log(error);
+
+      throw error;
+    }
+  }
+
+  static async updateTaskStatus(id: number, status: string) {
+    try {
+      const findTask = await prisma.task.findUnique({
+        where: {
+          id,
+        },
+      });
+
+      if (!findTask) {
+        throw new NotFoundError('Task tidak ditemukan');
+      }
+
+      const task = await prisma.task.update({
+        where: {
+          id,
+        },
+        data: {
+          status,
         },
       });
 

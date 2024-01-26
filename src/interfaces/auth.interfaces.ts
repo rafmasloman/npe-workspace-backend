@@ -5,17 +5,16 @@ import { JwtPayload } from 'jsonwebtoken';
 export interface IUserRegisterParams {
   email: string;
   password: string;
-  fullname: string;
+  firstname: string;
+  lastname: string;
   username: string;
-  role: Prisma.RoleCreateNestedOneWithoutUsersInput;
+  role: 'ADMIN' | 'STAFF' | 'PROJECT_MANAGER';
 }
 
 export interface IUserLoginRequestParams {
   email: string;
   password: string;
 }
-
-
 
 export interface IUserRequest extends Request {
   user: string | JwtPayload;

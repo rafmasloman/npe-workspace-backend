@@ -52,12 +52,13 @@ const adminController = {
 
   createUser: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { email, username, password, fullname, role } = req.body;
+      const { email, username, password, firstname, lastname, role } = req.body;
       const { error, value } = userValidationSchema.validate({
         email,
         username,
         password,
-        fullname,
+        firstname,
+        lastname,
         role,
       });
 
@@ -80,9 +81,16 @@ const adminController = {
   updateUser: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = req.params.id;
-      const payload = req.body;
+      const { email, username, password, firstname, lastname, role } = req.body;
 
-      const user = await AdminService.updateUser(userId, payload);
+      const user = await AdminService.updateUser(userId, {
+        email,
+        username,
+        password,
+        firstname,
+        lastname,
+        role,
+      });
 
       return res.json({
         message: 'Berhasil mengupdate user',
@@ -118,6 +126,8 @@ const adminController = {
         statusCode: 400,
       });
     } catch (error) {
+      console.log(error);
+
       next(error);
     }
   },

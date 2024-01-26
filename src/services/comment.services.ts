@@ -16,7 +16,8 @@ class CommentService {
         include: {
           user: {
             select: {
-              fullname: true,
+              firstname: true,
+              lastname: true,
             },
           },
         },
@@ -40,7 +41,8 @@ class CommentService {
         include: {
           user: {
             select: {
-              fullname: true,
+              firstname: true,
+              lastname: true,
               member: {
                 select: {
                   position: true,
@@ -68,7 +70,8 @@ class CommentService {
         include: {
           user: {
             select: {
-              fullname: true,
+              firstname: true,
+              lastname: true,
               member: {
                 select: {
                   position: true,

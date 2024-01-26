@@ -14,7 +14,8 @@ async function main() {
     data: {
       email: 'adminnpe01@gmail.com',
       password: hashPassword,
-      fullname: 'Admin 01',
+      firstname: 'Admin',
+      lastname: 'NPE',
       username: 'admin01',
       role: 'ADMIN',
     },

@@ -42,7 +42,13 @@ const projectController = {
 
   getAllProject: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const projects = await ProjectService.getAllProject();
+      const limit = req.query.limit;
+      const projectName = req.query.projectName;
+
+      const projects = await ProjectService.getAllProject(
+        Number(limit),
+        projectName as string,
+      );
 
       return res.json({
         message: 'Berhasil mendapatkan semua data project',
@@ -58,18 +64,37 @@ const projectController = {
     }
   },
 
+  getMemberProject: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      const memberProjects = await ProjectService.getProjectByMember(id);
+
+      return res.json({
+        message: 'Berhasil mendapatkan semua data user projects',
+        statusCode: HttpStatusCode.OK,
+        data: memberProjects,
+      });
+    } catch (error) {
+      console.log('error : ', error);
+
+      return res.json({
+        message: error,
+      });
+    }
+  },
+
   getProjectDetail: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = req.params.id;
       const project = await ProjectService.getProjetDetail(id);
-      const onToDoTask = await TaskService.getTasksByProjectStatus(id, 'To Do');
+      const onToDoTask = await TaskService.getTasksByProjectStatus(id, 'TODO');
       const onProgressTask = await TaskService.getTasksByProjectStatus(
         id,
-        'On Progress',
+        'ON_PROGRESS',
       );
       const onCompletedTask = await TaskService.getTasksByProjectStatus(
         id,
-        'Completed',
+        'COMPLETED',
       );
 
       return res.json({
@@ -92,7 +117,15 @@ const projectController = {
   updateProject: async (req: any, res: Response, next: NextFunction) => {
     try {
       const id = req.params.id;
-      const payload = req.body;
+      const {
+        projectName,
+        description,
+        price,
+        platform,
+        member,
+        startedDate,
+        endDate,
+      } = req.body;
 
       const image =
         (req.files?.image && req.files?.image[0]?.filename) || undefined;
@@ -103,9 +136,14 @@ const projectController = {
       console.log('image name : ', image);
 
       const project = await ProjectService.updateProject(id, {
-        ...payload,
-        price: Number(payload.price),
+        projectName,
+        description,
+        price,
+        platform,
+        member,
         image,
+        startedDate: new Date(startedDate),
+        endDate: new Date(endDate),
         projectIcon,
       });
 
