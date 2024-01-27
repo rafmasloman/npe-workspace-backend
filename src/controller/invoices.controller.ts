@@ -94,7 +94,27 @@ class InvoiceController {
     } catch (error) {
       console.log(error);
 
-      return error;
+      next(error);
+    }
+  }
+
+  static async sendInvoiceEmail(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      const payload = req.body;
+
+      const invoiceEmail = await InvoiceServices.sendEmail(payload);
+
+      return res.json({
+        message: 'Berhasil mengirim invoice kepada client',
+        statusCode: HttpStatusCode.OK,
+        invoiceEmail,
+      });
+    } catch (error) {
+      next(error);
     }
   }
 }

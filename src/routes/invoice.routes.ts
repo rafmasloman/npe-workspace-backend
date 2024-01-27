@@ -12,6 +12,11 @@ class InvoiceRouter {
     this.route.get('/:id', authToken, InvoiceController.getInvoiceDetail);
     this.route.delete('/:id', authToken, InvoiceController.deleteInvoice);
     this.route.put('/:id', authToken, InvoiceController.updateInvoice);
+    this.route.post(
+      '/sendEmail',
+      authToken,
+      InvoiceController.sendInvoiceEmail,
+    );
 
     return this.route;
   }

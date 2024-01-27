@@ -1,6 +1,12 @@
 import prisma from '../config/prisma-client.config';
 import NotFoundError from '../error/not-found.error';
-import { ICreateInvoiceRequestParams } from '../interfaces/invoice.interface';
+import {
+  ICreateInvoiceRequestParams,
+  ISenderInvoiceRequestParams,
+} from '../interfaces/invoice.interface';
+import nodemailer from 'nodemailer';
+import fs from 'fs/promises';
+import ejs from 'ejs';
 
 class InvoiceServices {
   static async createInvoice(payload: ICreateInvoiceRequestParams) {
@@ -132,6 +138,34 @@ class InvoiceServices {
       console.log(error);
 
       return error;
+    }
+  }
+
+  static async sendEmail(payload: ISenderInvoiceRequestParams) {
+    try {
+      const template = await fs.readFile('views/invoice-email.ejs', 'utf-8');
+
+      const renderTemplate = ejs.compile(template)(payload.data);
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'raflymasloman12@gmail.com',
+          pass: process.env.EMAIL_TRANSPORTER_PASSWORD,
+        },
+      });
+
+      const mailOption = {
+        from: 'raflymasloman12@gmail.com',
+        to: payload.receiverEmail,
+        subject: payload.subject,
+        html: renderTemplate,
+      };
+
+      const sender = await transporter.sendMail(mailOption);
+
+      return sender;
+    } catch (error) {
+      throw error;
     }
   }
 }

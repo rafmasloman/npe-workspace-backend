@@ -19,6 +19,8 @@ dotenv.config();
 
 const app: Application = express();
 const port = process.env.PORT || 8000;
+
+app.set('view engine', 'ejs')
 app.use(express.json());
 app.use(
   cors({
