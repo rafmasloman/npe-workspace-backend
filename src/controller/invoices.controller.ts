@@ -5,12 +5,8 @@ import { HttpStatusCode } from '../constants/responses.constant';
 class InvoiceController {
   static async createInvoice(req: Request, res: Response, next: NextFunction) {
     try {
-      const { invoicesTitle, otherInfo, clientId } = req.body;
-      const invoice = await InvoiceServices.createInvoice({
-        invoicesTitle,
-        otherInfo,
-        clientId,
-      });
+      const payload = req.body;
+      const invoice = await InvoiceServices.createInvoice(payload);
 
       return res.json({
         message: 'Berhasil mengambil semua data invoices',

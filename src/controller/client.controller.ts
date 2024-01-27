@@ -5,14 +5,8 @@ import { HttpStatusCode } from '../constants/responses.constant';
 const clientController = {
   createClient: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { name, phoneNumber, address, project, email } = req.body;
-      const client = await ClientService.createClient({
-        name,
-        phoneNumber,
-        address,
-        project,
-        email,
-      });
+      const payload = req.body;
+      const client = await ClientService.createClient(payload);
 
       return res.json({
         message: 'Berhasil menambah data client',

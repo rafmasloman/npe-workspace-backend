@@ -68,6 +68,20 @@ class AuthServices {
       throw error;
     }
   }
+
+  static async getCredential(userId: string) {
+    try {
+      const user = await prisma.user.findFirst({
+        where: {
+          id: userId,
+        },
+      });
+
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default AuthServices;

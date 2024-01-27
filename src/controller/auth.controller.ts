@@ -25,9 +25,8 @@ const authController = {
 
   credential: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const userCredential = req.body.user;
-
-      console.log('user credential : ', req.body.user.id);
+      const userCredential = req.signedCookies;
+      console.log('user credential : ', req.signedCookies);
 
       const user = await AdminService.getUserDetail(userCredential.id);
 

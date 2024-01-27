@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import UnauthorizedError from '../error/unauthrized.error';
 import { IUserRequest } from '../interfaces/auth.interfaces';
+import cookie from 'cookie-parser';
 
 const authToken = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -17,7 +18,9 @@ const authToken = async (req: Request, res: Response, next: NextFunction) => {
       throw new UnauthorizedError('Token tidak terverifikasi');
     }
 
-    req.body.user = userToken;
+    req.signedCookies = userToken;
+
+    // req.body.user = userToken;
 
     next();
   } catch (error) {

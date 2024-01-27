@@ -13,14 +13,14 @@ import commentRouter from './src/routes/comment.routes';
 import milestoneRouter from './src/routes/milestone.routes';
 import PayrollRoute from './src/routes/payroll.routes';
 import InvoiceRouter from './src/routes/invoice.routes';
-
+import cookieParser from 'cookie-parser';
 //For env File
 dotenv.config();
 
 const app: Application = express();
 const port = process.env.PORT || 8000;
 
-app.set('view engine', 'ejs')
+app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(
   cors({
@@ -28,6 +28,8 @@ app.use(
     credentials: true,
   }),
 );
+
+app.use(cookieParser());
 
 const API_VERSION = 'v1';
 const API_URL = 'api';
