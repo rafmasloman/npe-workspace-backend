@@ -1,7 +1,14 @@
 export interface ICreatePayrollRequestParams {
   percent: number;
-  paymentMethod: string;
-  date: Date;
+  transactionProvider:
+    | 'BRI'
+    | 'BNI'
+    | 'BSI'
+    | 'BCA'
+    | 'Mandiri'
+    | 'Gopay'
+    | 'Dana'
+    | 'Ovo';
   memberId: string;
   projectId: string;
 }
@@ -14,4 +21,15 @@ export interface IReadPayrollResponseParams {
   date: Date;
   memberId: string;
   projectId: string;
+}
+
+enum BankProvider {
+  'BRI',
+  'BNI',
+  'BSI',
+  'BCA',
+  'Mandiri',
+  'Gopay',
+  'Dana',
+  'Ovo',
 }

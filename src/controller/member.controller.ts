@@ -6,18 +6,14 @@ import { ICreateMemberRequestParams } from '../interfaces/member.interface';
 const memberController = {
   createMember: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { position, phoneNumber, gender, birthDate, userId } = req.body;
+      const payload = req.body;
       const profilePicture = req.file?.filename;
 
-      const initialBirthDate = new Date(birthDate);
+      const initialBirthDate = new Date(payload.birthDate);
 
       const member = await MemberService.createMember({
-        position,
-        phoneNumber,
-        gender,
+        ...payload,
         birthDate: initialBirthDate,
-        profilePicture,
-        userId,
       } as ICreateMemberRequestParams);
 
       return res.json({
@@ -34,20 +30,16 @@ const memberController = {
 
   updateMember: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { position, phoneNumber, gender, birthDate, userId } = req.body;
+      const payload = req.body;
       const id = req.params.id;
       const profilePicture = req.file?.filename;
 
       console.log(profilePicture);
 
-      const member = await MemberService.updateMember(id, {
-        position,
-        phoneNumber,
-        gender,
-        birthDate,
-        userId,
-        profilePicture,
-      } as ICreateMemberRequestParams);
+      const member = await MemberService.updateMember(
+        id,
+        payload as ICreateMemberRequestParams,
+      );
       return res.json({
         message: 'Berhasil mengubah data member',
         statusCode: HttpStatusCode.CREATED,

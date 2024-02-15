@@ -6,7 +6,7 @@ import TaskService from '../services/task.services';
 const projectController = {
   createProject: async (req: any, res: Response, next: NextFunction) => {
     try {
-      const { projectName, description, price, platform, member } = req.body;
+      const payload = req.body;
 
       console.log('project : ', req.body);
 
@@ -17,11 +17,7 @@ const projectController = {
         undefined;
 
       const project = await ProjectService.createProject({
-        projectName,
-        description,
-        price,
-        platform,
-        member,
+        ...payload,
         image,
         projectIcon,
       });

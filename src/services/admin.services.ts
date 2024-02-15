@@ -107,8 +107,6 @@ class AdminService {
         },
       });
 
-      console.log('user detail : ', user);
-
       if (!user) {
         throw new NotFoundError('Not Found');
       }

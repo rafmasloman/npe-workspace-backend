@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import InvoiceServices from '../services/invoice.services';
 import { HttpStatusCode } from '../constants/responses.constant';
+import ejs from 'ejs';
 
 class InvoiceController {
   static async createInvoice(req: Request, res: Response, next: NextFunction) {
@@ -20,14 +21,10 @@ class InvoiceController {
 
   static async updateInvoice(req: Request, res: Response, next: NextFunction) {
     try {
-      const { invoicesTitle, otherInfo, clientId } = req.body;
+      const payload = req.body;
       const { id } = req.params;
 
-      const invoice = await InvoiceServices.updateInvoice(id, {
-        invoicesTitle,
-        otherInfo,
-        clientId,
-      });
+      const invoice = await InvoiceServices.updateInvoice(id, payload);
 
       return res.json({
         message: 'Berhasil menambah data tagihan client',
@@ -110,6 +107,24 @@ class InvoiceController {
         invoiceEmail,
       });
     } catch (error) {
+      console.log(error);
+
+      next(error);
+    }
+  }
+
+  static async renderEmail(req: Request, res: Response, next: NextFunction) {
+    try {
+      const renderEmail = await ejs.renderFile('src/views/invoice-email.ejs', {
+        clientName: 'Reski Anugerah',
+      });
+
+      console.log('render email : ', renderEmail);
+
+      return res.send(renderEmail);
+    } catch (error) {
+      console.log(error);
+
       next(error);
     }
   }

@@ -4,18 +4,10 @@ import { HttpStatusCode } from '../constants/responses.constant';
 
 const milestoneController = {
   createMilestone: async (req: Request, res: Response, next: NextFunction) => {
-    const { milestoneName, startedDate, endDate, projectId, status, member } =
-      req.body;
+    const payload = req.body;
 
     try {
-      const data = await MilestoneService.createMilestone({
-        milestoneName,
-        startedDate,
-        endDate,
-        status,
-        member,
-        projectId,
-      });
+      const data = await MilestoneService.createMilestone(payload);
 
       return res.json({
         message: 'Berhasil menambah data milestone',
@@ -100,18 +92,10 @@ const milestoneController = {
   updateMilestone: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
 
-    const { milestoneName, startedDate, endDate, projectId, status, member } =
-      req.body;
+    const payload = req.body;
 
     try {
-      const data = await MilestoneService.updateMilestone(Number(id), {
-        milestoneName,
-        startedDate,
-        endDate,
-        status,
-        projectId,
-        member,
-      });
+      const data = await MilestoneService.updateMilestone(Number(id), payload);
 
       return res.json({
         message: 'Berhasil mengubahl data milestone',

@@ -1,21 +1,47 @@
 import { NextFunction, Request, Response } from 'express';
 import PayrollService from '../services/payroll.services';
+import { HttpStatusCode } from '../constants/responses.constant';
 
 class PayrollController {
   static async createPayroll(req: Request, res: Response, next: NextFunction) {
-    let { percent, paymentMethod, date, memberId, projectId } = req.body;
+    let payload = req.body;
     try {
-      const data = await PayrollService.createPayroll({
-        percent,
-        projectId,
-        memberId,
-        date,
-        paymentMethod,
+      const data = await PayrollService.createPayroll(payload);
+      return res.json({
+        message: 'Berhasil menambah data payroll',
+        statusCode: HttpStatusCode.CREATED,
+        data,
       });
-
-      return data;
     } catch (error) {
-      console.log('payroll create : ', error);
+      throw error;
+    }
+  }
+
+  static async getAllPayroll(req: Request, res: Response, next: NextFunction) {
+    try {
+      const data = await PayrollService.getAllPayroll();
+
+      return res.json({
+        message: 'Berhasil mendapatkan semua data payroll',
+        statusCode: HttpStatusCode.OK,
+        data,
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async deletePayroll(req: Request, res: Response, next: NextFunction) {
+    try {
+      const id = req.params.id;
+      const data = await PayrollService.deletePayroll(Number(id));
+
+      return res.json({
+        message: 'Berhasil menghapus payroll',
+        statusCode: HttpStatusCode.OK,
+        data,
+      });
+    } catch (error) {
       throw error;
     }
   }

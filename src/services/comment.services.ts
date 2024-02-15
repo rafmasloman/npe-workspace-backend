@@ -3,7 +3,7 @@ import {
   ICreateCommentRequestParams,
   IGetAllCommentRequest,
 } from '../interfaces/comment.interfaces';
-
+import Server from 'socket.io';
 class CommentService {
   static async createComments(payload: ICreateCommentRequestParams) {
     try {

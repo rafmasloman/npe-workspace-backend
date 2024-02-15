@@ -23,5 +23,7 @@ export interface IInvoiceClientRequestParams {
 export interface ISenderInvoiceRequestParams {
   receiverEmail: string;
   subject: string;
-  data: IInvoiceClientRequestParams;
+  data: {
+    invoicesTitle: string;
+  };
 }

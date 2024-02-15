@@ -21,15 +21,9 @@ const clientController = {
   updateClient: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = req.params.id;
-      const { name, phoneNumber, address, project, email } = req.body;
+      const payload = req.body;
 
-      const client = await ClientService.updateClient(id, {
-        name,
-        phoneNumber,
-        address,
-        project,
-        email,
-      });
+      const client = await ClientService.updateClient(id, payload);
       return res.json({
         message: 'Berhasil mengubah data client',
         statusCode: HttpStatusCode.CREATED,

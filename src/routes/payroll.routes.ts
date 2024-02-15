@@ -7,6 +7,8 @@ class PayrollRoute {
 
   static routes(): Router {
     this.route.post('/', authToken, PayrollController.createPayroll);
+    this.route.get('/', authToken, PayrollController.getAllPayroll);
+    this.route.delete('/:id', authToken, PayrollController.deletePayroll);
 
     return this.route;
   }

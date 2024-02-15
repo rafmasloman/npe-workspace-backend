@@ -26,11 +26,8 @@ const authController = {
   credential: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userCredential = req.signedCookies;
-      console.log('user credential : ', req.signedCookies);
 
       const user = await AdminService.getUserDetail(userCredential.id);
-
-      console.log(user);
 
       return res.json({
         statusCode: HttpStatusCode.OK,

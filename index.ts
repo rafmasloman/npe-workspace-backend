@@ -14,13 +14,27 @@ import milestoneRouter from './src/routes/milestone.routes';
 import PayrollRoute from './src/routes/payroll.routes';
 import InvoiceRouter from './src/routes/invoice.routes';
 import cookieParser from 'cookie-parser';
+import InvoiceController from './src/controller/invoices.controller';
+import path from 'path';
+import Server from 'socket.io';
+import http from 'http';
+import commentController from './src/controller/comment.controller';
+
 //For env File
 dotenv.config();
 
 const app: Application = express();
 const port = process.env.PORT || 8000;
+const server = http.createServer(app);
+const io = new Server.Server(server, {
+  cors: {
+    origin: '*',
+    credentials: true,
+  },
+});
 
 app.set('view engine', 'ejs');
+
 app.use(express.json());
 app.use(
   cors({
@@ -30,6 +44,8 @@ app.use(
 );
 
 app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'src')));
 
 const API_VERSION = 'v1';
 const API_URL = 'api';
@@ -47,8 +63,28 @@ app.use(`/${API_URL}/${API_VERSION}/milestone`, milestoneRouter());
 app.use(`/${API_URL}/${API_VERSION}/payroll`, PayrollRoute.routes());
 app.use(`/${API_URL}/${API_VERSION}/invoice`, InvoiceRouter.routes());
 
+app.use('/renderEmail', InvoiceController.renderEmail);
+
 app.use(ErrorHandler);
 
-app.listen(port, () => {
+io.on('connection', (socket) => {
+  
+  console.log('connected');
+  
+  commentController.sendCommentMessage(socket);
+  // socket.on('message', (data) => {
+  //   console.log('message : ', data);
+
+  //   socket.broadcast.emit('message', data);
+  // });
+
+  socket.on('disconnect', () => {
+    console.log('diconnected');
+
+    socket.disconnect();
+  });
+});
+
+server.listen(port, () => {
   console.log(`Server is Fire at http://localhost:${port}`);
 });

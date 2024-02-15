@@ -1,12 +1,218 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Invoice Detail</title>
-</head>
-<body>
-    <h1>Invoice Detail</h1>
-    <p>Dear <%= clientName %> </p>
-</body>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style type="text/css">
+      body {
+        font-family: 'Plus Jakarta Sans';
+      }
+
+      thead {
+        background-color: #e9f2ff;
+        color: #153b6f;
+      }
+      th,
+      table:nth-of-type(2) td {
+        text-align: start;
+      }
+    </style>
+  </head>
+
+  <body>
+    <table width="100%" style="background-color: #153b6f">
+      <tbody>
+        <tr style="color: white">
+          <td style="width: 20px; padding-left: 16px">
+            <img
+              src="https://i.ibb.co/nr3Ph3F/npe-ngatur.png"
+              alt="Logo "
+              style="width: 45px; height: 45px; display: block"
+              width="45"
+              height="45"
+            />
+          </td>
+
+          <td>
+            <p style="font-size: 0.865rem; font-weight: 700">
+              NPE <br />
+              NgaTur
+            </p>
+          </td>
+
+          <!-- <td
+            style="
+              text-align: end;
+              padding-right: 16px;
+              font-size: 0.75rem;
+              font-weight: 300;
+              color: white;
+              list-style: none;
+            "
+          >
+            <h4>NPE Digital</h4>
+            <p>HQ - Makassar, Sulawesi Selatan</p>
+            <p>BTP Blok E No.159, Tamalanrea</p>
+            <p>npedigital@gmail.com</p>
+          </td> -->
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Your invoice is here!</h3>
+
+    <!-- <div>
+      <p>Rafly Masloman</p>
+      <p>Terima kasih sudah menggunakan jasa dari NPE Digital</p>
+    </div> -->
+
+    <table width="100%" style="font-size: 0.865rem; margin-bottom: 16px">
+      <tbody>
+        <tr>
+          <td>
+            <p style="padding: 0; margin: 0 0 5px 0; white-space: nowrap">
+              Rafly Masloman
+            </p>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <p style="padding: 0; margin: 0 0 5px 0; white-space: nowrap">
+              Terima kasih sudah menggunakan jasa dari NPE Digital
+            </p>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <p
+              style="
+                padding: 0;
+                margin: 0 0 5px 0;
+                width: 1%;
+                white-space: nowrap;
+              "
+            >
+              Order ID
+            </p>
+          </td>
+
+          <td>
+            <p
+              style="
+                padding: 0;
+                margin: 0 0 0 0;
+                width: 1%;
+                white-space: nowrap;
+              "
+            >
+              :
+            </p>
+          </td>
+
+          <td>
+            <p style="padding: 0; margin: 0; width: 1%; white-space: nowrap">
+              db85ebc6-adda-4bb1-8b27-89740fa22eb8
+            </p>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="width: 1%">
+            <p style="padding: 0; margin: 0 0 5px 0">Tanggal Pemesanan</p>
+          </td>
+
+          <td>
+            <p
+              style="
+                padding: 0;
+                margin: 0 0 0 0;
+                width: 1%;
+                white-space: nowrap;
+              "
+            >
+              :
+            </p>
+          </td>
+
+          <td>
+            <p style="padding: 0; margin: 0">01 Desember 2000</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table width="100%" style="border-collapse: collapse; font-size: 0.75rem">
+      <thead>
+        <th style="padding: 16px">#</th>
+        <th style="padding: 16px">Paket</th>
+        <th style="padding: 16px">Harga</th>
+      </thead>
+
+      <tbody>
+        <tr style="border-bottom: solid 1px gray">
+          <td style="padding: 16px; width: 1%; white-space: nowrap">1</td>
+          <td style="padding: 16px">Total Pembuatan Website / Aplikasi</td>
+          <td style="padding: 16px">Rp. 150.000.000</td>
+        </tr>
+        <tr style="border-bottom: solid 1px gray">
+          <td style="padding: 16px">2</td>
+
+          <td style="padding: 16px">Biaya Pelatihan</td>
+          <td style="padding: 16px">Gratis</td>
+        </tr>
+
+        <tr style="border-bottom: solid 1px gray">
+          <td style="padding: 16px">3</td>
+
+          <td style="padding: 16px">Dukungan Teknis</td>
+          <td style="padding: 16px">Gratis</td>
+        </tr>
+
+        <tr style="border-bottom: solid 1px gray">
+          <td style="padding: 16px">4</td>
+
+          <td style="padding: 16px">Server</td>
+          <td style="padding: 16px">Rp. 20.000.000</td>
+        </tr>
+
+        <tr colspan="2" style="border-top: solid 2px #153b6f; font-weight: 600">
+          <td style="font-weight: 700; padding: 16px; white-space: nowrap">
+            Total Payment
+          </td>
+
+          <td style="padding: 16px"></td>
+          <td style="padding: 16px">Rp. 170.000.000</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div style="margin-top: 16px; width: 100%; text-align: center">
+      <button
+        style="
+          background-color: #153b6f;
+          padding: 10px 10px;
+          text-align: center;
+          text-decoration: none;
+          border-radius: 10px;
+          display: inline-block;
+          border: 0;
+        "
+      >
+        <a href="#" style="text-decoration: none; color: white">
+          Lihat Detail
+        </a>
+      </button>
+    </div>
+  </body>
 </html>

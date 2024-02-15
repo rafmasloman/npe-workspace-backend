@@ -25,6 +25,16 @@ class PayrollService {
     }
   }
 
+  static async getAllPayroll() {
+    try {
+      const payroll = await prisma.payroll.findMany();
+
+      return payroll;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async getMemberPayroll(payrollId: number) {
     try {
       const payroll = await prisma.payroll.findFirst({

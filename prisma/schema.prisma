@@ -113,7 +113,7 @@ model Task {
   member    Member[]
   comment Comment[]
   status String
-  priority Priority
+  priority Priority 
   milestoneId Int?
   milestone Milestone? @relation(fields: [milestoneId], references: [id])
   createdAt DateTime  @default(now())
@@ -150,12 +150,11 @@ model Invoices {
 model Payroll {
   id           Int       @id @default(autoincrement())
   percent      Int
-  paymentMethod  String
-  date         DateTime  @default(now())
   memberId     String    @unique
   member       Member    @relation(fields: [memberId], references: [id])
   projectId    String
   project      Project   @relation(fields: [projectId], references: [id])
+  transactionProvider  TransactionProvider
   createdAt    DateTime  @default(now())
   updatedAt    DateTime? @updatedAt
 }
@@ -183,4 +182,15 @@ enum Priority {
   HIGH
   MEDIUM
   LOW
+}
+
+enum TransactionProvider {
+  BRI 
+  BNI 
+  BSI 
+  BCA 
+  Mandiri
+  Gopay
+  Dana
+  Ovo 
 }

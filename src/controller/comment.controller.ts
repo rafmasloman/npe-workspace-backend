@@ -1,17 +1,15 @@
 import { NextFunction, Request, Response } from 'express';
 import CommentService from '../services/comment.services';
 import { HttpStatusCode } from '../constants/responses.constant';
+import { Socket } from 'socket.io';
+import { ICreateCommentRequestParams } from '../interfaces/comment.interfaces';
 
 const commentController = {
   createComment: async (req: Request, res: Response, next: NextFunction) => {
-    const { message, userId, taskId } = req.body;
+    const payload = req.body;
 
     try {
-      const comment = await CommentService.createComments({
-        message,
-        userId,
-        taskId,
-      });
+      const comment = await CommentService.createComments(payload);
 
       return res.json({
         message: 'Berhasil menambah komentar',
@@ -21,6 +19,22 @@ const commentController = {
     } catch (error) {
       next(error);
     }
+  },
+
+  sendCommentMessage: async (socket: Socket) => {
+    socket.on('message', async (data: any) => {
+      console.log('message : ', data);
+
+      try {
+        const comment = CommentService.createComments(data);
+
+        console.log(data);
+
+        socket.broadcast.emit('message', data);
+      } catch (error) {
+        throw error;
+      }
+    });
   },
 
   getAllComments: async (req: Request, res: Response, next: NextFunction) => {

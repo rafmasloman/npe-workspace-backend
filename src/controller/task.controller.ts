@@ -9,26 +9,8 @@ import {
 const TaskController = {
   createTask: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const {
-        name,
-        projectId,
-        member,
-        milestoneId,
-        endDate,
-        startedDate,
-        status,
-        priority,
-      } = req.body;
-      const task = await TaskService.createTask({
-        name,
-        projectId,
-        member,
-        startedDate,
-        milestoneId,
-        endDate,
-        status,
-        priority,
-      });
+      const payload = req.body;
+      const task = await TaskService.createTask(payload);
 
       return res.json({
         message: 'Berhasil membuat task',
@@ -45,8 +27,6 @@ const TaskController = {
   getAllTask: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const tasks = await TaskService.getAllTask();
-
-      console.log('tasks : ', tasks);
 
       return res.json({
         message: 'Berhasil mendapatkan semua data task',
@@ -91,17 +71,12 @@ const TaskController = {
   updateTask: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = req.params.id;
-      const { name, projectId, member, milestoneId, status, priority } =
-        req.body;
+      const payload = req.body;
 
-      const task = await TaskService.updateTask(Number(id), {
-        name,
-        projectId,
-        member,
-        milestoneId,
-        status,
-        priority,
-      } as ICreateTaskRequestParams);
+      const task = await TaskService.updateTask(
+        Number(id),
+        payload as ICreateTaskRequestParams,
+      );
 
       return res.json({
         message: 'Berhasil mengupdate task',

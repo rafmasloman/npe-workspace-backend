@@ -4,9 +4,9 @@ import {
   ICreateInvoiceRequestParams,
   ISenderInvoiceRequestParams,
 } from '../interfaces/invoice.interface';
-import nodemailer from 'nodemailer';
-import fs from 'fs/promises';
-import ejs from 'ejs';
+import ejs, { render } from 'ejs';
+import path from 'path';
+import MailerLibs from '../libs/mailer.libs';
 
 class InvoiceServices {
   static async createInvoice(payload: ICreateInvoiceRequestParams) {
@@ -143,16 +143,12 @@ class InvoiceServices {
 
   static async sendEmail(payload: ISenderInvoiceRequestParams) {
     try {
-      const template = await fs.readFile('views/invoice-email.ejs', 'utf-8');
+      const renderTemplate = await ejs.renderFile(
+        'src/views/invoice-email.ejs',
+        // payload.data,
+      );
 
-      const renderTemplate = ejs.compile(template)(payload.data);
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: 'raflymasloman12@gmail.com',
-          pass: process.env.EMAIL_TRANSPORTER_PASSWORD,
-        },
-      });
+      const transporter = MailerLibs.createTransporterGmail();
 
       const mailOption = {
         from: 'raflymasloman12@gmail.com',
@@ -161,10 +157,14 @@ class InvoiceServices {
         html: renderTemplate,
       };
 
+      // return renderTemplate;
+
       const sender = await transporter.sendMail(mailOption);
 
       return sender;
     } catch (error) {
+      console.log(error);
+
       throw error;
     }
   }
