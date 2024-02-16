@@ -46,7 +46,7 @@ model Project {
   description String
   startedDate DateTime?              @default(now())
   endDate     DateTime?
-  price       Int
+  price       Int @default(0)
   task        Task[]
   member      Member[]
   clientId    String? @unique
@@ -54,6 +54,7 @@ model Project {
   image       String?
   projectIcon String?
   platform    String?
+  currentPayroll Int @default(0)
   payroll     Payroll[]
   milestone   Milestone[]
 
@@ -150,14 +151,19 @@ model Invoices {
 model Payroll {
   id           Int       @id @default(autoincrement())
   percent      Int
-  memberId     String    @unique
+  
+  memberId     String    
   member       Member    @relation(fields: [memberId], references: [id])
   projectId    String
   project      Project   @relation(fields: [projectId], references: [id])
+  salary       Int @default(0)
   transactionProvider  TransactionProvider
   createdAt    DateTime  @default(now())
   updatedAt    DateTime? @updatedAt
+
+  @@unique([memberId, projectId])
 }
+
 
 
 enum RoleType {

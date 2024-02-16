@@ -14,7 +14,8 @@ class ProjectService {
       const project = await prisma.project.create({
         data: {
           ...(payload as any),
-          price: Number(payload.price),
+          price: payload.price,
+          currentPayroll: payload.price,
           member: {
             connect: payload.member?.map((id: string) => ({
               id,
