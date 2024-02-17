@@ -21,7 +21,11 @@ const milestoneController = {
 
   getAllMilestones: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const data = await MilestoneService.getAllMilestones();
+      const { name, status } = req.query;
+      const data = await MilestoneService.getAllMilestones(
+        name as string,
+        status as any,
+      );
 
       return res.json({
         message: 'Berhasil mendapatkan semua data milestones',

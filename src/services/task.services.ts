@@ -27,7 +27,12 @@ class TaskService {
     }
   }
 
-  static async getAllTask() {
+  static async getAllTask(
+    name?: string,
+    status?: any,
+    priority?: any,
+    projectName?: string,
+  ) {
     try {
       const tasks = await prisma.task.findMany({
         // include: {
@@ -39,6 +44,23 @@ class TaskService {
         //   },
         //   milestone: true,
         // },
+
+        where: {
+          name: {
+            contains: name,
+          },
+          status: {
+            contains: status,
+          },
+          priority: {
+            equals: priority,
+          },
+          project: {
+            projectName: {
+              contains: projectName,
+            },
+          },
+        },
       });
 
       return tasks;

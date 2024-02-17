@@ -143,6 +143,7 @@ model Invoices {
   otherInfo String?
   clientId String @unique
   orderId String @default(uuid())
+  invoiceStatus TransactionStatus @default(UNPAID)
   client Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
   createdAt    DateTime  @default(now())
   updatedAt    DateTime? @updatedAt
@@ -157,12 +158,20 @@ model Payroll {
   projectId    String
   project      Project   @relation(fields: [projectId], references: [id])
   salary       Int @default(0)
+  payrollStatus TransactionStatus @default(UNPAID)
+
   transactionProvider  TransactionProvider
   createdAt    DateTime  @default(now())
   updatedAt    DateTime? @updatedAt
 
   @@unique([memberId, projectId])
 }
+
+// model Meeting {
+//   id String @id @default(uuid())
+//   name String @db.VarChar(100)
+//   meetingDescription String @db.VarChar(250)
+// }
 
 
 
@@ -199,4 +208,9 @@ enum TransactionProvider {
   Gopay
   Dana
   Ovo 
+}
+
+enum TransactionStatus {
+  PAID
+  UNPAID
 }

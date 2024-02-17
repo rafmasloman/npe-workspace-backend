@@ -53,7 +53,12 @@ const clientController = {
 
   getAllClient: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const clients = await ClientService.getAllClient();
+      const { name, projectName, limit } = req.query;
+      const clients = await ClientService.getAllClient(
+        name as string,
+        projectName as string,
+        Number(limit),
+      );
 
       return res.json({
         message: 'Berhasil mendapatkan semua data client',
@@ -61,6 +66,8 @@ const clientController = {
         data: clients,
       });
     } catch (error) {
+      console.log('error : ', error);
+
       next(error);
     }
   },

@@ -1,6 +1,8 @@
+import { FieldRef } from '@prisma/client/runtime/library';
 import prisma from '../config/prisma-client.config';
 import NotFoundError from '../error/not-found.error';
 import { ICreateMilestoneRequestParams } from '../interfaces/milestone.interfaces';
+import { StatusProgress } from '../interfaces/task.interface';
 
 class MilestoneService {
   static async createMilestone(payload: ICreateMilestoneRequestParams) {
@@ -30,7 +32,7 @@ class MilestoneService {
     }
   }
 
-  static async getAllMilestones() {
+  static async getAllMilestones(name?: string, status?: StatusProgress) {
     try {
       const milestones = await prisma.milestone.findMany({
         include: {
@@ -40,6 +42,15 @@ class MilestoneService {
               projectIcon: true,
               projectName: true,
             },
+          },
+        },
+
+        where: {
+          milestoneName: {
+            contains: name,
+          },
+          status: {
+            equals: status as any,
           },
         },
       });

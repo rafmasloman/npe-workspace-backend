@@ -68,8 +68,11 @@ const memberController = {
 
   getAllMember: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const limit = req.query.limit;
+      const { firstname, lastname, position, limit } = req.query;
       const members = await MemberService.getAllMember(
+        firstname as string,
+        lastname as string,
+        position as string,
         Number(limit) || undefined,
       );
 

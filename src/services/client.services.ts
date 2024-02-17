@@ -50,7 +50,11 @@ class ClientService {
     }
   }
 
-  static async getAllClient() {
+  static async getAllClient(
+    name?: string,
+    projectName?: string,
+    limit?: number,
+  ) {
     try {
       const clients = await prisma.client.findMany({
         include: {
@@ -62,6 +66,17 @@ class ClientService {
             },
           },
         },
+        where: {
+          name: {
+            contains: name,
+          },
+          project: {
+            projectName: {
+              contains: projectName,
+            },
+          },
+        },
+        take: !limit ? undefined : limit,
       });
 
       return clients;

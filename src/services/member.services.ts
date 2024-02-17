@@ -31,7 +31,6 @@ class MemberService {
           project: true,
         },
       });
-      console.log('member projects : ', member);
 
       return member;
     } catch (error) {
@@ -41,7 +40,12 @@ class MemberService {
     }
   }
 
-  static async getAllMember(limit?: number) {
+  static async getAllMember(
+    firstname?: string,
+    lastname?: string,
+    position?: string,
+    limit?: number,
+  ) {
     try {
       const members = await prisma.member.findMany({
         include: {
@@ -53,7 +57,28 @@ class MemberService {
           task: true,
           user: true,
         },
-        take: limit,
+
+        where: {
+          user: {
+            AND: [
+              {
+                firstname: {
+                  contains: firstname,
+                },
+              },
+              {
+                lastname: {
+                  contains: lastname,
+                },
+              },
+            ],
+          },
+
+          position: {
+            contains: position,
+          },
+        },
+        take: !limit ? undefined : limit,
       });
 
       return members;

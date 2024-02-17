@@ -26,7 +26,13 @@ const TaskController = {
 
   getAllTask: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const tasks = await TaskService.getAllTask();
+      const { name, status, priority, projectName } = req.query;
+      const tasks = await TaskService.getAllTask(
+        name as string,
+        status as string,
+        priority as any,
+        projectName as string,
+      );
 
       return res.json({
         message: 'Berhasil mendapatkan semua data task',
@@ -34,6 +40,8 @@ const TaskController = {
         data: tasks,
       });
     } catch (error) {
+      console.log(error);
+
       next(error);
     }
   },

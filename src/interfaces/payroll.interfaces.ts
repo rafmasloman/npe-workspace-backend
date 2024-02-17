@@ -9,6 +9,7 @@ export interface ICreatePayrollRequestParams {
     | 'Gopay'
     | 'Dana'
     | 'Ovo';
+  transactionStatus: 'UNPAID' | 'PAID';
   memberId: string;
   projectId: string;
 }
