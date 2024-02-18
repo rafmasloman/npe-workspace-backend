@@ -58,12 +58,26 @@ class AdminService {
 
   static async updateUser(id: string, payload: IAdminUpdateUserRequestParams) {
     try {
+      const hashPassword = await bcrypt.hash(
+        payload.password!,
+        HashPassword.SALT_ROUND,
+      );
+
+      const existingUser = await prisma.user.findUnique({
+        where: { email: payload.email },
+      });
+
+      if (existingUser) {
+        throw new ValidationError('Email Sudah ada');
+      }
+
       const user = await prisma.user.update({
         where: {
           id,
         },
         data: {
           ...payload,
+          password: hashPassword!,
         },
       });
 
@@ -81,6 +95,7 @@ class AdminService {
           id: true,
           firstname: true,
           lastname: true,
+          username: true,
           email: true,
           role: true,
         },
@@ -102,6 +117,7 @@ class AdminService {
           id: true,
           firstname: true,
           lastname: true,
+          username: true,
           email: true,
           role: true,
         },

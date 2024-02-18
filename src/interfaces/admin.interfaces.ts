@@ -11,11 +11,11 @@ export interface IAdminCreateUserRequestParams {
 }
 
 export interface IAdminUpdateUserRequestParams {
-  email: string;
-  username: string;
-  password: string;
-  firstname: string;
-  lastname: string;
+  email?: string;
+  username?: string;
+  password?: string;
+  firstname?: string;
+  lastname?: string;
   role: 'STAFF' | 'ADMIN' | 'PROJECT_MANAGER';
   //   role: Prisma.RoleCreateNestedOneWithoutUsersInput;
 }

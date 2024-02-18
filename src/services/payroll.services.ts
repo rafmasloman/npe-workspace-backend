@@ -61,7 +61,28 @@ class PayrollService {
 
   static async getAllPayroll() {
     try {
-      const payroll = await prisma.payroll.findMany();
+      const payroll = await prisma.payroll.findMany({
+        include: {
+          member: {
+            select: {
+              profilePicture: true,
+              position: true,
+              user: {
+                select: {
+                  firstname: true,
+                  lastname: true,
+                },
+              },
+            },
+          },
+          project: {
+            select: {
+              projectName: true,
+              projectIcon: true,
+            },
+          },
+        },
+      });
 
       return payroll;
     } catch (error) {

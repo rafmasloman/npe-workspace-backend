@@ -74,6 +74,8 @@ const adminController = {
         data: user,
       });
     } catch (error) {
+      console.error(error);
+
       next(error);
     }
   },

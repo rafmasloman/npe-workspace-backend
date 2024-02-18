@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import AuthServices from '../services/auth.services';
 import { HttpStatusCode } from '../constants/responses.constant';
 import AdminService from '../services/admin.services';
+import bcrypt, { hash } from 'bcrypt';
 
 const authController = {
   login: async (req: Request, res: Response, next: NextFunction) => {
@@ -58,6 +59,28 @@ const authController = {
       });
     } catch (error) {
       next(error);
+    }
+  },
+
+  changePassword: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const payload = req.body;
+      const { id, role } = req.signedCookies;
+      const user = await AuthServices.getUserPassword(id);
+
+      const hashedPassword = await bcrypt.hash(payload.password, 10);
+
+      const userUpdate = await AdminService.updateUser(id, {
+        password: hashedPassword,
+        role,
+      });
+
+      res.json({
+        message: 'berhasil mengubah password',
+        data: userUpdate,
+      });
+    } catch (error) {
+      throw error;
     }
   },
 };

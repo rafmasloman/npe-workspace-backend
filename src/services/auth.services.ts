@@ -82,6 +82,23 @@ class AuthServices {
       throw error;
     }
   }
+
+  static async getUserPassword(userId: string) {
+    try {
+      const user = await prisma.user.findFirst({
+        where: {
+          id: userId,
+        },
+        select: {
+          password: true,
+        },
+      });
+
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default AuthServices;
