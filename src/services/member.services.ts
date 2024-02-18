@@ -113,6 +113,8 @@ class MemberService {
   }
 
   static async updateMember(id: string, payload: ICreateMemberRequestParams) {
+    console.log('payload : ', payload);
+
     try {
       const findMember = await prisma.member.findUnique({
         where: {
@@ -130,6 +132,7 @@ class MemberService {
         },
         data: {
           ...payload,
+          userId: payload.userId,
         },
       });
 

@@ -14,6 +14,7 @@ const memberController = {
       const member = await MemberService.createMember({
         ...payload,
         birthDate: initialBirthDate,
+        profilePicture,
       } as ICreateMemberRequestParams);
 
       return res.json({
@@ -34,12 +35,10 @@ const memberController = {
       const id = req.params.id;
       const profilePicture = req.file?.filename;
 
-      console.log(profilePicture);
-
-      const member = await MemberService.updateMember(
-        id,
-        payload as ICreateMemberRequestParams,
-      );
+      const member = await MemberService.updateMember(id, {
+        ...payload,
+        profilePicture,
+      });
       return res.json({
         message: 'Berhasil mengubah data member',
         statusCode: HttpStatusCode.CREATED,
