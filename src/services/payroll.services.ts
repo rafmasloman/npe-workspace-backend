@@ -16,6 +16,7 @@ class PayrollService {
           ...payload,
           memberId: payload.memberId,
           projectId: payload.projectId,
+          percent: Number(payload.percent),
         },
       });
 
@@ -59,9 +60,24 @@ class PayrollService {
     }
   }
 
-  static async getAllPayroll() {
+  static async getAllPayroll(
+    memberName?: string,
+    status?: any,
+    position?: string,
+    limit?: number,
+  ) {
     try {
       const payroll = await prisma.payroll.findMany({
+        where: {
+          member: {
+            position: {
+              contains: position,
+            },
+          },
+          payrollStatus: {
+            equals: status,
+          },
+        },
         include: {
           member: {
             select: {
@@ -82,6 +98,7 @@ class PayrollService {
             },
           },
         },
+        take: !limit ? undefined : limit,
       });
 
       return payroll;
