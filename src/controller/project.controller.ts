@@ -5,10 +5,9 @@ import TaskService from '../services/task.services';
 
 const projectController = {
   createProject: async (req: any, res: Response, next: NextFunction) => {
+    console.log('project : ', req.body.startedDate);
     try {
       const payload = req.body;
-
-      console.log('project : ', req.body);
 
       const image =
         (req.files?.image && req.files?.image[0]?.filename) || undefined;

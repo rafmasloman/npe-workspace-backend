@@ -6,6 +6,7 @@ import MemberOnPayroll from '../services/memberOnPayroll.services';
 class PayrollController {
   static async createPayroll(req: Request, res: Response, next: NextFunction) {
     let payload = req.body;
+
     try {
       const data = await PayrollService.createPayroll(payload);
       return res.json({

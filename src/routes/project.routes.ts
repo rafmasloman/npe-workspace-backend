@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import authToken from '../middleware/auth.middleware';
-import checkRole from '../middleware/role.middleware';
+import { checkRole } from '../middleware/role.middleware';
 import projectController from '../controller/project.controller';
 import multerConfig from '../libs/multer.libs';
 

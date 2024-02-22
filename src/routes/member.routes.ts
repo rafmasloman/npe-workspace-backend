@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import authToken from '../middleware/auth.middleware';
-import checkRole from '../middleware/role.middleware';
 import memberController from '../controller/member.controller';
 import multerConfig from '../libs/multer.libs';
+import { checkRole } from '../middleware/role.middleware';
 
 const memberRouter = () => {
   const router = Router();

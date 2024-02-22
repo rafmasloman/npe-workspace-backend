@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import authToken from '../middleware/auth.middleware';
-import checkRole from '../middleware/role.middleware';
 import clientController from '../controller/client.controller';
+import { checkRole } from '../middleware/role.middleware';
 
 const clientRouter = () => {
   const router = Router();

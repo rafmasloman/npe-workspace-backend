@@ -1,0 +1,54 @@
+import { NextFunction, Request, Response } from 'express';
+import ProfileService from '../services/profile.services';
+import { HttpStatusCode } from '../constants/responses.constant';
+
+class ProfileController {
+  static async updateProfile(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { userId } = req.params;
+      const {
+        firstname,
+        lastname,
+        phoneNumber,
+        gender,
+        birthDate,
+        profilePicture,
+      } = req.body;
+
+      const userProfile = await ProfileService.updateProfile(userId, {
+        firstname,
+        lastname,
+        phoneNumber,
+        gender,
+        birthDate,
+        profilePicture,
+      });
+
+      return res.json({
+        message: 'Berhasil update data profile',
+        statusCode: HttpStatusCode.OK,
+        data: userProfile,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getUserProfile(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { userId } = req.params;
+
+      const userProfile = await ProfileService.getProfileDetail(userId);
+
+      return res.json({
+        statusCode: HttpStatusCode.OK,
+        message: 'Berhasil mendapatkan data profile',
+        data: userProfile,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+}
+
+export default ProfileController;

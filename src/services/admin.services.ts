@@ -107,6 +107,29 @@ class AdminService {
     }
   }
 
+  static async getUserStaff() {
+    try {
+      const staff = await prisma.user.findMany({
+        where: {
+          OR: [
+            {
+              role: 'STAFF',
+            },
+            {
+              role: 'PROJECT_MANAGER',
+            },
+          ],
+        },
+      });
+
+      return staff;
+    } catch (error) {
+      console.log(error);
+
+      throw error;
+    }
+  }
+
   static async getUserDetail(id: string) {
     try {
       const user: IUserDetailResponse | any = await prisma.user.findFirst({

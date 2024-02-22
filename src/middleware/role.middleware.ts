@@ -19,4 +19,31 @@ const checkRole = (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export default checkRole;
+const checkRolePM = (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { role } = req.signedCookies;
+
+    console.log(
+      'role : ',
+      role.toLowerCase() !== 'admin'.toLowerCase() &&
+        role.toLowerCase() !== 'project_manager'.toLowerCase(),
+    );
+
+    if (
+      role.toLowerCase() !== 'admin'.toLowerCase() &&
+      role.toLowerCase() !== 'project_manager'.toLowerCase()
+    ) {
+      throw new UnauthorizedError(
+        'Hanya Admin atau Project Management yang dapat mengakses endpoint ini',
+      );
+    }
+
+    next();
+  } catch (error) {
+    console.log('error : ', error);
+
+    next(error);
+  }
+};
+
+export { checkRole, checkRolePM };

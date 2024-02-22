@@ -1,23 +1,25 @@
 import prisma from '../config/prisma-client.config';
 import NotFoundError from '../error/not-found.error';
 import { ICreateProjectRequestParams } from '../interfaces/project.interface';
+import moment from 'moment';
 
 class ProjectService {
   static async createProject(payload: ICreateProjectRequestParams) {
-    // let memberId: any = payload.member?.slice(0, payload.member.length);
-    // memberId = memberId.split(',');
+    let memberId: any = payload.member?.slice(0, payload.member.length);
+    memberId = memberId.split(',');
     // memberId.map((id: string) => console.log(id));
-
-    // console.log('member : ', memberId);
 
     try {
       const project = await prisma.project.create({
         data: {
           ...(payload as any),
-          price: payload.price,
-          currentPayroll: payload.price,
+          startedDate: new Date(payload.startedDate!),
+          endDate: new Date(payload.endDate!),
+          price: Number(payload.price),
+          currentPayroll: Number(payload.price),
+
           member: {
-            connect: payload.member?.map((id: string) => ({
+            connect: memberId?.map((id: string) => ({
               id,
             })),
           },
@@ -222,6 +224,8 @@ class ProjectService {
 
       return project;
     } catch (error) {
+      console.log('error : ', error);
+
       throw error;
     }
   }

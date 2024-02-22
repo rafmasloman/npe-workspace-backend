@@ -1,15 +1,16 @@
 import { Router } from 'express';
 import adminController from '../controller/admin.controller';
 import authToken from '../middleware/auth.middleware';
-import checkRole from '../middleware/role.middleware';
+import { checkRole, checkRolePM } from '../middleware/role.middleware';
 
 const adminRouter = () => {
   const router = Router();
 
-  router.get('/', authToken, checkRole, adminController.getAllUsers);
+  router.get('/', authToken, checkRolePM, adminController.getAllUsers);
   router.post('/', authToken, checkRole, adminController.createUser);
   router.put('/:id', authToken, checkRole, adminController.updateUser);
   router.get('/roles', authToken, checkRole, adminController.getAllRoles);
+  router.get('/staff', authToken, checkRolePM, adminController.getUserStaff);
   router.get('/:id', authToken, checkRole, adminController.getDetailUser);
   router.delete('/:id', authToken, checkRole, adminController.deleteUser);
 

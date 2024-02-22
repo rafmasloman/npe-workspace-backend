@@ -5,41 +5,52 @@ class MemberOnPayroll {
     try {
       const memberStaff = await prisma.member.findMany({
         select: {
+          id: true,
           user: {
             select: {
               firstname: true,
+              lastname: true,
             },
           },
         },
       });
 
-      const staffs = memberStaff.filter((staff) => {
-        return staff.user?.firstname;
+      const memberPayrollResponse = await prisma.payroll.findMany({
+        select: {
+          member: {
+            select: {
+              id: true,
+              user: {
+                select: {
+                  firstname: true,
+                  lastname: true,
+                },
+              },
+            },
+          },
+        },
       });
 
-      //   const memberPayrollResponse = await prisma.payroll.findMany({
-      //     where: {
-      //       member: {
-      //         is: {
-      //           user: {
-      //             firstname: staffs?.user?.firstname,
-      //           },
-      //         },
-      //       },
-      //     },
+      const memberStaffIds = new Set(
+        memberPayrollResponse.map((member) => member.member.id),
+      );
 
-      //     select: {
-      //       member: {
-      //         select: {
-      //           user: true,
-      //         },
-      //       },
-      //     },
-      //   });
+      const memberHavePayroll = memberStaff.filter(
+        (member) => !memberStaffIds.has(member.id),
+      );
 
-      console.log('memberStaff : ', staffs);
+      console.log(memberHavePayroll);
 
-      //   return memberPayrollResponse;
+      const memberPayroll = memberHavePayroll.map((data) => {
+        return {
+          id: data.id,
+          user: {
+            fullname: `${data.user?.firstname} ${data.user?.lastname}`,
+          },
+        };
+      });
+
+      return memberPayroll;
     } catch (error) {
       throw error;
     }

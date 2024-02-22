@@ -19,6 +19,7 @@ import path from 'path';
 import Server from 'socket.io';
 import http from 'http';
 import commentController from './src/controller/comment.controller';
+import ProfileRoute from './src/routes/profile.routes';
 
 //For env File
 dotenv.config();
@@ -62,15 +63,15 @@ app.use(`/${API_URL}/${API_VERSION}/comment`, commentRouter());
 app.use(`/${API_URL}/${API_VERSION}/milestone`, milestoneRouter());
 app.use(`/${API_URL}/${API_VERSION}/payroll`, PayrollRoute.routes());
 app.use(`/${API_URL}/${API_VERSION}/invoice`, InvoiceRouter.routes());
+app.use(`/${API_URL}/${API_VERSION}/profile`, ProfileRoute.routes());
 
 app.use('/renderEmail', InvoiceController.renderEmail);
 
 app.use(ErrorHandler);
 
 io.on('connection', (socket) => {
-  
   console.log('connected');
-  
+
   commentController.sendCommentMessage(socket);
   // socket.on('message', (data) => {
   //   console.log('message : ', data);

@@ -35,6 +35,20 @@ const adminController = {
     }
   },
 
+  getUserStaff: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const staff = await AdminService.getUserStaff();
+
+      return res.json({
+        message: 'Berhasil mendapatkan user staf',
+        statusCode: HttpStatusCode.OK,
+        data: staff,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
   getDetailUser: async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
     try {
