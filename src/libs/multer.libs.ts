@@ -6,8 +6,6 @@ const multerConfig = (filename?: string) => {
   try {
     const currentDirectory = path.join(__dirname, `..`, '..');
 
-    console.log('fs : ', fs.existsSync);
-
     const storage = multer.diskStorage({
       destination: (req, file, callback) => {
         callback(null, `public/uploads/${filename}`);
@@ -20,7 +18,6 @@ const multerConfig = (filename?: string) => {
     const uploads = multer({ storage });
     return uploads;
   } catch (error) {
-    console.log('error : ', error);
     throw error;
   }
 };

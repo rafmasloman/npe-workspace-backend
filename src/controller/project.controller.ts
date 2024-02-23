@@ -112,15 +112,7 @@ const projectController = {
   updateProject: async (req: any, res: Response, next: NextFunction) => {
     try {
       const id = req.params.id;
-      const {
-        projectName,
-        description,
-        price,
-        platform,
-        member,
-        startedDate,
-        endDate,
-      } = req.body;
+      const payload = req.body;
 
       const image =
         (req.files?.image && req.files?.image[0]?.filename) || undefined;
@@ -128,19 +120,14 @@ const projectController = {
         (req.files?.projectIcon && req.files?.projectIcon[0]?.filename) ||
         undefined;
 
-      console.log('image name : ', image);
-
       const project = await ProjectService.updateProject(id, {
-        projectName,
-        description,
-        price,
-        platform,
-        member,
+        ...payload,
+        member: payload.member,
         image,
-        startedDate: new Date(startedDate),
-        endDate: new Date(endDate),
         projectIcon,
       });
+
+      console.log('data : ', project);
 
       return res.json({
         message: 'Berhasil mengupdate project',
