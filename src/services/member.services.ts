@@ -29,6 +29,12 @@ class MemberService {
         },
         include: {
           project: true,
+          user: {
+            select: {
+              firstname: true,
+              lastname: true,
+            },
+          },
         },
       });
 

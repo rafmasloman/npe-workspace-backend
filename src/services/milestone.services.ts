@@ -26,7 +26,7 @@ class MilestoneService {
 
       return milestone;
     } catch (error) {
-      console.log(error);
+      console.log('milestone error : ', error);
 
       throw error;
     }
@@ -84,6 +84,9 @@ class MilestoneService {
       const milestones = await prisma.milestone.findMany({
         where: {
           projectId,
+        },
+        include: {
+          task: true,
         },
       });
 

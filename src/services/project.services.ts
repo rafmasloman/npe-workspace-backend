@@ -155,18 +155,85 @@ class ProjectService {
     }
   }
 
+  static async getUserProject(userId: string) {
+    try {
+      const userProject = await prisma.member.findFirst({
+        where: {
+          userId,
+        },
+        select: {
+          project: {
+            select: {
+              id: true,
+              projectName: true,
+              projectIcon: true,
+              description: true,
+              endDate: true,
+              platform: true,
+              task: {
+                select: {
+                  id: true,
+                  status: true,
+                },
+              },
+              milestone: {
+                select: {
+                  id: true,
+                  status: true,
+                },
+              },
+              member: {
+                select: {
+                  position: true,
+                  user: {
+                    select: {
+                      firstname: true,
+                      lastname: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+
+      return userProject;
+    } catch (error) {
+      console.log('error : ', error);
+      throw error;
+    }
+  }
+
   static async getProjetDetail(id: string, status?: string) {
     try {
-      const project = await prisma.project.findUnique({
+      const project = await prisma.project.findFirst({
         where: {
           id,
         },
         include: {
           member: {
-            include: {
-              user: true,
+            select: {
+              id: true,
+              position: true,
+              profilePicture: true,
+              user: {
+                select: {
+                  id: true,
+                  firstname: true,
+                  lastname: true,
+                },
+              },
             },
           },
+          client: {
+            select: {
+              name: true,
+              phoneNumber: true,
+              address: true,
+            },
+          },
+          task: true,
         },
       });
 
@@ -176,6 +243,8 @@ class ProjectService {
 
       return project;
     } catch (error) {
+      console.log(error);
+
       throw error;
     }
   }
@@ -183,7 +252,6 @@ class ProjectService {
   static async updateProject(id: string, payload: ICreateProjectRequestParams) {
     let memberId: any = payload.member?.slice(0, payload.member.length);
     memberId = memberId.split(',');
-    console.log('payload : ', payload.member);
 
     try {
       const project = await prisma.project.update({
@@ -193,16 +261,17 @@ class ProjectService {
         data: {
           ...payload,
 
-          // price: Number(payload.price),
-          // currentPayroll: Number(payload.price),
-          // startedDate: new Date(payload.startedDate!),
-          // endDate: new Date(payload.endDate!),
+          price: Number(payload.price),
+          currentPayroll: Number(payload.price),
+          startedDate: new Date(payload.startedDate!),
+          endDate: new Date(payload.endDate!),
 
           member: {
             connect: memberId?.map((id: string) => ({
               id,
             })),
           },
+          clientId: payload.clientId,
         },
       });
 
@@ -229,33 +298,6 @@ class ProjectService {
       throw error;
     }
   }
-
-  // static async inviteMember(projectId: string, memberId: string, payload: any) {
-  //   try {
-  //     const member = await prisma.member.findUnique({
-  //       where: {
-  //         id: memberId,
-  //       },
-  //     });
-
-  //     if (!member) {
-  //       throw new NotFoundError('Member not found');
-  //     }
-
-  //     const project = await prisma.project.update({
-  //       where: {
-  //         id: projectId,
-  //       },
-  //       data: {
-  //         memberId,
-  //       },
-  //     });
-
-  //     return project;
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // }
 }
 
 export default ProjectService;

@@ -17,3 +17,8 @@ export interface IUploadProjectFilesParams {
   projectIcon: string;
   image: string;
 }
+
+export interface IInviteMemberParamsType {
+  projectId: string;
+  member: string;
+}

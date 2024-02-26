@@ -1,3 +1,5 @@
+import { RoleType } from '@prisma/client';
+
 export interface ICreateMemberRequestParams {
   name: string;
   position: string;
@@ -16,4 +18,17 @@ export interface IReadMembersResponseParams {
   profilePicture: string;
   gender: string;
   birthDate: Date;
+}
+
+export interface IMemberResponseParams {
+  id: string;
+  position: string;
+  phoneNumber: string;
+  profilePicture: string | null;
+  gender: string;
+  birthDate: Date;
+  role: RoleType;
+  userId: string | null;
+  createdAt: Date;
+  updatedAt: Date | null;
 }

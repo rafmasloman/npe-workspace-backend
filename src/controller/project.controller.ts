@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import ProjectService from '../services/project.services';
 import { HttpStatusCode } from '../constants/responses.constant';
-import TaskService from '../services/task.services';
+import TaskService from '../services/task/task.services';
+import ProjectOnMember from '../services/project/projectOnMember';
 
 const projectController = {
   createProject: async (req: any, res: Response, next: NextFunction) => {
@@ -78,6 +79,24 @@ const projectController = {
     }
   },
 
+  getUserProject: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const id = req.params.id;
+
+      const userProject = await ProjectService.getUserProject(id);
+
+      return res.json({
+        message: 'Berhasil mendapatkan user project',
+        statusCode: HttpStatusCode.OK,
+        data: userProject,
+      });
+    } catch (error) {
+      console.log(error);
+
+      next(error);
+    }
+  },
+
   getProjectDetail: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = req.params.id;
@@ -103,6 +122,25 @@ const projectController = {
             completed: onCompletedTask,
           },
         },
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  inviteMember: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { projectId, member } = req.body;
+
+      const project = await ProjectOnMember.inviteMemberToProject({
+        projectId,
+        member,
+      });
+
+      return res.json({
+        message: 'Berhasil mengundang member ke dalam project',
+        statusCode: HttpStatusCode.OK,
+        data: project,
       });
     } catch (error) {
       next(error);
@@ -149,6 +187,29 @@ const projectController = {
       return res.json({
         message: 'Berhasil menghapus project',
         statusCode: HttpStatusCode.OK,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  deleteMemberFromProject: async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      const id = req.params.id;
+      const { memberId } = req.body;
+      const project = await ProjectOnMember.deleteMemberFromProject(
+        id,
+        memberId,
+      );
+
+      return res.json({
+        message: 'Berhasil member dari project',
+        statusCode: HttpStatusCode.OK,
+        data: project,
       });
     } catch (error) {
       next(error);

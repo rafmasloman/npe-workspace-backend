@@ -1,6 +1,6 @@
-import prisma from '../config/prisma-client.config';
-import NotFoundError from '../error/not-found.error';
-import { ICreateTaskRequestParams } from '../interfaces/task.interface';
+import prisma from '../../config/prisma-client.config';
+import NotFoundError from '../../error/not-found.error';
+import { ICreateTaskRequestParams } from '../../interfaces/task.interface';
 
 class TaskService {
   static async createTask(payload: ICreateTaskRequestParams) {
@@ -23,6 +23,8 @@ class TaskService {
 
       return task;
     } catch (error) {
+      console.log('error : ', error);
+
       throw error;
     }
   }

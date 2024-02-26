@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import TaskService from '../services/task.services';
+import TaskService from '../services/task/task.services';
 import { HttpStatusCode } from '../constants/responses.constant';
 import {
   ICreateTaskRequestParams,

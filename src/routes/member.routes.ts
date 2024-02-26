@@ -2,7 +2,7 @@ import { Router } from 'express';
 import authToken from '../middleware/auth.middleware';
 import memberController from '../controller/member.controller';
 import multerConfig from '../libs/multer.libs';
-import { checkRole } from '../middleware/role.middleware';
+import { checkRole, checkRolePM } from '../middleware/role.middleware';
 
 const memberRouter = () => {
   const router = Router();
@@ -30,7 +30,7 @@ const memberRouter = () => {
     multerConfig('members').single('profilePicture'),
     memberController.updateMember,
   );
-  router.delete('/:id', authToken, checkRole, memberController.deleteMember);
+  router.delete('/:id', authToken, checkRolePM, memberController.deleteMember);
 
   return router;
 };
