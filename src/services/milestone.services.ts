@@ -87,6 +87,16 @@ class MilestoneService {
         },
         include: {
           task: true,
+          member: {
+            include: {
+              user: {
+                select: {
+                  firstname: true,
+                  lastname: true,
+                },
+              },
+            },
+          },
         },
       });
 

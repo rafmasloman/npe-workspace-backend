@@ -21,6 +21,19 @@ class TaskService {
         },
       });
 
+      const milestone = await prisma.milestone.update({
+        where: {
+          id: payload.milestoneId,
+        },
+        data: {
+          member: {
+            connect: payload.member.map((memberId: string) => ({
+              id: memberId,
+            })),
+          },
+        },
+      });
+
       return task;
     } catch (error) {
       console.log('error : ', error);
@@ -73,15 +86,23 @@ class TaskService {
 
   static async getTaskDetail(id: number) {
     try {
-      const task = await prisma.task.findUnique({
+      const task = await prisma.task.findFirst({
         where: {
           id,
         },
         include: {
           project: {
             select: {
+              id: true,
+              projectIcon: true,
               projectName: true,
               image: true,
+            },
+          },
+          milestone: {
+            select: {
+              id: true,
+              milestoneName: true,
             },
           },
           comment: {
@@ -91,13 +112,23 @@ class TaskService {
                 select: {
                   firstname: true,
                   lastname: true,
-                },
-                include: {
                   member: {
                     select: {
                       profilePicture: true,
                     },
                   },
+                },
+              },
+            },
+          },
+          member: {
+            select: {
+              id: true,
+              profilePicture: true,
+              user: {
+                select: {
+                  firstname: true,
+                  lastname: true,
                 },
               },
             },
@@ -111,6 +142,8 @@ class TaskService {
 
       return task;
     } catch (error) {
+      console.log('error : ', error);
+
       throw error;
     }
   }

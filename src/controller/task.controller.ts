@@ -70,7 +70,11 @@ const TaskController = {
       const id = Number(req.params.id);
       const task = await TaskService.getTaskDetail(id);
 
-      return task;
+      return res.json({
+        message: 'Berhasil mendapatkan detail task',
+        statusCode: HttpStatusCode.OK,
+        data: task,
+      });
     } catch (error) {
       next(error);
     }
