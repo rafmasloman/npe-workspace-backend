@@ -106,6 +106,8 @@ class MilestoneService {
 
       return milestones;
     } catch (error) {
+      console.log('error : ', error);
+
       throw error;
     }
   }
