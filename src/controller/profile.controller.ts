@@ -12,8 +12,11 @@ class ProfileController {
         phoneNumber,
         gender,
         birthDate,
+        email,
         profilePicture,
       } = req.body;
+
+      console.log(req.body);
 
       const userProfile = await ProfileService.updateProfile(userId, {
         firstname,
@@ -22,6 +25,7 @@ class ProfileController {
         gender,
         birthDate,
         profilePicture,
+        email,
       });
 
       return res.json({

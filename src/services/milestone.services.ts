@@ -172,6 +172,28 @@ class MilestoneService {
     }
   }
 
+  static async updateMilestoneStatus(
+    id: string,
+    status: 'TODO' | 'ON_PROGRESS' | 'COMPLETED',
+  ) {
+    try {
+      const milestone = await prisma.milestone.update({
+        where: {
+          id: Number(id),
+        },
+        data: {
+          status,
+        },
+      });
+
+      return milestone;
+    } catch (error) {
+      console.log(error);
+
+      throw error;
+    }
+  }
+
   static async deleteMilestone(milestoneId: number) {
     try {
       const milestone = await prisma.milestone.delete({

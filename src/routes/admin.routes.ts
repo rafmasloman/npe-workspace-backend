@@ -11,7 +11,7 @@ const adminRouter = () => {
   router.put('/:id', authToken, checkRole, adminController.updateUser);
   router.get('/roles', authToken, checkRole, adminController.getAllRoles);
   router.get('/staff', authToken, checkRolePM, adminController.getUserStaff);
-  router.get('/:id', authToken, checkRole, adminController.getDetailUser);
+  router.get('/:id', authToken, checkRolePM, adminController.getDetailUser);
   router.delete('/:id', authToken, checkRole, adminController.deleteUser);
 
   return router;

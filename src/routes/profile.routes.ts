@@ -8,6 +8,7 @@ class ProfileRoute {
   static routes(): Router {
     // this.route.get('/:userId', authToken, ProfileController.updateProfile);
     this.route.get('/:userId', authToken, ProfileController.getUserProfile);
+    this.route.put('/:userId', authToken, ProfileController.updateProfile);
 
     return this.route;
   }

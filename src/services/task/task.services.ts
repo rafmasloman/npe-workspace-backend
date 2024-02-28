@@ -136,10 +136,6 @@ class TaskService {
         },
       });
 
-      if (!task) {
-        throw new NotFoundError('Task tidak ditemukan');
-      }
-
       return task;
     } catch (error) {
       console.log('error : ', error);

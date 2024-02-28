@@ -10,6 +10,16 @@ class ProfileService {
             id: userId,
           },
         },
+        include: {
+          user: {
+            select: {
+              id: true,
+              firstname: true,
+              lastname: true,
+              email: true,
+            },
+          },
+        },
       });
 
       return userProfileResponse;
@@ -25,12 +35,6 @@ class ProfileService {
     payload: IUpdateProfileRequestParams,
   ) {
     try {
-      const userDetail = await prisma.user.findFirst({
-        where: {
-          id: userId,
-        },
-      });
-
       const userProfileResponse = await prisma.user.update({
         where: {
           id: userId,
@@ -38,35 +42,17 @@ class ProfileService {
         data: {
           firstname: payload.firstname,
           lastname: payload.lastname,
-          //   member: {
-          //     connect: {
-          //       id: memberId,
-          //       phoneNumber: payload.phoneNumber,
-          //     },
-          //   },
+          email: payload.email,
+          member: {
+            update: {
+              phoneNumber: payload.phoneNumber,
+              gender: payload.gender,
+            },
+          },
         },
       });
 
-      //   console.log('user profile : ', userProfileResponse);
-
-      const memberProfileResponse = await prisma.member.update({
-        where: {
-          userId: userProfileResponse.id,
-        },
-        data: {
-          phoneNumber: payload.phoneNumber,
-          profilePicture: payload.profilePicture,
-          gender: payload.gender,
-          birthDate: payload.birthDate,
-        },
-      });
-
-      const data = {
-        ...userProfileResponse,
-        ...memberProfileResponse,
-      };
-
-      return data;
+      return userProfileResponse;
     } catch (error) {
       throw error;
     }
