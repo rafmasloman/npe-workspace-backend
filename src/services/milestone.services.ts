@@ -97,6 +97,15 @@ class MilestoneService {
               },
             },
           },
+          _count: {
+            select: {
+              task: {
+                where: {
+                  status: 'COMPLETED',
+                },
+              },
+            },
+          },
         },
       });
 
@@ -104,7 +113,16 @@ class MilestoneService {
         throw NotFoundError;
       }
 
-      return milestones;
+      const milestonesWithProgress = milestones.map((milestone) => {
+        return {
+          ...milestone,
+          progress: Math.floor(
+            (milestone._count.task / milestone.task.length) * 100,
+          ),
+        };
+      });
+
+      return milestonesWithProgress;
     } catch (error) {
       console.log('error : ', error);
 

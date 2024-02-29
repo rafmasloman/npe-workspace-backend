@@ -63,6 +63,14 @@ const milestoneController = {
     try {
       const data = await MilestoneService.getMilestonesByProject(id);
 
+      // const projectMilestone = data.map((milestone) => {
+      //   console.log('project milestone : ', milestone);
+
+      //   return milestone;
+      // });
+
+      // console.log('project milestone : ', projectMilestone);
+
       return res.json({
         message: 'Berhasil mendapatkan semua data milestones by project',
         statusCode: HttpStatusCode.OK,
