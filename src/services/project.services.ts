@@ -179,7 +179,6 @@ class ProjectService {
               milestone: {
                 select: {
                   id: true,
-                  status: true,
                 },
               },
               member: {

@@ -129,7 +129,6 @@ model Milestone {
   description String?
   task Task[]
   member Member[]
-  status StatusProgress @default(TODO)
   projectId String?
   project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
   startedDate DateTime @default(now())

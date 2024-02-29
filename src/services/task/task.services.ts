@@ -189,6 +189,11 @@ class TaskService {
               id: true,
             },
           },
+          milestone: {
+            select: {
+              milestoneName: true,
+            },
+          },
         },
       });
 

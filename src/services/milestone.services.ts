@@ -3,6 +3,7 @@ import prisma from '../config/prisma-client.config';
 import NotFoundError from '../error/not-found.error';
 import { ICreateMilestoneRequestParams } from '../interfaces/milestone.interfaces';
 import { StatusProgress } from '../interfaces/task.interface';
+import MilestoneUtils from '../utils/milestone.utils';
 
 class MilestoneService {
   static async createMilestone(payload: ICreateMilestoneRequestParams) {
@@ -49,9 +50,6 @@ class MilestoneService {
           milestoneName: {
             contains: name,
           },
-          status: {
-            equals: status as any,
-          },
         },
       });
 
@@ -86,7 +84,11 @@ class MilestoneService {
           projectId,
         },
         include: {
-          task: true,
+          task: {
+            select: {
+              status: true,
+            },
+          },
           member: {
             include: {
               user: {
@@ -114,10 +116,16 @@ class MilestoneService {
       }
 
       const milestonesWithProgress = milestones.map((milestone) => {
+        const taskStatus = MilestoneUtils.countAllTaskStatus(milestone.task);
+
         return {
           ...milestone,
           progress: Math.floor(
             (milestone._count.task / milestone.task.length) * 100,
+          ),
+          status: MilestoneUtils.generateMilestoneStatusByTask(
+            taskStatus,
+            milestone.task.length,
           ),
         };
       });
@@ -181,28 +189,6 @@ class MilestoneService {
               id: memberId,
             })),
           },
-        },
-      });
-
-      return milestone;
-    } catch (error) {
-      console.log(error);
-
-      throw error;
-    }
-  }
-
-  static async updateMilestoneStatus(
-    id: string,
-    status: 'TODO' | 'ON_PROGRESS' | 'COMPLETED',
-  ) {
-    try {
-      const milestone = await prisma.milestone.update({
-        where: {
-          id: Number(id),
-        },
-        data: {
-          status,
         },
       });
 

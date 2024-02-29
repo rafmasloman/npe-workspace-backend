@@ -18,11 +18,6 @@ const milestoneRouter = () => {
     authToken,
     milestoneController.getMilestonesByMember,
   );
-  router.put(
-    '/status/:id',
-    authToken,
-    milestoneController.updateMilestoneStatus,
-  );
   router.put('/:id', authToken, milestoneController.updateMilestone);
   router.delete('/:id', authToken, milestoneController.deleteMilestone);
 

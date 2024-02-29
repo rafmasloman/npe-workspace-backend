@@ -121,30 +121,6 @@ const milestoneController = {
     }
   },
 
-  updateMilestoneStatus: async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ) => {
-    const { status } = req.body;
-    const { id } = req.params;
-
-    try {
-      const milestone = await MilestoneService.updateMilestoneStatus(
-        id,
-        status,
-      );
-
-      return res.json({
-        message: 'Berhasil mengubah status milestone',
-        statusCode: HttpStatusCode.OK,
-        data: milestone,
-      });
-    } catch (error) {
-      next(error);
-    }
-  },
-
   deleteMilestone: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
 
