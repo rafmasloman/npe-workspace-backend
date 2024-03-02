@@ -30,6 +30,27 @@ class ProfileService {
     }
   }
 
+  static async getProfilePicture(userId: string) {
+    try {
+      const userProfilePictureResponse = await prisma.member.findFirst({
+        where: {
+          user: {
+            id: userId,
+          },
+        },
+        select: {
+          profilePicture: true,
+        },
+      });
+
+      return userProfilePictureResponse;
+    } catch (error) {
+      console.log(error);
+
+      throw error;
+    }
+  }
+
   static async updateProfile(
     userId: string,
     payload: IUpdateProfileRequestParams,
@@ -53,6 +74,29 @@ class ProfileService {
       });
 
       return userProfileResponse;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async updateProfilePicture(
+    userId: string,
+    payload: { profilePicture: string },
+  ) {
+    try {
+      const userProfilePicture = await prisma.member.update({
+        where: {
+          userId,
+        },
+        data: {
+          profilePicture: payload.profilePicture,
+        },
+        select: {
+          profilePicture: true,
+        },
+      });
+
+      return userProfilePicture;
     } catch (error) {
       throw error;
     }

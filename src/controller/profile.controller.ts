@@ -34,6 +34,33 @@ class ProfileController {
         data: userProfile,
       });
     } catch (error) {
+      console.log(error);
+
+      next(error);
+    }
+  }
+
+  static async updateProfilePicture(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      const profilePicture = req.file?.filename;
+      const { userId } = req.params;
+
+      const userProfile = await ProfileService.updateProfilePicture(userId, {
+        profilePicture: profilePicture ?? '',
+      });
+
+      return res.json({
+        message: 'Berhasil update data foto profile',
+        statusCode: HttpStatusCode.OK,
+        data: userProfile,
+      });
+    } catch (error) {
+      console.log(error);
+
       next(error);
     }
   }
@@ -43,6 +70,26 @@ class ProfileController {
       const { userId } = req.params;
 
       const userProfile = await ProfileService.getProfileDetail(userId);
+
+      return res.json({
+        statusCode: HttpStatusCode.OK,
+        message: 'Berhasil mendapatkan data profile',
+        data: userProfile,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getUserProfilePicture(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      const { userId } = req.params;
+
+      const userProfile = await ProfileService.getProfilePicture(userId);
 
       return res.json({
         statusCode: HttpStatusCode.OK,
