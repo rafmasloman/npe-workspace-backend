@@ -184,6 +184,7 @@ class ProjectService {
               },
               member: {
                 select: {
+                  profilePicture: true,
                   position: true,
                   user: {
                     select: {
