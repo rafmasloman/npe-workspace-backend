@@ -143,6 +143,14 @@ class AdminService {
           username: true,
           email: true,
           role: true,
+
+          member: {
+            select: {
+              id: true,
+              profilePicture: true,
+              position: true,
+            },
+          },
         },
       });
 

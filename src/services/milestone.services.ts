@@ -3,7 +3,8 @@ import prisma from '../config/prisma-client.config';
 import NotFoundError from '../error/not-found.error';
 import { ICreateMilestoneRequestParams } from '../interfaces/milestone.interfaces';
 import { StatusProgress } from '../interfaces/task.interface';
-import MilestoneUtils from '../utils/milestone.utils';
+import MilestoneUtils from '../utils/progress.utils';
+import ProgressUtils from '../utils/progress.utils';
 
 class MilestoneService {
   static async createMilestone(payload: ICreateMilestoneRequestParams) {
@@ -116,14 +117,14 @@ class MilestoneService {
       }
 
       const milestonesWithProgress = milestones.map((milestone) => {
-        const taskStatus = MilestoneUtils.countAllTaskStatus(milestone.task);
+        const taskStatus = ProgressUtils.countAllTaskStatus(milestone.task);
 
         return {
           ...milestone,
           progress: Math.floor(
             (milestone._count.task / milestone.task.length) * 100,
           ),
-          status: MilestoneUtils.generateMilestoneStatusByTask(
+          status: ProgressUtils.generateStatusByTask(
             taskStatus,
             milestone.task.length,
           ),

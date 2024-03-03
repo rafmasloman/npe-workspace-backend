@@ -2,6 +2,7 @@ import prisma from '../config/prisma-client.config';
 import NotFoundError from '../error/not-found.error';
 import { ICreateProjectRequestParams } from '../interfaces/project.interface';
 import moment from 'moment';
+import ProgressUtils from '../utils/progress.utils';
 
 class ProjectService {
   static async createProject(payload: ICreateProjectRequestParams) {
@@ -240,7 +241,23 @@ class ProjectService {
         throw new NotFoundError('Invalid id project');
       }
 
-      return project;
+      const projectProgress = () => {
+        const countProjectTaskStatus = ProgressUtils.countAllTaskStatus(
+          project.task,
+        );
+        const generateProgress = Math.floor(
+          (countProjectTaskStatus.completed / project.task.length) * 100,
+        );
+
+        return generateProgress;
+      };
+
+      const projectResponse = {
+        ...project,
+        progress: projectProgress(),
+      };
+
+      return projectResponse;
     } catch (error) {
       console.log(error);
 
