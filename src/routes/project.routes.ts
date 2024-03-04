@@ -54,7 +54,7 @@ const projectRouter = () => {
   );
 
   router.delete(
-    '/removeMember/:id',
+    '/removeMember/:id/:memberId',
     authToken,
     checkRolePM,
     projectController.deleteMemberFromProject,

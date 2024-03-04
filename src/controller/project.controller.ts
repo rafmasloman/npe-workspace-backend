@@ -198,9 +198,13 @@ const projectController = {
     res: Response,
     next: NextFunction,
   ) => {
+    console.log('req body : ', req.params.memberId);
+    console.log('req body : ', req.params.id);
+
     try {
       const id = req.params.id;
-      const { memberId } = req.body;
+      const memberId = req.params.memberId;
+      // const { memberId } = req.body;
       const project = await ProjectOnMember.deleteMemberFromProject(
         id,
         memberId,

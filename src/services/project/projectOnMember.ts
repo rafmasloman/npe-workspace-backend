@@ -27,6 +27,8 @@ class ProjectOnMember {
   }
 
   static async deleteMemberFromProject(id: string, memberId: string) {
+    console.log('member id : ', memberId);
+
     try {
       const project = await prisma.project.update({
         where: {
@@ -47,6 +49,8 @@ class ProjectOnMember {
 
       return project;
     } catch (error) {
+      console.log(error);
+
       throw error;
     }
   }
