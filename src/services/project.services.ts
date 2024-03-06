@@ -288,7 +288,6 @@ class ProjectService {
               id,
             })),
           },
-          clientId: payload.clientId,
         },
       });
 

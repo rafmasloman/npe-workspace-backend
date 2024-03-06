@@ -39,8 +39,6 @@ class MemberOnPayroll {
         (member) => !memberStaffIds.has(member.id),
       );
 
-      console.log(memberHavePayroll);
-
       const memberPayroll = memberHavePayroll.map((data) => {
         return {
           id: data.id,

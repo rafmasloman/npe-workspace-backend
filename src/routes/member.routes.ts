@@ -15,6 +15,12 @@ const memberRouter = () => {
     memberController.getMembersProject,
   );
 
+  router.get(
+    '/project-manager',
+    authToken,
+    memberController.getMemberProjectManager,
+  );
+
   router.get('/:id', authToken, memberController.getMemberDetail);
 
   router.post(

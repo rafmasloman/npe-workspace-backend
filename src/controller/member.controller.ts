@@ -122,6 +122,24 @@ const memberController = {
       next(error);
     }
   },
+
+  getMemberProjectManager: async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      const projectManager = await MemberService.getMemberProjectManager();
+
+      return res.json({
+        message: 'Berhasil mendapatkan project manager',
+        statusCode: HttpStatusCode.OK,
+        data: projectManager,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
 };
 
 export default memberController;

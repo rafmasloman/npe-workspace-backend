@@ -118,6 +118,32 @@ class MemberService {
     }
   }
 
+  static async getMemberProjectManager() {
+    try {
+      const staff = await prisma.member.findMany({
+        where: {
+          user: {
+            role: 'PROJECT_MANAGER',
+          },
+        },
+        include: {
+          user: {
+            select: {
+              firstname: true,
+              lastname: true,
+            },
+          },
+        },
+      });
+
+      return staff;
+    } catch (error) {
+      console.log(error);
+
+      throw error;
+    }
+  }
+
   static async updateMember(id: string, payload: ICreateMemberRequestParams) {
     console.log('payload : ', payload);
 
