@@ -247,15 +247,35 @@ class TaskService {
 
   static async updateTask(id: number, payload: ICreateTaskRequestParams) {
     try {
-      const findTask = await prisma.task.findUnique({
+      const findTask = await prisma.task.findFirst({
         where: {
           id,
+        },
+        select: {
+          member: {
+            select: {
+              id: true,
+            },
+          },
         },
       });
 
       if (!findTask) {
         throw new NotFoundError('Task tidak ditemukan');
       }
+
+      const removeMemberTask = await prisma.task.update({
+        where: {
+          id,
+        },
+        data: {
+          member: {
+            disconnect: findTask?.member.map((member: any) => ({
+              id: member.id,
+            })),
+          },
+        },
+      });
 
       const task = await prisma.task.update({
         where: {
@@ -270,6 +290,9 @@ class TaskService {
           },
           projectId: payload.projectId,
           milestoneId: payload.milestoneId,
+        },
+        include: {
+          member: true,
         },
       });
 
