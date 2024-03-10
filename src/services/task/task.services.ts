@@ -160,10 +160,13 @@ class TaskService {
         include: {
           member: {
             select: {
+              id: true,
               position: true,
               profilePicture: true,
               user: {
                 select: {
+                  id: true,
+
                   firstname: true,
                   lastname: true,
                 },
@@ -192,6 +195,8 @@ class TaskService {
           },
           milestone: {
             select: {
+              id: true,
+
               milestoneName: true,
             },
           },

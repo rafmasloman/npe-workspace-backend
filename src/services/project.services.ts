@@ -156,6 +156,34 @@ class ProjectService {
     }
   }
 
+  static async getProjectMember(projectId: string) {
+    try {
+      const userProject = await prisma.project.findFirst({
+        where: {
+          id: projectId,
+        },
+        select: {
+          member: {
+            select: {
+              id: true,
+              position: true,
+              user: {
+                select: {
+                  firstname: true,
+                  lastname: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      return userProject;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async getUserProject(userId: string, projectName?: string) {
     console.log('project name : ', projectName);
 

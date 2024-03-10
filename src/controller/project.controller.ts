@@ -79,6 +79,29 @@ const projectController = {
     }
   },
 
+  getTeamMemberProject: async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      const { id } = req.params;
+      const memberProjects = await ProjectService.getProjectMember(id);
+
+      return res.json({
+        message: 'Berhasil mendapatkan anggota tim project',
+        statusCode: HttpStatusCode.OK,
+        data: memberProjects,
+      });
+    } catch (error) {
+      console.log('error : ', error);
+
+      return res.json({
+        message: error,
+      });
+    }
+  },
+
   getUserProject: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = req.params.id;
@@ -208,7 +231,6 @@ const projectController = {
     try {
       const id = req.params.id;
       const memberId = req.params.memberId;
-      // const { memberId } = req.body;
       const project = await ProjectOnMember.deleteMemberFromProject(
         id,
         memberId,

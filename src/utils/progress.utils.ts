@@ -24,12 +24,18 @@ const ProgressUtils = {
     taskStatus: { todo: number; on_progress: number; completed: number },
     taskLength: number,
   ) => {
-    if (taskStatus.on_progress > 0) {
-      return 'On Progress';
-    } else if (taskStatus.completed === taskLength) {
-      return 'Completed';
+    console.log('task status : ', taskStatus.completed + ' ' + taskLength);
+
+    if (taskLength > 0) {
+      if (taskStatus.on_progress > 0) {
+        return 'On Progress';
+      } else if (taskStatus.completed === taskLength) {
+        return 'Completed';
+      } else {
+        return 'To Do';
+      }
     } else {
-      return 'To Do';
+      return 'No task yet';
     }
   },
 };
