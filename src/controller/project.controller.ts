@@ -82,8 +82,12 @@ const projectController = {
   getUserProject: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = req.params.id;
+      const projectName = req.query.projectName;
 
-      const userProject = await ProjectService.getUserProject(id);
+      const userProject = await ProjectService.getUserProject(
+        id,
+        projectName as string,
+      );
 
       return res.json({
         message: 'Berhasil mendapatkan user project',

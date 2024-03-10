@@ -156,7 +156,9 @@ class ProjectService {
     }
   }
 
-  static async getUserProject(userId: string) {
+  static async getUserProject(userId: string, projectName?: string) {
+    console.log('project name : ', projectName);
+
     try {
       const userProject = await prisma.member.findFirst({
         where: {
@@ -164,6 +166,11 @@ class ProjectService {
         },
         select: {
           project: {
+            where: {
+              projectName: {
+                contains: projectName,
+              },
+            },
             select: {
               id: true,
               projectName: true,
