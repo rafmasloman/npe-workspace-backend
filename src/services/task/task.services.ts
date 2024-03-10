@@ -1,6 +1,7 @@
 import prisma from '../../config/prisma-client.config';
 import NotFoundError from '../../error/not-found.error';
 import { ICreateTaskRequestParams } from '../../interfaces/task.interface';
+import TaskMemberService from './taskOnMember';
 
 class TaskService {
   static async createTask(payload: ICreateTaskRequestParams) {
@@ -264,18 +265,10 @@ class TaskService {
         throw new NotFoundError('Task tidak ditemukan');
       }
 
-      const removeMemberTask = await prisma.task.update({
-        where: {
-          id,
-        },
-        data: {
-          member: {
-            disconnect: findTask?.member.map((member: any) => ({
-              id: member.id,
-            })),
-          },
-        },
-      });
+      const taskMember = await TaskMemberService.removeMemberFromTask(
+        id,
+        findTask,
+      );
 
       const task = await prisma.task.update({
         where: {
