@@ -10,6 +10,15 @@ export interface ICreateMemberRequestParams {
   userId: string;
 }
 
+export interface IUpdateMemberRequestParams {
+  position: string;
+  phoneNumber: string;
+  profilePicture: string;
+  gender: string;
+  birthDate: Date;
+  userId: string;
+}
+
 export interface IReadMembersResponseParams {
   id: string;
   name: string;

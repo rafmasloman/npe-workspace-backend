@@ -1,6 +1,9 @@
 import prisma from '../config/prisma-client.config';
 import NotFoundError from '../error/not-found.error';
-import { ICreateMemberRequestParams } from '../interfaces/member.interface';
+import {
+  ICreateMemberRequestParams,
+  IUpdateMemberRequestParams,
+} from '../interfaces/member.interface';
 
 class MemberService {
   static async createMember(payload: ICreateMemberRequestParams) {
@@ -109,6 +112,13 @@ class MemberService {
           },
           task: true,
           project: true,
+          user: {
+            select: {
+              id: true,
+              firstname: true,
+              lastname: true,
+            },
+          },
         },
       });
 
@@ -144,11 +154,37 @@ class MemberService {
     }
   }
 
-  static async updateMember(id: string, payload: ICreateMemberRequestParams) {
+  static async getMemberStaff() {
+    try {
+      const staff = await prisma.member.findMany({
+        where: {
+          user: {
+            role: 'STAFF',
+          },
+        },
+        include: {
+          user: {
+            select: {
+              firstname: true,
+              lastname: true,
+            },
+          },
+        },
+      });
+
+      return staff;
+    } catch (error) {
+      console.log(error);
+
+      throw error;
+    }
+  }
+
+  static async updateMember(id: string, payload: IUpdateMemberRequestParams) {
     console.log('payload : ', payload);
 
     try {
-      const findMember = await prisma.member.findUnique({
+      const findMember = await prisma.member.findFirst({
         where: {
           id,
         },
@@ -170,6 +206,8 @@ class MemberService {
 
       return member;
     } catch (error) {
+      console.log(error);
+
       throw error;
     }
   }

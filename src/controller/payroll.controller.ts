@@ -9,13 +9,16 @@ class PayrollController {
 
     try {
       const data = await PayrollService.createPayroll(payload);
+
       return res.json({
         message: 'Berhasil menambah data payroll',
         statusCode: HttpStatusCode.CREATED,
         data,
       });
     } catch (error) {
-      throw error;
+      console.log('error : ', error);
+
+      next(error);
     }
   }
 
@@ -36,6 +39,29 @@ class PayrollController {
       });
     } catch (error) {
       throw error;
+    }
+  }
+
+  static async getPayrollDetail(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) {
+    console.log(req.params);
+
+    try {
+      const { id } = req.params;
+      const data = await PayrollService.getPayrollDetail(id);
+
+      return res.json({
+        message: 'Berhasil detail data payroll',
+        statusCode: HttpStatusCode.OK,
+        data,
+      });
+    } catch (error) {
+      console.log('payroll etail error : ', error);
+
+      next(error);
     }
   }
 

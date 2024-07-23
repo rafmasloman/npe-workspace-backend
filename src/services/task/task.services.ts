@@ -48,6 +48,7 @@ class TaskService {
     status?: any,
     priority?: any,
     projectName?: string,
+    limit?: number,
   ) {
     try {
       const tasks = await prisma.task.findMany({
@@ -77,6 +78,17 @@ class TaskService {
             },
           },
         },
+
+        include: {
+          project: {
+            select: {
+              projectIcon: true,
+              projectName: true,
+            },
+          },
+        },
+
+        take: limit ? limit : undefined,
       });
 
       return tasks;

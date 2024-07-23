@@ -13,14 +13,14 @@ datasource db {
 model User {
   id       String   @id @default(uuid())
   username String
-  password String   @unique
+  password String   
   email    String   @unique
   firstname String?   @db.VarChar(100)
   lastname String? @db.VarChar(100)
   // roleId Int
   // role Role @relation(fields: [roleId], references: [id])
   role     RoleType @default(value: STAFF)
-  memberId String?
+  // memberId String?
   member   Member?
   comments Comment[]
 
@@ -49,8 +49,9 @@ model Project {
   price       Int @default(0)
   task        Task[]
   member      Member[]
-  clientId    String? @unique
-  client      Client?   @relation(fields: [clientId], references: [id])
+  // clientId    String?   @unique
+  // client      Client?   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  client      Client?
   image       String?
   projectIcon String?
   platform    String?
@@ -71,7 +72,7 @@ model Member {
   profilePicture String?
   gender         String
   birthDate      DateTime  @default(now())
-  role           RoleType  @default(STAFF)
+  // role           RoleType  @default(STAFF)
   userId         String?   @unique
   user           User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
   task           Task[]
@@ -88,9 +89,10 @@ model Client {
   name        String    @db.VarChar(100)
   phoneNumber String
   address     String
-  email String
-  project     Project?
-  invoices Invoices?
+  email       String
+  project      Project?   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId    String?   @unique
+  
   createdAt   DateTime  @default(now())
   updatedAt   DateTime? @updatedAt
 }
@@ -117,7 +119,7 @@ model Task {
   status String
   priority Priority 
   milestoneId Int?
-  milestone Milestone? @relation(fields: [milestoneId], references: [id])
+  milestone Milestone? @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
   createdAt DateTime  @default(now())
   endDate   DateTime?
   updatedAt DateTime? @updatedAt
@@ -127,7 +129,7 @@ model Milestone {
   id Int @id @default(autoincrement())
   milestoneName String
   description String?
-  task Task[]
+  task Task[] 
   member Member[]
   projectId String?
   project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
@@ -138,17 +140,7 @@ model Milestone {
   updatedAt DateTime? @updatedAt
 }
 
-model Invoices {
-  id String @id @default(uuid())
-  invoicesTitle String
-  otherInfo String?
-  clientId String @unique
-  orderId String @default(uuid())
-  invoiceStatus TransactionStatus @default(UNPAID)
-  client Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime? @updatedAt
-}
+
 
 model Payroll {
   id           Int       @id @default(autoincrement())
@@ -161,7 +153,7 @@ model Payroll {
   salary       Int @default(0)
   payrollStatus TransactionStatus @default(UNPAID)
 
-  transactionProvider  TransactionProvider
+  // transactionProvider  TransactionProvider
   createdAt    DateTime  @default(now())
   updatedAt    DateTime? @updatedAt
 
@@ -200,16 +192,16 @@ enum Priority {
   LOW
 }
 
-enum TransactionProvider {
-  BRI 
-  BNI 
-  BSI 
-  BCA 
-  Mandiri
-  Gopay
-  Dana
-  Ovo 
-}
+// enum TransactionProvider {
+//   BRI 
+//   BNI 
+//   BSI 
+//   BCA 
+//   Mandiri
+//   Gopay
+//   Dana
+//   Ovo 
+// }
 
 enum TransactionStatus {
   PAID

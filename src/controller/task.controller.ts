@@ -26,12 +26,13 @@ const TaskController = {
 
   getAllTask: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { name, status, priority, projectName } = req.query;
+      const { name, status, priority, projectName, limit } = req.query;
       const tasks = await TaskService.getAllTask(
         name as string,
         status as string,
         priority as any,
         projectName as string,
+        Number(limit),
       );
 
       return res.json({

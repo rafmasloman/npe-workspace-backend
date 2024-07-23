@@ -5,5 +5,4 @@ export interface IUpdateProfileRequestParams {
   phoneNumber: string;
   gender: string;
   birthDate: string;
-  profilePicture: string;
 }

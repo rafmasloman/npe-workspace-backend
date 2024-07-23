@@ -23,8 +23,6 @@ const memberController = {
         data: member,
       });
     } catch (error) {
-      console.log('error controller : ', error);
-
       next(error);
     }
   },
@@ -135,6 +133,20 @@ const memberController = {
         message: 'Berhasil mendapatkan project manager',
         statusCode: HttpStatusCode.OK,
         data: projectManager,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  getMemberStaff: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const teamMember = await MemberService.getMemberStaff();
+
+      return res.json({
+        message: 'Berhasil mendapatkan data staff member',
+        statusCode: HttpStatusCode.OK,
+        data: teamMember,
       });
     } catch (error) {
       next(error);

@@ -49,6 +49,52 @@ const adminController = {
     }
   },
 
+  getUserMember: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const member = await AdminService.getUserMember();
+
+      return res.json({
+        message: 'Berhasil mendapatkan user member',
+        statusCode: HttpStatusCode.OK,
+        data: member,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  getUserNonMember: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const member = await AdminService.getUserNonMember();
+
+      return res.json({
+        message: 'Berhasil mendapatkan user yang belum menjadi member',
+        statusCode: HttpStatusCode.OK,
+        data: member,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  getProjectManagerWithNonProject: async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      const member = await AdminService.getProjectManagerWithNonProject();
+
+      return res.json({
+        message: 'Berhasil mendapatkan project manager',
+        statusCode: HttpStatusCode.OK,
+        data: member,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
   getDetailUser: async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
     try {
@@ -64,7 +110,34 @@ const adminController = {
     }
   },
 
+  changeUserPassword: async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      const { userId, newPassword } = req.body;
+      const id = req.params.id;
+
+      const user = await AdminService.changePassword(id, {
+        userId,
+        newPassword,
+      });
+
+      return res.json({
+        message: 'Berhasil Mengubah Password',
+        statusCode: HttpStatusCode.CREATED,
+      });
+    } catch (error) {
+      console.log(error);
+
+      next(error);
+    }
+  },
+
   createUser: async (req: Request, res: Response, next: NextFunction) => {
+    console.log('payload : ', req.body);
+
     try {
       const { email, username, password, firstname, lastname, role } = req.body;
       const { error, value } = userValidationSchema.validate({
@@ -77,6 +150,7 @@ const adminController = {
       });
 
       if (error) {
+        console.log('error : ', error.message);
         throw new ValidationError(error.message);
       }
 
@@ -97,12 +171,11 @@ const adminController = {
   updateUser: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = req.params.id;
-      const { email, username, password, firstname, lastname, role } = req.body;
+      const { email, username, firstname, lastname, role } = req.body;
 
       const user = await AdminService.updateUser(userId, {
         email,
         username,
-        password,
         firstname,
         lastname,
         role,

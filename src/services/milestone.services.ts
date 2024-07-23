@@ -74,6 +74,29 @@ class MilestoneService {
 
       return milestone;
     } catch (error) {
+      console.log('error : ', error);
+
+      throw error;
+    }
+  }
+
+  static async getMilestoneDeadline(milestoneId: number) {
+    try {
+      const milestone = await prisma.milestone.findFirst({
+        where: {
+          id: milestoneId,
+        },
+        select: {
+          endDate: true,
+        },
+      });
+
+      if (!milestone) {
+        throw NotFoundError;
+      }
+
+      return milestone;
+    } catch (error) {
       throw error;
     }
   }

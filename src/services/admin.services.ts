@@ -10,6 +10,45 @@ import { IUserDetailResponse } from '../interfaces/user.interface';
 import bcrypt from 'bcrypt';
 
 class AdminService {
+  static async changePassword(
+    id: string,
+    payload: {
+      userId: string;
+      newPassword: string;
+    },
+  ) {
+    const { newPassword, userId } = payload;
+
+    try {
+      const checkRole = await prisma.user.findFirst({
+        where: {
+          id,
+        },
+      });
+
+      console.log('check role : ', checkRole);
+
+      // if ((!checkRole?.role as unknown) !== 'ADMIN') {
+      //   throw NotFoundError;
+      // }
+
+      const hashNewPassword = await bcrypt.hash(newPassword, 10);
+
+      const user = await prisma.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          password: hashNewPassword,
+        },
+      });
+
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async createUser(payload: IAdminCreateUserRequestParams) {
     try {
       const hashPassword = await bcrypt.hash(
@@ -58,26 +97,12 @@ class AdminService {
 
   static async updateUser(id: string, payload: IAdminUpdateUserRequestParams) {
     try {
-      const hashPassword = await bcrypt.hash(
-        payload.password!,
-        HashPassword.SALT_ROUND,
-      );
-
-      const existingUser = await prisma.user.findUnique({
-        where: { email: payload.email },
-      });
-
-      if (existingUser) {
-        throw new ValidationError('Email Sudah ada');
-      }
-
       const user = await prisma.user.update({
         where: {
           id,
         },
         data: {
           ...payload,
-          password: hashPassword!,
         },
       });
 
@@ -91,6 +116,17 @@ class AdminService {
   static async getAllUser() {
     try {
       const user = await prisma.user.findMany({
+        where: {
+          OR: [
+            {
+              role: 'PROJECT_MANAGER',
+            },
+
+            {
+              role: 'STAFF',
+            },
+          ],
+        },
         select: {
           id: true,
           firstname: true,
@@ -98,6 +134,11 @@ class AdminService {
           username: true,
           email: true,
           role: true,
+          member: {
+            select: {
+              id: true,
+            },
+          },
         },
       });
       return user;
@@ -162,6 +203,82 @@ class AdminService {
     } catch (error) {
       console.log('user credential error : ', error);
 
+      throw error;
+    }
+  }
+
+  static async getUserMember() {
+    try {
+      const user = await prisma.user.findMany({
+        where: {
+          role: 'PROJECT_MANAGER' && 'STAFF',
+          member: { isNot: null },
+        },
+      });
+
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getUserNonMember() {
+    try {
+      const user = await prisma.user.findMany({
+        where: {
+          OR: [
+            {
+              role: 'STAFF',
+            },
+            {
+              role: 'PROJECT_MANAGER',
+            },
+          ],
+          member: { is: null },
+        },
+        select: {
+          id: true,
+          firstname: true,
+          lastname: true,
+        },
+      });
+
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getProjectManagerWithNonProject() {
+    try {
+      const user = await prisma.user.findMany({
+        where: {
+          role: 'PROJECT_MANAGER',
+          member: { isNot: null },
+        },
+        select: {
+          id: true,
+          firstname: true,
+          lastname: true,
+          member: {
+            select: {
+              id: true,
+              project: true,
+            },
+          },
+        },
+      });
+
+      const projectManager = user.map((ctx) => {
+        if (ctx.member?.project) {
+          if (ctx.member.project.length <= 0) {
+            return ctx;
+          }
+        }
+      });
+
+      return projectManager;
+    } catch (error) {
       throw error;
     }
   }

@@ -53,6 +53,29 @@ const milestoneController = {
     }
   },
 
+  getMilestoneDeadline: async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    const { id } = req.params;
+    console.log('id : ', id);
+
+    try {
+      const data = await MilestoneService.getMilestoneDeadline(Number(id));
+
+      console.log('deadline data : ', data);
+
+      return res.json({
+        message: 'Berhasil mendapatkan data deadline milestone',
+        statusCode: HttpStatusCode.OK,
+        data,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
   getMilestoneByProject: async (
     req: Request,
     res: Response,

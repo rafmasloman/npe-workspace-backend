@@ -22,7 +22,7 @@ const projectController = {
         projectIcon,
       });
 
-      console.log('tess');
+      console.log('project : ');
 
       return res.json({
         message: 'Berhasil membuat project',
@@ -107,7 +107,7 @@ const projectController = {
       const id = req.params.id;
       const projectName = req.query.projectName;
 
-      const userProject = await ProjectService.getUserProject(
+      const userProject = await ProjectService.getMemberProject(
         id,
         projectName as string,
       );

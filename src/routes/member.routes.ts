@@ -21,6 +21,8 @@ const memberRouter = () => {
     memberController.getMemberProjectManager,
   );
 
+  router.get('/staff', authToken, memberController.getMemberStaff);
+
   router.get('/:id', authToken, memberController.getMemberDetail);
 
   router.post(

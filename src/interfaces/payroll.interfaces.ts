@@ -1,14 +1,6 @@
 export interface ICreatePayrollRequestParams {
   percent: number;
-  transactionProvider:
-    | 'BRI'
-    | 'BNI'
-    | 'BSI'
-    | 'BCA'
-    | 'Mandiri'
-    | 'Gopay'
-    | 'Dana'
-    | 'Ovo';
+
   transactionStatus: 'UNPAID' | 'PAID';
   memberId: string;
   projectId: string;

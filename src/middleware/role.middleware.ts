@@ -6,9 +6,7 @@ const checkRole = (req: Request, res: Response, next: NextFunction) => {
     const { role } = req.signedCookies;
 
     if (role.toLowerCase() !== 'admin'.toLowerCase()) {
-      throw new UnauthorizedError(
-        'Hanya Admin yang bisa mengakses endpoint ini',
-      );
+      throw new UnauthorizedError('Hanya Admin yang bisa mengakses fitur ini');
     }
 
     next();
@@ -34,7 +32,7 @@ const checkRolePM = (req: Request, res: Response, next: NextFunction) => {
       role.toLowerCase() !== 'project_manager'.toLowerCase()
     ) {
       throw new UnauthorizedError(
-        'Hanya Admin atau Project Management yang dapat mengakses endpoint ini',
+        'Hanya Admin atau Project Management yang dapat mengakses fitur ini',
       );
     }
 

@@ -54,8 +54,6 @@ class PayrollService {
 
       return payroll;
     } catch (error) {
-      console.log('payroll creata : ', error);
-
       throw error;
     }
   }
@@ -99,6 +97,40 @@ class PayrollService {
           },
         },
         take: !limit ? undefined : limit,
+      });
+
+      return payroll;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getPayrollDetail(payrollId: string) {
+    try {
+      const payroll = await prisma.payroll.findFirst({
+        where: {
+          id: Number(payrollId),
+        },
+        include: {
+          member: {
+            select: {
+              profilePicture: true,
+              position: true,
+              user: {
+                select: {
+                  firstname: true,
+                  lastname: true,
+                },
+              },
+            },
+          },
+          project: {
+            select: {
+              projectName: true,
+              projectIcon: true,
+            },
+          },
+        },
       });
 
       return payroll;

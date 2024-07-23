@@ -63,11 +63,12 @@ class ProfileService {
         data: {
           firstname: payload.firstname,
           lastname: payload.lastname,
-          email: payload.email,
+
           member: {
             update: {
               phoneNumber: payload.phoneNumber,
-              gender: payload.gender,
+              // gender: payload.gender,
+              birthDate: payload.birthDate,
             },
           },
         },
@@ -75,6 +76,8 @@ class ProfileService {
 
       return userProfileResponse;
     } catch (error) {
+      console.log('error : ', error);
+
       throw error;
     }
   }

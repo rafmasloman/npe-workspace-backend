@@ -9,6 +9,7 @@ class ProjectService {
     try {
       let memberId: any = payload.member?.slice(0, payload.member.length);
       memberId = memberId.split(',');
+
       const project = await prisma.project.create({
         data: {
           ...(payload as any),
@@ -16,7 +17,6 @@ class ProjectService {
           endDate: new Date(payload.endDate!),
           price: Number(payload.price),
           currentPayroll: Number(payload.price),
-
           member: {
             connect: memberId?.map((id: string) => ({
               id,
@@ -184,7 +184,7 @@ class ProjectService {
     }
   }
 
-  static async getUserProject(userId: string, projectName?: string) {
+  static async getMemberProject(userId: string, projectName?: string) {
     console.log('project name : ', projectName);
 
     try {
@@ -194,11 +194,11 @@ class ProjectService {
         },
         select: {
           project: {
-            where: {
-              projectName: {
-                contains: projectName,
-              },
-            },
+            // where: {
+            //   projectName: {
+            //     contains: projectName,
+            //   },
+            // },
             select: {
               id: true,
               projectName: true,
@@ -301,6 +301,20 @@ class ProjectService {
     }
   }
 
+  static async getProjectByDeadline() {
+    try {
+      const allProjects = await prisma.project.findMany({
+        where: {
+          endDate: {
+            gte: new Date(),
+          },
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async updateProject(id: string, payload: ICreateProjectRequestParams) {
     let memberId: any = payload.member?.slice(0, payload.member.length);
     memberId = memberId.split(',');
@@ -341,6 +355,30 @@ class ProjectService {
           id,
         },
       });
+
+      const projectDetail = await prisma.project.findFirst({
+        where: {
+          id,
+        },
+        include: {
+          member: true,
+        },
+      });
+
+      // if(!projectDetail) {
+      //   throw Error('Not Found Project')
+      // }
+
+      // const deleteMemberFromProject = await prisma.project.update({
+      //   where : {
+      //     id
+      //   },
+      //   data: {
+      //     member: {
+      //       disconnect: projectDetail.member.map(m => m.id)
+      //     }
+      //   }
+      // })
 
       return project;
     } catch (error) {

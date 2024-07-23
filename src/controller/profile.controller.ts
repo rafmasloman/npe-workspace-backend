@@ -6,15 +6,8 @@ class ProfileController {
   static async updateProfile(req: Request, res: Response, next: NextFunction) {
     try {
       const { userId } = req.params;
-      const {
-        firstname,
-        lastname,
-        phoneNumber,
-        gender,
-        birthDate,
-        email,
-        profilePicture,
-      } = req.body;
+      const { firstname, lastname, phoneNumber, gender, birthDate, email } =
+        req.body;
 
       console.log(req.body);
 
@@ -24,7 +17,6 @@ class ProfileController {
         phoneNumber,
         gender,
         birthDate,
-        profilePicture,
         email,
       });
 

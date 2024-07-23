@@ -12,9 +12,9 @@ import fileRouter from './src/routes/file.routes';
 import commentRouter from './src/routes/comment.routes';
 import milestoneRouter from './src/routes/milestone.routes';
 import PayrollRoute from './src/routes/payroll.routes';
-import InvoiceRouter from './src/routes/invoice.routes';
+// import InvoiceRouter from './src/routes/invoice.routes';
 import cookieParser from 'cookie-parser';
-import InvoiceController from './src/controller/invoices.controller';
+// import InvoiceController from './src/controller/invoices.controller';
 import path from 'path';
 import Server from 'socket.io';
 import http from 'http';
@@ -62,29 +62,29 @@ app.use(`/${API_URL}/${API_VERSION}/files`, fileRouter());
 app.use(`/${API_URL}/${API_VERSION}/comment`, commentRouter());
 app.use(`/${API_URL}/${API_VERSION}/milestone`, milestoneRouter());
 app.use(`/${API_URL}/${API_VERSION}/payroll`, PayrollRoute.routes());
-app.use(`/${API_URL}/${API_VERSION}/invoice`, InvoiceRouter.routes());
+// app.use(`/${API_URL}/${API_VERSION}/invoice`, InvoiceRouter.routes());
 app.use(`/${API_URL}/${API_VERSION}/profile`, ProfileRoute.routes());
 
-app.use('/renderEmail', InvoiceController.renderEmail);
+// app.use('/renderEmail', InvoiceController.renderEmail);
 
 app.use(ErrorHandler);
 
-io.on('connection', (socket) => {
-  console.log('connected');
+// io.on('connection', (socket) => {
+//   console.log('connected');
 
-  commentController.sendCommentMessage(socket);
-  // socket.on('message', (data) => {
-  //   console.log('message : ', data);
+//   commentController.sendCommentMessage(socket);
+//   // socket.on('message', (data) => {
+//   //   console.log('message : ', data);
 
-  //   socket.broadcast.emit('message', data);
-  // });
+//   //   socket.broadcast.emit('message', data);
+//   // });
 
-  socket.on('disconnect', () => {
-    console.log('diconnected');
+//   socket.on('disconnect', () => {
+//     console.log('diconnected');
 
-    socket.disconnect();
-  });
-});
+//     socket.disconnect();
+//   });
+// });
 
 server.listen(port, () => {
   console.log(`Server is Fire at http://localhost:${port}`);

@@ -5,11 +5,15 @@ import { ICreateClientRequestParams } from '../interfaces/client.interfaces';
 class ClientService {
   static async createClient(payload: ICreateClientRequestParams) {
     try {
-      console.log('client : ', payload.project);
+      console.log('client : ', payload.project === undefined);
 
       const client = await prisma.client.create({
         data: {
-          ...payload,
+          address: payload.address,
+          email: payload.email,
+          name: payload.name,
+          phoneNumber: payload.phoneNumber,
+
           project: {
             connect: {
               id: payload.project,

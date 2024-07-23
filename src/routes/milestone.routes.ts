@@ -14,6 +14,11 @@ const milestoneRouter = () => {
     milestoneController.getMilestoneByProject,
   );
   router.get(
+    '/deadline/:id',
+    authToken,
+    milestoneController.getMilestoneDeadline,
+  );
+  router.get(
     '/member/:memberId',
     authToken,
     milestoneController.getMilestonesByMember,
