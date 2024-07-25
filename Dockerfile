@@ -2,15 +2,15 @@ FROM node:18
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package.json yarn.lock ./
 
-RUN npm install
+RUN yarn install
 
 COPY . .
 
-RUN npm run build
+RUN yarn build
 
 
-EXPOSE 8000
+EXPOSE 5613
 
-CMD ["npm", "start"]
+CMD ["yarn", "start"]

@@ -4,8 +4,11 @@ services:
   app:
     build: .
     ports:
-      - '8000:8000'
+      - '5613:5613'
+    environment:
+      - PORT=5613
+      - DATABASE_URL="mysql://root:12345678@localhost:3306/db_npe-workspace"
+      - JWT_KEY="npe_workspace_key"
     volumes:
       - .:/app
       - /app/node_modules
-    command: npm run dev
