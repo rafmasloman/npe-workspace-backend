@@ -139,11 +139,33 @@ class PayrollService {
     }
   }
 
-  static async getMemberPayroll(payrollId: number) {
+  static async getMemberPayroll(id: string | number) {
     try {
+      const user = await prisma.user.findFirst({
+        where: {
+          id: id as string,
+        },
+      });
+
+      const member = await prisma.member.findFirst({
+        where: {
+          userId: user?.id,
+        },
+      });
+
       const payroll = await prisma.payroll.findFirst({
         where: {
-          id: payrollId,
+          OR: [
+            {
+              id: id as number,
+            },
+            {
+              projectId: id as string,
+            },
+            {
+              memberId: member?.id,
+            },
+          ],
         },
       });
 

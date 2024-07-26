@@ -10,6 +10,11 @@ class PayrollRoute {
     this.route.get('/', authToken, PayrollController.getAllPayroll);
     this.route.get('/:id', authToken, PayrollController.getPayrollDetail);
     this.route.get('/member', authToken, PayrollController.getMembersPayroll);
+    this.route.get(
+      '/:id/member',
+      authToken,
+      PayrollController.getMemberPayroll,
+    );
     this.route.delete('/:id', authToken, PayrollController.deletePayroll);
 
     return this.route;

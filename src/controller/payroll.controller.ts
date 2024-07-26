@@ -97,6 +97,26 @@ class PayrollController {
       throw error;
     }
   }
+
+  static async getMemberPayroll(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      const id = req.params.id;
+
+      const data = await PayrollService.getMemberPayroll(id);
+
+      return res.json({
+        message: 'Berhasil mendapatkan data member payroll',
+        statusCode: HttpStatusCode.OK,
+        data,
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default PayrollController;
