@@ -105,11 +105,18 @@ class PayrollService {
     }
   }
 
-  static async getPayrollDetail(payrollId: string) {
+  static async getPayrollDetail(id: string | number) {
     try {
       const payroll = await prisma.payroll.findFirst({
         where: {
-          id: Number(payrollId),
+          OR: [
+            {
+              id: id as number,
+            },
+            {
+              projectId: id as string,
+            },
+          ],
         },
         include: {
           member: {
