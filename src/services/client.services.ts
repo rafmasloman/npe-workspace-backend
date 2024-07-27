@@ -14,11 +14,12 @@ class ClientService {
           name: payload.name,
           phoneNumber: payload.phoneNumber,
 
-          project: {
-            connect: {
-              id: payload.project,
-            },
-          },
+          // project: {
+          //   connect: {
+          //     id: !payload.project ? null : payload.project,
+          //   },
+          // },
+          projectId: !payload.project ? null : payload.project,
         },
       });
 
