@@ -12,11 +12,19 @@ class ProjectService {
 
       const project = await prisma.project.create({
         data: {
-          ...(payload as any),
+          projectName: payload.projectName,
+          description: payload.description,
+          platform: payload.platform,
+
           startedDate: new Date(payload.startedDate!),
           endDate: new Date(payload.endDate!),
           price: Number(payload.price),
           currentPayroll: Number(payload.price),
+          client: {
+            connect: {
+              id: payload.clientId,
+            },
+          },
           member: {
             connect: memberId?.map((id: string) => ({
               id,
@@ -264,6 +272,7 @@ class ProjectService {
           },
           client: {
             select: {
+              id: true,
               name: true,
               phoneNumber: true,
               address: true,
