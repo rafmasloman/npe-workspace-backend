@@ -38,12 +38,11 @@ class ClientService {
           id,
         },
         data: {
-          ...payload,
-          project: {
-            connect: {
-              id: payload.project,
-            },
-          },
+          address: payload.address,
+          email: payload.email,
+          name: payload.name,
+          phoneNumber: payload.phoneNumber,
+          projectId: !payload.project ? null : payload.project,
         },
       });
 
