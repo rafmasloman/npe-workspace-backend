@@ -6,9 +6,10 @@ import ProjectOnMember from '../services/project/projectOnMember';
 
 const projectController = {
   createProject: async (req: any, res: Response, next: NextFunction) => {
-    console.log('project : ', req.body.startedDate);
     try {
       const payload = req.body;
+
+      console.log('create project payload : ', payload);
 
       const image =
         (req.files?.image && req.files?.image[0]?.filename) || undefined;
@@ -21,8 +22,6 @@ const projectController = {
         image,
         projectIcon,
       });
-
-      console.log('project : ');
 
       return res.json({
         message: 'Berhasil membuat project',
