@@ -72,17 +72,25 @@ class ClientService {
           },
         },
         where: {
-          name: {
-            contains: name,
-          },
-          project: {
-            projectName: {
-              contains: projectName,
+          OR: [
+            {
+              name: {
+                contains: !name ? '' : name,
+              },
             },
-          },
+            {
+              project: {
+                projectName: {
+                  contains: !projectName ? '' : projectName,
+                },
+              },
+            },
+          ],
         },
         take: !limit ? undefined : limit,
       });
+
+      console.log('clients : ', clients);
 
       return clients;
     } catch (error) {
