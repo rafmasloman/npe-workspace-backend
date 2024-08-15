@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE `project` MODIFY `startedDate` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3),
-    MODIFY `endDate` DATETIME(3) NULL;

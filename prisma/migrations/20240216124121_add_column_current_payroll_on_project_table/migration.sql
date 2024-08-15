@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE `project` ADD COLUMN `currentPayroll` INTEGER NOT NULL DEFAULT 0,
-    MODIFY `price` INTEGER NOT NULL DEFAULT 0;

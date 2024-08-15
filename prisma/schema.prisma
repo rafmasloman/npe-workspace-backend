@@ -51,7 +51,9 @@ model Project {
   member      Member[]
   // clientId    String?   @unique
   // client      Client?   @relation(fields: [clientId], references: [id], onDelete: Cascade)
-  client      Client?
+  // client      Client?
+  clientId String
+  client Client @relation(fields: [clientId], references: [id])
   image       String?
   projectIcon String?
   platform    String?
@@ -90,8 +92,9 @@ model Client {
   phoneNumber String
   address     String
   email       String
-  project      Project?   @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  projectId    String?   @unique
+  // project      Project?   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  // projectId    String?   @unique
+  project Project[]
   
   createdAt   DateTime  @default(now())
   updatedAt   DateTime? @updatedAt
