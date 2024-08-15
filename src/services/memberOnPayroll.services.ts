@@ -1,9 +1,16 @@
 import prisma from '../config/prisma-client.config';
 
 class MemberOnPayroll {
-  static async getMembersPayroll() {
+  static async getMembersPayroll(id: string) {
     try {
       const memberStaff = await prisma.member.findMany({
+        where: {
+          project: {
+            every: {
+              id,
+            },
+          },
+        },
         select: {
           id: true,
           user: {
@@ -16,6 +23,9 @@ class MemberOnPayroll {
       });
 
       const memberPayrollResponse = await prisma.payroll.findMany({
+        where: {
+          projectId: id,
+        },
         select: {
           member: {
             select: {
