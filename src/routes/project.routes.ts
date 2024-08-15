@@ -12,6 +12,11 @@ const projectRouter = () => {
   router.get('/user/:id', authToken, projectController.getUserProject);
   router.get('/member/:id', authToken, projectController.getMemberProject);
   router.get(
+    '/:id/member/payroll',
+    authToken,
+    projectController.getMemberPayrollByProject,
+  );
+  router.get(
     '/teams/:id',
     authToken,
     checkRolePM,

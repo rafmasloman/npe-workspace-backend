@@ -15,16 +15,12 @@ class ProjectService {
           projectName: payload.projectName,
           description: payload.description,
           platform: payload.platform,
-
+          projectIcon: payload.projectIcon,
           startedDate: new Date(payload.startedDate!),
           endDate: new Date(payload.endDate!),
           price: Number(payload.price),
           currentPayroll: Number(payload.price),
-          client: {
-            connect: {
-              id: payload.clientId,
-            },
-          },
+          clientId: payload.clientId,
           member: {
             connect: memberId?.map((id: string) => ({
               id,
@@ -32,6 +28,7 @@ class ProjectService {
           },
         },
       });
+      console.log('project : ', project);
 
       return project;
     } catch (error) {
@@ -128,6 +125,8 @@ class ProjectService {
               task: {
                 select: {
                   name: true,
+                  priority: true,
+                  status: true,
                   project: {
                     select: {
                       projectName: true,
@@ -138,7 +137,7 @@ class ProjectService {
                 take: 2,
               },
               milestone: {
-                select: {
+                include: {
                   member: {
                     select: {
                       profilePicture: true,
@@ -148,6 +147,12 @@ class ProjectService {
                           lastname: true,
                         },
                       },
+                    },
+                  },
+                  project: {
+                    select: {
+                      projectIcon: true,
+                      projectName: true,
                     },
                   },
                 },
@@ -187,6 +192,95 @@ class ProjectService {
       });
 
       return userProject;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getProjectMemberPayroll(projectId: string) {
+    try {
+      // const member = await prisma.member.findMany({
+      //   where: {
+      //     project: {
+      //         every: {
+      //           id: projectId
+      //         }
+      //     }
+      //   },
+      //   include: {
+      //     payroll: {
+
+      //     }
+      //   }
+      // })
+
+      // console.log('member : ', member.);
+
+      const memberPayroll = await prisma.project.findFirst({
+        where: {
+          id: projectId,
+        },
+        select: {
+          projectName: true,
+          projectIcon: true,
+          description: true,
+          currentPayroll: true,
+          price: true,
+          // payroll: {
+          //   select: {
+          //     id: true,
+          //     salary: true,
+          //     percent: true,
+          //     projectId: true,
+          //     memberId: true,
+          //     member: {
+          //       select: {
+          //         id: true,
+          //         position: true,
+          //         phoneNumber: true,
+          //         profilePicture: true,
+
+          //         user: {
+          //           select: {
+          //             firstname: true,
+          //             lastname: true,
+          //           },
+          //         },
+          //       },
+          //     },
+          //   },
+          // },
+          member: {
+            select: {
+              id: true,
+              position: true,
+              phoneNumber: true,
+              profilePicture: true,
+
+              user: {
+                select: {
+                  firstname: true,
+                  lastname: true,
+                },
+              },
+              payroll: {
+                where: {
+                  projectId: projectId,
+                },
+                select: {
+                  id: true,
+                  salary: true,
+                  percent: true,
+                  projectId: true,
+                  memberId: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      return memberPayroll;
     } catch (error) {
       throw error;
     }
@@ -266,6 +360,7 @@ class ProjectService {
                   id: true,
                   firstname: true,
                   lastname: true,
+                  role: true,
                 },
               },
             },
@@ -286,6 +381,10 @@ class ProjectService {
         throw new NotFoundError('Invalid id project');
       }
 
+      const findProjectPM = project.member.find((pm) => {
+        return pm.user?.role === 'PROJECT_MANAGER';
+      });
+
       const projectProgress = () => {
         const countProjectTaskStatus = ProgressUtils.countAllTaskStatus(
           project.task,
@@ -299,6 +398,7 @@ class ProjectService {
 
       const projectResponse = {
         ...project,
+        projectManager: findProjectPM,
         progress: projectProgress(),
       };
 
@@ -334,13 +434,19 @@ class ProjectService {
           id,
         },
         data: {
-          ...payload,
-
-          price: Number(payload.price),
-          currentPayroll: Number(payload.price),
+          projectName: payload.projectName,
+          projectIcon: payload.projectIcon,
+          description: payload.description,
+          platform: payload.platform,
           startedDate: new Date(payload.startedDate!),
           endDate: new Date(payload.endDate!),
-
+          price: Number(payload.price),
+          currentPayroll: Number(payload.price),
+          client: {
+            connect: {
+              id: payload.clientId,
+            },
+          },
           member: {
             connect: memberId?.map((id: string) => ({
               id,
