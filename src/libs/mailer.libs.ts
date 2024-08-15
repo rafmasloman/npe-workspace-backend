@@ -14,6 +14,22 @@ class MailerLibs {
 
     return transporter;
   }
+
+  static sendForgotPasswordAccount(messageTo: string) {
+    const mailOptions = {
+      from: 'raflymasloman12@gmail.com',
+      to: messageTo,
+      subject: 'Forgot Password',
+    };
+
+    this.createTransporterGmail().sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log('Error sending email:', error);
+      } else {
+        console.log('Email sent:', info.response);
+      }
+    });
+  }
 }
 
 export default MailerLibs;
