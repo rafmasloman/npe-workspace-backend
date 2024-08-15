@@ -8,6 +8,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import UnauthorizedError from '../error/unauthrized.error';
 import { HashPassword } from '../constants/auth.constant';
+import NotFoundError from '../error/not-found.error';
 // import { configDotenv } from 'dotenv';
 
 // configDotenv();
@@ -65,6 +66,35 @@ class AuthServices {
 
       return token;
     } catch (error) {
+      throw error;
+    }
+  }
+
+  static async changeUserPassword(
+    id: string,
+    payload: { newPassword: string },
+  ) {
+    try {
+      // const findUserPassword = await this.getUserPassword(id)
+
+      // if(!findUserPassword) {
+      //   throw new NotFoundError("Tidak dapat menemukan password")
+      // }
+
+      const hashedPassword = await bcrypt.hash(payload.newPassword, 10);
+
+      const user = await prisma.user.update({
+        where: {
+          id,
+        },
+        data: {
+          password: hashedPassword,
+        },
+      });
+
+      return user;
+    } catch (error) {
+      console.error(error);
       throw error;
     }
   }

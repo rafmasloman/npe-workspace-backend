@@ -24,6 +24,32 @@ const authController = {
     }
   },
 
+  changeUserPassword: async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      const { newPassword } = req.body;
+      const params = req.params;
+      const user = await AuthServices.changeUserPassword(params.id, {
+        newPassword,
+      });
+
+      return res.json({
+        statusCode: HttpStatusCode.OK,
+        message: 'Berhasil Mengubah Password User',
+        data: {
+          token: user,
+        },
+      });
+    } catch (error) {
+      console.log('error : ', error);
+
+      next(error);
+    }
+  },
+
   credential: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userCredential = req.signedCookies;
