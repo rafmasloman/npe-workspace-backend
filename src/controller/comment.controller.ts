@@ -61,12 +61,16 @@ const commentController = {
         taskId as string,
       );
 
+      console.log('task comment : ', taskComment);
+
       return res.json({
         message: 'Berhasil mendapatkan semua data komentar',
         statusCode: HttpStatusCode.OK,
         data: taskComment,
       });
     } catch (error) {
+      console.log('error : ', error);
+
       next(error);
     }
   },
