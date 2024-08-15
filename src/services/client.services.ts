@@ -14,12 +14,12 @@ class ClientService {
           name: payload.name,
           phoneNumber: payload.phoneNumber,
 
-          // project: {
-          //   connect: {
-          //     id: !payload.project ? null : payload.project,
-          //   },
-          // },
-          projectId: !payload.project ? null : payload.project,
+          project: {
+            connect: payload.project?.map((ctx) => ({
+              id: ctx.id,
+            })),
+          },
+          // projectId: !payload.project ? null : payload.project,
         },
       });
 
@@ -42,7 +42,12 @@ class ClientService {
           email: payload.email,
           name: payload.name,
           phoneNumber: payload.phoneNumber,
-          projectId: !payload.project ? null : payload.project,
+          // projectId: !payload.project ? null : payload.project,
+          project: {
+            connect: payload.project?.map((ctx) => ({
+              id: ctx.id,
+            })),
+          },
         },
       });
 
@@ -78,9 +83,14 @@ class ClientService {
               },
             },
             {
+              // project: {
+              //   projectName: {
+              //     contains: !projectName ? '' : projectName,
+              //   },
+              // },
               project: {
-                projectName: {
-                  contains: !projectName ? '' : projectName,
+                every: {
+                  projectName,
                 },
               },
             },
