@@ -8,6 +8,7 @@ import {
 } from '../interfaces/admin.interfaces';
 import { IUserDetailResponse } from '../interfaces/user.interface';
 import bcrypt from 'bcrypt';
+import MailerLibs from '../libs/mailer.libs';
 
 class AdminService {
   static async changePassword(
@@ -44,6 +45,51 @@ class AdminService {
       });
 
       return user;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async forgetPassword(payload: { email?: string; username?: string }) {
+    try {
+      const user = await prisma.user.findFirst({
+        where: {
+          OR: [
+            {
+              email: payload.email,
+            },
+            {
+              username: payload.username,
+            },
+          ],
+        },
+        include: {
+          member: {
+            select: {
+              phoneNumber: true,
+            },
+          },
+        },
+      });
+
+      if (!user) {
+        throw new NotFoundError('Username atau Email tidak ditemukan');
+      }
+
+      MailerLibs.sendForgotPasswordAccount(user.email);
+
+      // const updateUserPassword = await prisma.user.updateMany({
+      //   where: {
+      //     OR: [{
+      //       email: user.email
+      //     }, {
+      //       username: user.username
+      //     }]
+      //   },
+      //   data: {
+      //     password
+      //   }
+      // })
     } catch (error) {
       throw error;
     }
@@ -96,6 +142,27 @@ class AdminService {
   }
 
   static async updateUser(id: string, payload: IAdminUpdateUserRequestParams) {
+    try {
+      const user = await prisma.user.update({
+        where: {
+          id,
+        },
+        data: {
+          ...payload,
+        },
+      });
+
+      return user;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
+  static async updateUserPassword(
+    id: string,
+    payload: IAdminUpdateUserRequestParams,
+  ) {
     try {
       const user = await prisma.user.update({
         where: {
