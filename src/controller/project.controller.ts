@@ -70,11 +70,7 @@ const projectController = {
         data: memberProjects,
       });
     } catch (error) {
-      console.log('error : ', error);
-
-      return res.json({
-        message: error,
-      });
+      next(error);
     }
   },
 
@@ -101,6 +97,25 @@ const projectController = {
     }
   },
 
+  getMemberPayrollByProject: async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      const { id } = req.params;
+      const memberProjects = await ProjectService.getProjectMemberPayroll(id);
+
+      return res.json({
+        message: 'Berhasil mendapatkan data payroll anggota tim',
+        statusCode: HttpStatusCode.OK,
+        data: memberProjects,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
   getUserProject: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = req.params.id;
@@ -117,8 +132,6 @@ const projectController = {
         data: userProject,
       });
     } catch (error) {
-      console.log(error);
-
       next(error);
     }
   },
@@ -178,6 +191,8 @@ const projectController = {
       const id = req.params.id;
       const payload = req.body;
 
+      console.log('update project payload : ', payload);
+
       const image =
         (req.files?.image && req.files?.image[0]?.filename) || undefined;
       const projectIcon =
@@ -186,12 +201,11 @@ const projectController = {
 
       const project = await ProjectService.updateProject(id, {
         ...payload,
-        member: payload.member,
         image,
         projectIcon,
       });
 
-      console.log('data : ', project);
+      console.log('update project : ', project);
 
       return res.json({
         message: 'Berhasil mengupdate project',
