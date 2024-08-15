@@ -66,6 +66,22 @@ class MilestoneService {
         where: {
           id: milestoneId,
         },
+        include: {
+          member: {
+            select: {
+              id: true,
+              position: true,
+              profilePicture: true,
+              user: {
+                select: {
+                  id: true,
+                  firstname: true,
+                  lastname: true,
+                },
+              },
+            },
+          },
+        },
       });
 
       if (!milestone) {
