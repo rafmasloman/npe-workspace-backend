@@ -8,13 +8,18 @@ class PayrollRoute {
   static routes(): Router {
     this.route.post('/', authToken, PayrollController.createPayroll);
     this.route.get('/', authToken, PayrollController.getAllPayroll);
+    this.route.get(
+      '/:id/members',
+      authToken,
+      PayrollController.getMembersPayroll,
+    );
     this.route.get('/:id', authToken, PayrollController.getPayrollDetail);
-    this.route.get('/member', authToken, PayrollController.getMembersPayroll);
     this.route.get(
       '/:id/member',
       authToken,
       PayrollController.getMemberPayroll,
     );
+    this.route.put('/:id', authToken, PayrollController.updatePayroll);
     this.route.delete('/:id', authToken, PayrollController.deletePayroll);
 
     return this.route;

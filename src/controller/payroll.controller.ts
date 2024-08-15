@@ -21,6 +21,24 @@ class PayrollController {
       next(error);
     }
   }
+  static async updatePayroll(req: Request, res: Response, next: NextFunction) {
+    let payload = req.body;
+    const { id } = req.params;
+
+    try {
+      const data = await PayrollService.updatePayroll(payload, id);
+
+      return res.json({
+        message: 'Berhasil mengubah data payroll',
+        statusCode: HttpStatusCode.CREATED,
+        data,
+      });
+    } catch (error) {
+      console.log('error : ', error);
+
+      next(error);
+    }
+  }
 
   static async getAllPayroll(req: Request, res: Response, next: NextFunction) {
     try {
@@ -38,7 +56,7 @@ class PayrollController {
         data,
       });
     } catch (error) {
-      throw error;
+      next(error);
     }
   }
 
@@ -47,11 +65,10 @@ class PayrollController {
     res: Response,
     next: NextFunction,
   ) {
-    console.log(req.params);
-
     try {
-      const { id } = req.params;
-      const data = await PayrollService.getPayrollDetail(id);
+      const { id, projectId } = req.params;
+
+      const data = await PayrollService.getPayrollDetail(id, projectId);
 
       return res.json({
         message: 'Berhasil detail data payroll',
@@ -76,7 +93,7 @@ class PayrollController {
         data,
       });
     } catch (error) {
-      throw error;
+      next(error);
     }
   }
 
@@ -86,7 +103,8 @@ class PayrollController {
     next: NextFunction,
   ) {
     try {
-      const data = await MemberOnPayroll.getMembersPayroll();
+      const { id } = req.params;
+      const data = await MemberOnPayroll.getMembersPayroll(id);
 
       return res.json({
         message: 'Berhasil mendapatkan data payroll tim member',
@@ -94,7 +112,7 @@ class PayrollController {
         data,
       });
     } catch (error) {
-      throw error;
+      next(error);
     }
   }
 
@@ -114,7 +132,7 @@ class PayrollController {
         data,
       });
     } catch (error) {
-      throw error;
+      next(error);
     }
   }
 }

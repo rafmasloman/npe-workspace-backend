@@ -54,6 +54,8 @@ class PayrollService {
 
       return payroll;
     } catch (error) {
+      console.log('error : ', error);
+
       throw error;
     }
   }
@@ -79,6 +81,7 @@ class PayrollService {
         include: {
           member: {
             select: {
+              id: true,
               profilePicture: true,
               position: true,
               user: {
@@ -91,6 +94,7 @@ class PayrollService {
           },
           project: {
             select: {
+              id: true,
               projectName: true,
               projectIcon: true,
             },
@@ -105,18 +109,12 @@ class PayrollService {
     }
   }
 
-  static async getPayrollDetail(id: string | number) {
+  static async getPayrollDetail(id?: string, projectId?: string) {
     try {
       const payroll = await prisma.payroll.findFirst({
         where: {
-          OR: [
-            {
-              id: id as number,
-            },
-            {
-              projectId: id as string,
-            },
-          ],
+          id: Number(id),
+          projectId,
         },
         include: {
           member: {
@@ -146,11 +144,11 @@ class PayrollService {
     }
   }
 
-  static async getMemberPayroll(id: string | number) {
+  static async getMemberPayroll(userId: string) {
     try {
       const user = await prisma.user.findFirst({
         where: {
-          id: id as string,
+          id: userId,
         },
       });
 
@@ -158,25 +156,47 @@ class PayrollService {
         where: {
           userId: user?.id,
         },
-      });
+        select: {
+          position: true,
+          payroll: {
+            select: {
+              id: true,
+              percent: true,
+              salary: true,
+              payrollStatus: true,
 
-      const payroll = await prisma.payroll.findFirst({
-        where: {
-          OR: [
-            {
-              id: id as number,
+              project: {
+                select: {
+                  id: true,
+                  projectName: true,
+                  projectIcon: true,
+                },
+              },
             },
-            {
-              projectId: id as string,
-            },
-            {
-              memberId: member?.id,
-            },
-          ],
+          },
         },
       });
 
-      return payroll;
+      // const payroll = await prisma.payroll.findMany({
+      //   where: {
+      //     memberId: member?.id,
+      //   },
+      //   select: {
+      //     id: true,
+      //     percent: true,
+      //     salary: true,
+      //     payrollStatus: true,
+      //     project: {
+      //       select: {
+      //         id: true,
+      //         projectName: true,
+      //         projectIcon: true,
+      //       },
+      //     },
+      //   },
+      // });
+
+      return member;
     } catch (error) {
       throw error;
     }
@@ -184,17 +204,54 @@ class PayrollService {
 
   static async updatePayroll(
     payload: ICreatePayrollRequestParams,
-    payrollId: number,
+    payrollId: string,
   ) {
     try {
+      const project = await ProjectService.getProjetDetail(payload.projectId);
+
       const payroll = await prisma.payroll.update({
         where: {
-          id: payrollId,
+          id: Number(payrollId),
         },
         data: {
-          ...payload,
+          memberId: payload.memberId,
+          projectId: payload.projectId,
+          percent: Number(payload.percent),
+          payrollStatus: payload.transactionStatus,
         },
       });
+
+      const payrollByProject = await prisma.payroll.findMany({
+        where: {
+          projectId: payload.projectId,
+        },
+      });
+
+      const totalPercent = payrollByProject.map((payroll) => {
+        return payroll.percent;
+      });
+
+      const calculateTotalPercentValue = calculateTotalValue(totalPercent);
+
+      if (calculateTotalPercentValue <= 100) {
+        const updateProject =
+          await ProjectOnPayrollService.updateProjectOnPayroll(
+            payload.projectId,
+            {
+              currentPayroll:
+                project.currentPayroll - payload.percent * 0.01 * project.price,
+            },
+          );
+
+        const salary = payload.percent * 0.01 * project.price;
+
+        const updateSalary = await PayrollService.updateSalaryOnPayroll(
+          payroll.id,
+          salary,
+        );
+      } else {
+        throw new Error('Percent data lebih dari 100');
+      }
 
       return payroll;
     } catch (error) {
@@ -219,11 +276,11 @@ class PayrollService {
     }
   }
 
-  static async deletePayroll(payrollId: number) {
+  static async deletePayroll(id: number) {
     try {
       const payroll = await prisma.payroll.delete({
         where: {
-          id: payrollId,
+          id,
         },
       });
 
