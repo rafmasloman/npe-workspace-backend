@@ -63,15 +63,12 @@ const authController = {
         email,
         newPassword,
       });
-      console.log(' update user account : ', user);
 
       return res.json({
         statusCode: HttpStatusCode.OK,
         message: 'Berhasil Mengubah Akun user',
       });
     } catch (error) {
-      console.log('error update user account : ', error);
-
       next(error);
     }
   },
