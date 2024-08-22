@@ -126,9 +126,11 @@ class AuthServices {
         },
       });
 
+      console.log('user services : ', user);
+
       return user;
     } catch (error) {
-      console.error(error);
+      console.error('user service errorsss : ', error);
       throw error;
     }
   }
