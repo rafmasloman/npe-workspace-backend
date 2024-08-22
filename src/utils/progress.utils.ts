@@ -24,8 +24,6 @@ const ProgressUtils = {
     taskStatus: { todo: number; on_progress: number; completed: number },
     taskLength: number,
   ) => {
-    console.log('task status : ', taskStatus.completed + ' ' + taskLength);
-
     if (taskLength > 0) {
       if (taskStatus.on_progress > 0) {
         return 'On Progress';

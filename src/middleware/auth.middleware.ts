@@ -24,8 +24,6 @@ const authToken = async (req: Request, res: Response, next: NextFunction) => {
 
     next();
   } catch (error) {
-    console.log(error);
-
     next(error);
   }
 };

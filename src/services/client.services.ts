@@ -5,8 +5,6 @@ import { ICreateClientRequestParams } from '../interfaces/client.interfaces';
 class ClientService {
   static async createClient(payload: ICreateClientRequestParams) {
     try {
-      console.log('client : ', payload.project === undefined);
-
       const client = await prisma.client.create({
         data: {
           address: payload.address,
@@ -25,8 +23,6 @@ class ClientService {
 
       return client;
     } catch (error) {
-      console.log('Client Create : ', error);
-
       throw error;
     }
   }
@@ -53,8 +49,6 @@ class ClientService {
 
       return client;
     } catch (error) {
-      console.log(error);
-
       throw error;
     }
   }
@@ -99,8 +93,6 @@ class ClientService {
         take: !limit ? undefined : limit,
       });
 
-      console.log('clients : ', clients);
-
       return clients;
     } catch (error) {
       throw error;
@@ -141,8 +133,6 @@ class ClientService {
         },
       });
 
-      console.log('find client : ', findClient);
-
       if (!findClient) {
         throw new NotFoundError('Invalid id Client');
       }
@@ -155,8 +145,6 @@ class ClientService {
 
       return client;
     } catch (error) {
-      console.log(error);
-
       return error;
     }
   }

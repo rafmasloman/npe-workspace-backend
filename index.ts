@@ -69,23 +69,6 @@ app.use(`/${API_URL}/${API_VERSION}/profile`, ProfileRoute.routes());
 
 app.use(ErrorHandler);
 
-// io.on('connection', (socket) => {
-//   console.log('connected');
-
-//   commentController.sendCommentMessage(socket);
-//   // socket.on('message', (data) => {
-//   //   console.log('message : ', data);
-
-//   //   socket.broadcast.emit('message', data);
-//   // });
-
-//   socket.on('disconnect', () => {
-//     console.log('diconnected');
-
-//     socket.disconnect();
-//   });
-// });
-
 server.listen(port, () => {
   console.log(`Server is Fire at http://localhost:${port}`);
 });

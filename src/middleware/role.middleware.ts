@@ -11,8 +11,6 @@ const checkRole = (req: Request, res: Response, next: NextFunction) => {
 
     next();
   } catch (error) {
-    console.log('error : ', error);
-
     next(error);
   }
 };
@@ -20,12 +18,6 @@ const checkRole = (req: Request, res: Response, next: NextFunction) => {
 const checkRolePM = (req: Request, res: Response, next: NextFunction) => {
   try {
     const { role } = req.signedCookies;
-
-    console.log(
-      'role : ',
-      role.toLowerCase() !== 'admin'.toLowerCase() &&
-        role.toLowerCase() !== 'project_manager'.toLowerCase(),
-    );
 
     if (
       role.toLowerCase() !== 'admin'.toLowerCase() &&
@@ -38,8 +30,6 @@ const checkRolePM = (req: Request, res: Response, next: NextFunction) => {
 
     next();
   } catch (error) {
-    console.log('error : ', error);
-
     next(error);
   }
 };

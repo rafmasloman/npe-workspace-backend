@@ -23,12 +23,8 @@ const commentController = {
 
   sendCommentMessage: async (socket: Socket) => {
     socket.on('message', async (data: any) => {
-      console.log('message : ', data);
-
       try {
         const comment = CommentService.createComments(data);
-
-        console.log(data);
 
         socket.broadcast.emit('message', data);
       } catch (error) {
@@ -48,8 +44,6 @@ const commentController = {
         data: comments,
       });
     } catch (error) {
-      console.log('get comments : ', error);
-
       next(error);
     }
   },
@@ -61,16 +55,12 @@ const commentController = {
         taskId as string,
       );
 
-      console.log('task comment : ', taskComment);
-
       return res.json({
         message: 'Berhasil mendapatkan semua data komentar',
         statusCode: HttpStatusCode.OK,
         data: taskComment,
       });
     } catch (error) {
-      console.log('error : ', error);
-
       next(error);
     }
   },

@@ -38,8 +38,6 @@ const clientController = {
     try {
       const id = req.params.id;
 
-      console.log('client id : ', id);
-
       const client = await ClientService.deleteClient(id);
 
       return res.json({
@@ -66,8 +64,6 @@ const clientController = {
         data: clients,
       });
     } catch (error) {
-      console.log('error : ', error);
-
       next(error);
     }
   },

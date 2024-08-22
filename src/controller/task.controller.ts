@@ -18,8 +18,6 @@ const TaskController = {
         data: task,
       });
     } catch (error) {
-      console.log('error controller : ', error);
-
       next(error);
     }
   },
@@ -41,8 +39,6 @@ const TaskController = {
         data: tasks,
       });
     } catch (error) {
-      console.log(error);
-
       next(error);
     }
   },
@@ -97,8 +93,6 @@ const TaskController = {
         data: task,
       });
     } catch (error) {
-      console.log(error);
-
       next(error);
     }
   },
@@ -108,9 +102,6 @@ const TaskController = {
       const id = req.params.id;
       const { status } = req.body;
 
-      console.log('status : ', status);
-      console.log('id : ', id);
-
       const task = await TaskService.updateTaskStatus(Number(id), status);
 
       return res.json({
@@ -119,8 +110,6 @@ const TaskController = {
         data: task,
       });
     } catch (error) {
-      console.log(error);
-
       next(error);
     }
   },

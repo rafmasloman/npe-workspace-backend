@@ -9,8 +9,6 @@ class ProfileController {
       const { firstname, lastname, phoneNumber, gender, birthDate, email } =
         req.body;
 
-      console.log(req.body);
-
       const userProfile = await ProfileService.updateProfile(userId, {
         firstname,
         lastname,
@@ -26,8 +24,6 @@ class ProfileController {
         data: userProfile,
       });
     } catch (error) {
-      console.log(error);
-
       next(error);
     }
   }
@@ -51,8 +47,6 @@ class ProfileController {
         data: userProfile,
       });
     } catch (error) {
-      console.log(error);
-
       next(error);
     }
   }

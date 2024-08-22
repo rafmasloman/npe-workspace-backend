@@ -25,8 +25,6 @@ class CommentService {
 
       return comment;
     } catch (error) {
-      console.log(error);
-
       throw error;
     }
   }

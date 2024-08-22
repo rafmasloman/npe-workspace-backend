@@ -18,8 +18,6 @@ const fileController = {
       const imageName = req.params.imageName;
       const imageFolder = req.params.imageFolder;
 
-      console.log('image name', imageName);
-
       const imagePath = path.join(
         __dirname,
         `../../public/uploads/${imageFolder}`,
@@ -37,7 +35,6 @@ const fileController = {
 
       // res.sendFile(imagePath);
     } catch (error) {
-      console.log('error : ', error);
       next(error);
     }
   },
@@ -47,8 +44,6 @@ const fileController = {
       const iconName = req.params.iconName;
       const imageFolder = req.params.imageFolder;
 
-      console.log(`iconName : ${iconName}, imageFolder : ${imageFolder}`);
-
       const iconPath = path.join(
         __dirname,
         `../../public/uploads/${imageFolder}`,
@@ -57,7 +52,6 @@ const fileController = {
 
       res.sendFile(iconPath);
     } catch (error) {
-      console.log('error : ', error);
       next(error);
     }
   },

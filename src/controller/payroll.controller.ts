@@ -16,8 +16,6 @@ class PayrollController {
         data,
       });
     } catch (error) {
-      console.log('error : ', error);
-
       next(error);
     }
   }
@@ -34,8 +32,6 @@ class PayrollController {
         data,
       });
     } catch (error) {
-      console.log('error : ', error);
-
       next(error);
     }
   }
@@ -76,8 +72,6 @@ class PayrollController {
         data,
       });
     } catch (error) {
-      console.log('payroll etail error : ', error);
-
       next(error);
     }
   }

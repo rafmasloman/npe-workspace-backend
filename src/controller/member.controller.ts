@@ -52,7 +52,6 @@ const memberController = {
       const id = req.params.id;
 
       const member = await MemberService.deleteMember(id);
-      console.log(member);
 
       return res.json({
         message: 'Berhasil menghapus data member',
@@ -86,7 +85,6 @@ const memberController = {
   getMemberDetail: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = req.params.id;
-      console.log(id);
 
       const member = await MemberService.getMemberDetail(id);
 
@@ -115,8 +113,6 @@ const memberController = {
         data: memberProject,
       });
     } catch (error) {
-      console.log(error);
-
       next(error);
     }
   },

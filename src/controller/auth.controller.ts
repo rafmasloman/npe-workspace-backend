@@ -18,8 +18,6 @@ const authController = {
         },
       });
     } catch (error) {
-      console.log('error : ', error);
-
       next(error);
     }
   },
@@ -44,8 +42,6 @@ const authController = {
         },
       });
     } catch (error) {
-      console.log('error : ', error);
-
       next(error);
     }
   },
@@ -88,7 +84,6 @@ const authController = {
         },
       });
     } catch (error) {
-      console.log(error);
       next(error);
     }
   },

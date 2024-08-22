@@ -129,15 +129,11 @@ const adminController = {
         statusCode: HttpStatusCode.CREATED,
       });
     } catch (error) {
-      console.log(error);
-
       next(error);
     }
   },
 
   createUser: async (req: Request, res: Response, next: NextFunction) => {
-    console.log('payload : ', req.body);
-
     try {
       const { email, username, password, firstname, lastname, role } = req.body;
       const { error, value } = userValidationSchema.validate({
@@ -150,7 +146,6 @@ const adminController = {
       });
 
       if (error) {
-        console.log('error : ', error.message);
         throw new ValidationError(error.message);
       }
 
@@ -215,8 +210,6 @@ const adminController = {
         statusCode: 400,
       });
     } catch (error) {
-      console.log(error);
-
       next(error);
     }
   },

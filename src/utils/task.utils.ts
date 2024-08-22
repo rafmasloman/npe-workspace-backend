@@ -4,7 +4,6 @@ const TaskUtils = {
       return task.status === 'COMPLETED';
     });
 
-    console.log(countTaskStatus.length);
     return countTaskStatus.length;
   },
 };

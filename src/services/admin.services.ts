@@ -27,8 +27,6 @@ class AdminService {
         },
       });
 
-      console.log('check role : ', checkRole);
-
       // if ((!checkRole?.role as unknown) !== 'ADMIN') {
       //   throw NotFoundError;
       // }
@@ -232,8 +230,6 @@ class AdminService {
 
       return staff;
     } catch (error) {
-      console.log(error);
-
       throw error;
     }
   }
@@ -268,8 +264,6 @@ class AdminService {
 
       return user;
     } catch (error) {
-      console.log('user credential error : ', error);
-
       throw error;
     }
   }

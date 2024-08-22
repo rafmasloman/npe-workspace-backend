@@ -5,8 +5,6 @@ import TaskMemberService from './taskOnMember';
 
 class TaskService {
   static async createTask(payload: ICreateTaskRequestParams) {
-    console.log('task : ', payload);
-
     try {
       const task = await prisma.task.create({
         data: {
@@ -37,8 +35,6 @@ class TaskService {
 
       return task;
     } catch (error) {
-      console.log('error : ', error);
-
       throw error;
     }
   }
@@ -151,8 +147,6 @@ class TaskService {
 
       return task;
     } catch (error) {
-      console.log('error : ', error);
-
       throw error;
     }
   }
@@ -308,8 +302,6 @@ class TaskService {
 
       return task;
     } catch (error) {
-      console.log(error);
-
       throw error;
     }
   }
@@ -337,8 +329,6 @@ class TaskService {
 
       return task;
     } catch (error) {
-      console.log(error);
-
       throw error;
     }
   }

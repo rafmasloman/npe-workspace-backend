@@ -28,12 +28,9 @@ class ProjectService {
           },
         },
       });
-      console.log('project : ', project);
 
       return project;
     } catch (error) {
-      console.log('error : ', error);
-
       throw error;
     }
   }
@@ -84,8 +81,6 @@ class ProjectService {
 
       return projects;
     } catch (error) {
-      console.log('error : ', error);
-
       throw error;
     }
   }
@@ -199,23 +194,6 @@ class ProjectService {
 
   static async getProjectMemberPayroll(projectId: string) {
     try {
-      // const member = await prisma.member.findMany({
-      //   where: {
-      //     project: {
-      //         every: {
-      //           id: projectId
-      //         }
-      //     }
-      //   },
-      //   include: {
-      //     payroll: {
-
-      //     }
-      //   }
-      // })
-
-      // console.log('member : ', member.);
-
       const memberPayroll = await prisma.project.findFirst({
         where: {
           id: projectId,
@@ -287,8 +265,6 @@ class ProjectService {
   }
 
   static async getMemberProject(userId: string, projectName?: string) {
-    console.log('project name : ', projectName);
-
     try {
       const userProject = await prisma.member.findFirst({
         where: {
@@ -338,7 +314,6 @@ class ProjectService {
 
       return userProject;
     } catch (error) {
-      console.log('error : ', error);
       throw error;
     }
   }
@@ -404,8 +379,6 @@ class ProjectService {
 
       return projectResponse;
     } catch (error) {
-      console.log(error);
-
       throw error;
     }
   }
@@ -457,8 +430,6 @@ class ProjectService {
 
       return project;
     } catch (error) {
-      console.log(error);
-
       throw error;
     }
   }
@@ -497,8 +468,6 @@ class ProjectService {
 
       return project;
     } catch (error) {
-      console.log('error : ', error);
-
       throw error;
     }
   }

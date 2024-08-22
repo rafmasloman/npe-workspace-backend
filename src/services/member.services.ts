@@ -43,8 +43,6 @@ class MemberService {
 
       return member;
     } catch (error) {
-      console.log(error);
-
       throw error;
     }
   }
@@ -92,8 +90,6 @@ class MemberService {
 
       return members;
     } catch (error) {
-      console.log('member get all error : ', error);
-
       throw error;
     }
   }
@@ -148,8 +144,6 @@ class MemberService {
 
       return staff;
     } catch (error) {
-      console.log(error);
-
       throw error;
     }
   }
@@ -174,15 +168,11 @@ class MemberService {
 
       return staff;
     } catch (error) {
-      console.log(error);
-
       throw error;
     }
   }
 
   static async updateMember(id: string, payload: IUpdateMemberRequestParams) {
-    console.log('payload : ', payload);
-
     try {
       const findMember = await prisma.member.findFirst({
         where: {
@@ -206,8 +196,6 @@ class MemberService {
 
       return member;
     } catch (error) {
-      console.log(error);
-
       throw error;
     }
   }

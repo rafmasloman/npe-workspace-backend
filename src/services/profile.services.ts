@@ -24,8 +24,6 @@ class ProfileService {
 
       return userProfileResponse;
     } catch (error) {
-      console.log(error);
-
       throw error;
     }
   }
@@ -45,8 +43,6 @@ class ProfileService {
 
       return userProfilePictureResponse;
     } catch (error) {
-      console.log(error);
-
       throw error;
     }
   }
@@ -76,8 +72,6 @@ class ProfileService {
 
       return userProfileResponse;
     } catch (error) {
-      console.log('error : ', error);
-
       throw error;
     }
   }

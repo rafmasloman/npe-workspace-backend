@@ -28,8 +28,6 @@ class MilestoneService {
 
       return milestone;
     } catch (error) {
-      console.log('milestone error : ', error);
-
       throw error;
     }
   }
@@ -90,8 +88,6 @@ class MilestoneService {
 
       return milestone;
     } catch (error) {
-      console.log('error : ', error);
-
       throw error;
     }
   }
@@ -172,8 +168,6 @@ class MilestoneService {
 
       return milestonesWithProgress;
     } catch (error) {
-      console.log('error : ', error);
-
       throw error;
     }
   }
@@ -196,8 +190,6 @@ class MilestoneService {
 
       return milestones;
     } catch (error) {
-      console.log(error);
-
       throw error;
     }
   }
@@ -234,8 +226,6 @@ class MilestoneService {
 
       return milestone;
     } catch (error) {
-      console.log(error);
-
       throw error;
     }
   }

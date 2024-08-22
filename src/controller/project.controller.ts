@@ -9,8 +9,6 @@ const projectController = {
     try {
       const payload = req.body;
 
-      console.log('create project payload : ', payload);
-
       const image =
         (req.files?.image && req.files?.image[0]?.filename) || undefined;
       const projectIcon =
@@ -29,8 +27,6 @@ const projectController = {
         data: project,
       });
     } catch (error) {
-      console.log('error : ', error);
-
       next(error);
     }
   },
@@ -51,8 +47,6 @@ const projectController = {
         data: projects,
       });
     } catch (error) {
-      console.log('error : ', error);
-
       return res.json({
         message: error,
       });
@@ -89,8 +83,6 @@ const projectController = {
         data: memberProjects,
       });
     } catch (error) {
-      console.log('error : ', error);
-
       return res.json({
         message: error,
       });
@@ -191,8 +183,6 @@ const projectController = {
       const id = req.params.id;
       const payload = req.body;
 
-      console.log('update project payload : ', payload);
-
       const image =
         (req.files?.image && req.files?.image[0]?.filename) || undefined;
       const projectIcon =
@@ -205,16 +195,12 @@ const projectController = {
         projectIcon,
       });
 
-      console.log('update project : ', project);
-
       return res.json({
         message: 'Berhasil mengupdate project',
         statusCode: HttpStatusCode.CREATED,
         data: project,
       });
     } catch (error) {
-      console.log(error);
-
       next(error);
     }
   },
@@ -238,9 +224,6 @@ const projectController = {
     res: Response,
     next: NextFunction,
   ) => {
-    console.log('req body : ', req.params.memberId);
-    console.log('req body : ', req.params.id);
-
     try {
       const id = req.params.id;
       const memberId = req.params.memberId;

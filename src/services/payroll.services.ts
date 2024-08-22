@@ -9,8 +9,6 @@ class PayrollService {
     try {
       const project = await ProjectService.getProjetDetail(payload.projectId);
 
-      // console.log('project on payroll : ', project.currentPayroll);
-
       const payroll = await prisma.payroll.create({
         data: {
           ...payload,
@@ -54,8 +52,6 @@ class PayrollService {
 
       return payroll;
     } catch (error) {
-      console.log('error : ', error);
-
       throw error;
     }
   }
