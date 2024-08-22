@@ -15,6 +15,11 @@ const authRouter = () => {
     checkRole,
     authController.changeUserPassword,
   );
+  router.put(
+    '/:id/update-user-account',
+    authToken,
+    authController.updateUserAccount,
+  );
 
   router.get('/credential', authToken, authController.credential);
 

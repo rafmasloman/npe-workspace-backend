@@ -99,6 +99,40 @@ class AuthServices {
     }
   }
 
+  static async updateUserAccount(
+    id: string,
+    payload: { email: string; newPassword: string },
+  ) {
+    try {
+      const findUser = await prisma.user.findUnique({
+        where: {
+          email: payload.email,
+        },
+      });
+
+      if (!findUser) {
+        throw new NotFoundError('Tidak dapat menemukan password');
+      }
+
+      const hashedPassword = await bcrypt.hash(payload.newPassword, 10);
+
+      const user = await prisma.user.update({
+        where: {
+          id,
+        },
+        data: {
+          email: payload.email,
+          password: hashedPassword,
+        },
+      });
+
+      return user;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
   static async getCredential(userId: string) {
     try {
       const user = await prisma.user.findFirst({

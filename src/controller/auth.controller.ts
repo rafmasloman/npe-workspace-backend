@@ -50,6 +50,29 @@ const authController = {
     }
   },
 
+  updateUserAccount: async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      const { email, newPassword } = req.body;
+      const params = req.params;
+
+      const user = await AuthServices.updateUserAccount(params.id, {
+        email,
+        newPassword,
+      });
+
+      return res.json({
+        statusCode: HttpStatusCode.OK,
+        message: 'Berhasil Mengubah Akun user',
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
   credential: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userCredential = req.signedCookies;
