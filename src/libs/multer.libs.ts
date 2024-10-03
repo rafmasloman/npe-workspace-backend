@@ -30,12 +30,16 @@ import fs from 'fs';
 
 // Pastikan folder uploads ada, jika tidak buat foldernya
 const ensureUploadsExist = (uploadsPath: string) => {
+  console.log('upload path : ', uploadsPath);
+
   if (!fs.existsSync(uploadsPath)) {
     fs.mkdirSync(uploadsPath, { recursive: true }); // Membuat folder secara rekursif
   }
 };
 
 const multerConfig = (filename?: string) => {
+  console.log('filename : ', filename);
+
   try {
     // Gunakan path absolute ke folder public/uploads
     const uploadsPath = path.join(
