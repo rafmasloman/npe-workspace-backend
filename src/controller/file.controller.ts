@@ -24,6 +24,8 @@ const fileController = {
         imageName,
       );
 
+      console.log('icon path : ', imagePath);
+
       readFile(imagePath, (err, data) => {
         if (err) {
           res.status(404).send('File not found!');
@@ -35,6 +37,8 @@ const fileController = {
 
       // res.sendFile(imagePath);
     } catch (error) {
+      console.log('error : ', error);
+
       next(error);
     }
   },
@@ -50,8 +54,12 @@ const fileController = {
         iconName,
       );
 
+      console.log('icon path : ', __dirname);
+
       res.sendFile(iconPath);
     } catch (error) {
+      console.log('error : ', error);
+
       next(error);
     }
   },

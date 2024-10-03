@@ -27,6 +27,8 @@ const projectController = {
         data: project,
       });
     } catch (error) {
+      console.log('create project : ', error);
+
       next(error);
     }
   },
